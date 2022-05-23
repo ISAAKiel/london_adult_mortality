@@ -118,6 +118,16 @@ lt.MC <- function(sampling,
     WOLS_Gompertz_shape <- mort_fit_WOLS$coefficients[2]
     WOLS_Gompertz_rate <- exp(mort_fit_WOLS$coefficients[1])
     
+    # fit survival data with nls via lx
+    NLS_Gompertz_shape <- NA
+    NLS_Gompertz_rate <- NA
+    tryCatch({
+      nls_fit <- nls(lx_vec ~ exp(a/b - a/b * exp(b * x_vec ) ) , 
+                     data = mort_df_x, start=list(a = 0.001, b = 0.075), weights = Dx_vec)#, method="Nelder-Mead")
+      NLS_Gompertz_shape <- summary(nls_fit)$coefficients[2]
+      NLS_Gompertz_rate <- summary(nls_fit)$coefficients[1]
+    }, error=function(e){})
+    
     # #fit survival to life table Dx
     surv_lt_Gompertz_shape <- NA
     surv_lt_Gompertz_rate <- NA
@@ -128,14 +138,30 @@ lt.MC <- function(sampling,
       surv_lt_Gompertz_rate <- exp(surv_lt$coefficients[2])
     }, error=function(e){})
     
-    # fit survival data with nls via lx
-    NLS_Gompertz_shape <- NA
-    NLS_Gompertz_rate <- NA
+    # create life table with broader age ranges
+    mort_prep_x <- mortAAR::prep.life.table(ind_df, 
+       agebeg = "age", ageend = "age_1", agerange = "exclude", 
+       method = c(1, 4, 5, 5, 5, 10, 10, 10, 10, 10, 10, 10, 10))
+    mort_life_x <- mortAAR::life.table(mort_prep_x)
+    x_length <- length(mort_life_x$x)
+    x_a <- cumsum(mort_life_x$a)
+    x_vec <- x_a[4:(x_length - 1)] - 15
+    x_vec2 <- c(x_vec[-1], 99)
+    x_mid <- (x_vec + x_vec2) / 2
+    Dx_vec <- mort_life_x$Dx[5:x_length]
+    qx_vec <- mort_life_x$qx[5:x_length]
+    lx_vec <- mort_life_x$lx[5:x_length]/100
+    mx_vec <- 1 / (500/qx_vec - 2.5)
+    mort_df_x <- data.frame(x_vec,  x_vec2, Dx_vec, qx_vec, lx_vec, mx_vec)
+    
+    # #fit survival to life table Dx
+    surv_lt10_Gompertz_shape <- NA
+    surv_lt10_Gompertz_rate <- NA
+    mort_df_x$death <- 1
     tryCatch({
-      nls_fit <- nls(lx_vec ~ exp(a/b - a/b * exp(b * x_vec ) ) , 
-                     data = mort_df_x, start=list(a = 0.001, b = 0.075), weights = Dx_vec)#, method="Nelder-Mead")
-      NLS_Gompertz_shape <- summary(nls_fit)$coefficients[2]
-      NLS_Gompertz_rate <- summary(nls_fit)$coefficients[1]
+      surv_lt10 <- flexsurv::flexsurvreg(formula = survival::Surv(x_vec, death) ~ 1, data = mort_df_x, dist="gompertz", weights = Dx_vec)
+      surv_lt10_Gompertz_shape <- surv_lt10$coefficients[1]
+      surv_lt10_Gompertz_rate <- exp(surv_lt10$coefficients[2])
     }, error=function(e){})
     
     #   # fit survival data with nls via qx
@@ -164,7 +190,8 @@ lt.MC <- function(sampling,
     # Bayes model
     gomp.known_age(ind_df, known_age = "age",
                    silent.jags = TRUE,
-                   silent.runjags = TRUE) %>%
+                   silent.runjags = TRUE,
+                   thinSteps=10) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
     bayes_gomp_b <- gomp_known_age_MCMC_diag[2,5]
     bayes_gomp_a <- gomp_known_age_MCMC_diag[1,5]
@@ -231,7 +258,8 @@ lt.MC <- function(sampling,
     #Bayesian modell with anthropological age estimate
     gomp.anthr_age(ind_df, age_beg = "age_beg", age_end = "age_end",
                    silent.jags = TRUE,
-                   silent.runjags = TRUE) %>%
+                   silent.runjags = TRUE,
+                   thinSteps=10) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_anthr_gomp_b <- gomp_anthr_MCMC_diag[2,5]
     bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]
@@ -242,6 +270,7 @@ lt.MC <- function(sampling,
                         OLS_Gompertz_shape, OLS_Gompertz_rate,
                         WOLS_Gompertz_shape, WOLS_Gompertz_rate,
                         surv_lt_Gompertz_shape, surv_lt_Gompertz_rate,
+                        surv_lt10_Gompertz_shape, surv_lt10_Gompertz_rate,
                         #LF2_Gompertz_shape, LF2_Gompertz_rate,
                         #poisson_Gompertz_shape, poisson_Gompertz_rate,
                         #binom_Gompertz_shape, binom_Gompertz_rate,

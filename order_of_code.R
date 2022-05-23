@@ -32,8 +32,8 @@ source("./lt_MC.R")
 source("./gomp_bayes_known_age.R")
 source("./gomp_anthr_age.R")
 
-set.seed(2094)
-lt_sim <- lt.MC(sampling = 10,
+set.seed(209)
+lt_sim <- lt.MC(sampling = 50,
                 n_min = 50,
                 n_max = 500,
                 #M_min = 25,
@@ -70,8 +70,10 @@ source("./halley_Breslau.R")
 source("./suessmilch.R")
 source("./Medieval_England.R")
 source("./Germany.R")
+source("./blayo_france.R")
 
-comp_df <- rbind(London_result, Paris_result, halley_result, suessmilch_result, medieval_result, uelzen_result )
+comp_df <- rbind(London_result, Paris_result, halley_result, 
+                 suessmilch_result, medieval_result, uelzen_result, blayo_result )
 rownames(comp_df) <- NULL
 cols.num <- c("year", "beta", "alpha")
 comp_df[cols.num] <- sapply(comp_df[cols.num],as.numeric)
@@ -84,7 +86,7 @@ ggplot(eng_mort_result, aes(x = year, y = beta)) + geom_point() + ylab("Gompertz
   geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
   ggtitle("England") +  theme(plot.title = element_text(hjust = 0.5)),
 ggplot(comp_df, aes(x = year, y = beta, group = group, colour = group, label = names ) ) + geom_point() + 
-  ylab("Gompertz \u03B2") + xlab("years AD") + ggrepel::geom_text_repel() + ylim(0.02, 0.06) + xlim(1400,1800) +
+  ylab("Gompertz \u03B2") + xlab("years AD") + ggrepel::geom_text_repel(data = comp_df[comp_df$group != "France",]) + ylim(0.02, 0.06) + xlim(1400,1800) +
   ggtitle("Miscellaneous") +  theme(plot.title = element_text(hjust = 0.5)),
 ncol= 2
 )

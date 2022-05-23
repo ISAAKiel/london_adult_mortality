@@ -3,6 +3,8 @@ gridExtra::grid.arrange (
     xlab("known Gompertz \u03B2") + ylab("estimated Gompertz \u03B2"),
   ggplot(lt_sim) + geom_point(aes(x = b_, y = surv_lt_Gompertz_shape), shape=1) + xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
     xlab("known Gompertz \u03B2") + ylab("estimated Gompertz \u03B2"),
+  ggplot(lt_sim) + geom_point(aes(x = b_, y = surv_lt10_Gompertz_shape), shape=1) + xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
+    xlab("known Gompertz \u03B2") + ylab("estimated Gompertz \u03B2"),
   ggplot(lt_sim) + geom_point(aes(x = b_, y = WOLS_Gompertz_shape), shape=1) + xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
     xlab("known Gompertz \u03B2") + ylab("estimated Gompertz \u03B2"),
   ggplot(lt_sim) + geom_point(aes(x = b_, y = NLS_Gompertz_shape), shape=1) + xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
@@ -17,7 +19,7 @@ gridExtra::grid.arrange (
 gridExtra::grid.arrange (
   ggplot(lt_sim) + geom_point(aes(x = y, y = (b_ - surv_Gompertz_shape)), shape=1) + #xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
     xlab("sample size") + ylab("difference"),
-  ggplot(lt_sim) + geom_point(aes(x = y, y = (b_ - surv_lt_Gompertz_shape)), shape=1) + #xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
+  ggplot(lt_sim) + geom_point(aes(x = y, y = (b_ - surv_lt10_Gompertz_shape)), shape=1) + #xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
     xlab("sample size") + ylab("difference"),
   ggplot(lt_sim) + geom_point(aes(x = y, y = (b_ - WOLS_Gompertz_shape)), shape=1) + #xlim(0.02, 0.1) + ylim(0.02, 0.1) + 
     xlab("sample size") + ylab("difference"),
@@ -55,7 +57,7 @@ fit <- lm(bayes_gomp_b ~ b_ , data = lt_sim)
 summary(fit)
 
 
-betas <- c("surv_Gompertz_shape", "WOLS_Gompertz_shape", "surv_lt_Gompertz_shape","OLS_Gompertz_shape",
+betas <- c("surv_Gompertz_shape", "WOLS_Gompertz_shape", "surv_lt10_Gompertz_shape","OLS_Gompertz_shape",
            # "LF2_Gompertz_shape", "poisson_Gompertz_shape", "binom_Gompertz_shape", 
            "NLS_Gompertz_shape", "bayes_gomp_b")
 betas <- c("WOLS_estim_Gompertz_shape", #"surv_estim_lt_Gompertz_shape", 
