@@ -87,9 +87,6 @@ lt.sampling <- function(sampling,
     ind_list <- data.frame()
     for (i in 1:y) {
       x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15
-      if (x > 99) {
-        x = 99
-      }
       if(length(error_range) > 0) {
         x_used <- round(rnorm(1, x, error_range))
       } else {
@@ -97,7 +94,8 @@ lt.sampling <- function(sampling,
       }      
       if (x_used > 99) {
         x_used = 99
-      } else if (x_used < 15) {
+      } else if 
+      (x_used < 15) {
         x_used = 15
       }
       x_diff <- x - x_used

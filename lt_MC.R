@@ -6,7 +6,10 @@ lt.MC <- function(sampling,
                   b_min = 0.025,
                   b_max = 0.1,
                   error_range = NULL,
-                  age_categories = "Wellcome") # either Museum of London Wellcome database or of the Backbone of Europe project
+                  age_categories = "Wellcome", # either Museum of London Wellcome database or of the Backbone of Europe project
+                  bayes = FALSE,
+                  thinSteps = 10,
+                  numSavedSteps = 10000 )
 {
   start_time <- Sys.time()
   lt_result <- data.frame()
@@ -32,9 +35,6 @@ lt.MC <- function(sampling,
     ind_df <- data.frame(ind = NA, age = NA, age_beg = NA, age_end = NA)
     for (i in 1:y) {
       x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15
-      if (x > 99) {
-        x = 99
-      }
       if(length(error_range) > 0) {
         x_used <- round(rnorm(1, x, error_range))
       } else {
@@ -91,30 +91,31 @@ lt.MC <- function(sampling,
     
     # compute life table
     ind_df$age_1 <- ind_df$age + 1
-    mort_prep_x <- mortAAR::prep.life.table(ind_df, agebeg = "age", ageend = "age_1", agerange = "exclude")
+    mort_prep_x <- mortAAR::prep.life.table(ind_df, agebeg = "age", ageend = "age_1", agerange = "excluded")
     mort_life_x <- mortAAR::life.table(mort_prep_x)
     x_length <- length(mort_life_x$x)
     x_a <- cumsum(mort_life_x$a)
     x_vec <- x_a[4:(x_length - 1)] - 15
-    x_vec2 <- c(x_vec[-1], 99)
-    x_mid <- (x_vec + x_vec2) / 2
     Dx_vec <- mort_life_x$Dx[5:x_length]
-    qx_vec <- mort_life_x$qx[5:x_length]
+    qx_vec <- mort_life_x$qx[5:x_length]/100
     lx_vec <- mort_life_x$lx[5:x_length]/100
-    mx_vec <- 1 / (500/qx_vec - 2.5)
-    mort_df_x <- data.frame(x_vec,  x_vec2, Dx_vec, qx_vec, lx_vec, mx_vec)
+    Lx_vec <- mort_life_x$Lx[5:x_length]
+    dx_vec <- mort_life_x$dx[5:x_length]
+    mx_vec <- dx_vec / Lx_vec
+    kx <- Dx_vec / ( mx_vec * 5 )
+    mort_df_x <- data.frame(x_vec, Dx_vec, qx_vec, lx_vec, mx_vec, kx)
     
     # #fit OLS to life table qx which has to by divided by 1,000
     OLS_Gompertz_shape <- NA
     OLS_Gompertz_rate <- NA
     tryCatch({
-      mort_fit_OLS <- lm(log(mx_vec)  ~ x_mid, data = mort_df_x)
+      mort_fit_OLS <- lm(log(mx_vec)  ~ x_vec, data = mort_df_x)
       OLS_Gompertz_shape <- mort_fit_OLS$coefficients[2]
       OLS_Gompertz_rate <- exp(mort_fit_OLS$coefficients[1])
     }, error=function(e){})
     
     #fit WOLS to life table qx which has to by divided by 1,000
-    mort_fit_WOLS <- lm(log(mx_vec)  ~ x_mid, data = mort_df_x, weights  = Dx_vec)
+    mort_fit_WOLS <- lm(log(mx_vec)  ~ x_vec, data = mort_df_x, weights  = Dx_vec) # experimenting with midpoints
     WOLS_Gompertz_shape <- mort_fit_WOLS$coefficients[2]
     WOLS_Gompertz_rate <- exp(mort_fit_WOLS$coefficients[1])
     
@@ -146,13 +147,8 @@ lt.MC <- function(sampling,
     x_length <- length(mort_life_x$x)
     x_a <- cumsum(mort_life_x$a)
     x_vec <- x_a[4:(x_length - 1)] - 15
-    x_vec2 <- c(x_vec[-1], 99)
-    x_mid <- (x_vec + x_vec2) / 2
     Dx_vec <- mort_life_x$Dx[5:x_length]
-    qx_vec <- mort_life_x$qx[5:x_length]
-    lx_vec <- mort_life_x$lx[5:x_length]/100
-    mx_vec <- 1 / (500/qx_vec - 2.5)
-    mort_df_x <- data.frame(x_vec,  x_vec2, Dx_vec, qx_vec, lx_vec, mx_vec)
+    mort_df_x <- data.frame(x_vec, Dx_vec)
     
     # #fit survival to life table Dx
     surv_lt10_Gompertz_shape <- NA
@@ -188,14 +184,18 @@ lt.MC <- function(sampling,
     # binom_Gompertz_rate <- mort_life_law_binom$coefficients[1]
     
     # Bayes model
-    gomp.known_age(ind_df, known_age = "age",
-                   silent.jags = TRUE,
-                   silent.runjags = TRUE,
-                   thinSteps=10) %>%
-      diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
-    bayes_gomp_b <- gomp_known_age_MCMC_diag[2,5]
-    bayes_gomp_a <- gomp_known_age_MCMC_diag[1,5]
-    
+    bayes_gomp_b <- NA
+    bayes_gomp_a <- NA
+    if (bayes == TRUE) {
+      gomp.known_age(ind_df, known_age = "age",
+                     silent.jags = TRUE,
+                     silent.runjags = TRUE,
+                     thinSteps = thinSteps,
+                     numSavedSteps = numSavedSteps) %>%
+        diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
+      bayes_gomp_b <- gomp_known_age_MCMC_diag[2,5]
+      bayes_gomp_a <- gomp_known_age_MCMC_diag[1,5]
+    }
     
     
     # compute life table from "archaeological" data
@@ -224,9 +224,18 @@ lt.MC <- function(sampling,
     WOLS_estim_Gompertz_shape <- NA
     WOLS_estim_Gompertz_rate <- NA
     tryCatch({
-      mort_fit_WOLS_estim <- lm(log(1 / (100/qx_vec - 0.5))  ~ x_mid, data = mort_df_estim, weights  = Dx_vec)
+      mort_fit_WOLS_estim <- lm(log(mx_vec)  ~ x_mid, data = mort_df_estim, weights  = Dx_vec)
       WOLS_estim_Gompertz_shape <- mort_fit_WOLS_estim$coefficients[2]
       WOLS_estim_Gompertz_rate <- exp(mort_fit_WOLS_estim$coefficients[1])
+    }, error=function(e){})
+    
+    #fit OLS to life table mx
+    OLS_estim_Gompertz_shape <- NA
+    OLS_estim_Gompertz_rate <- NA
+    tryCatch({
+      mort_fit_OLS_estim <- lm(log(mx_vec)  ~ x_mid, data = mort_df_estim)
+      OLS_estim_Gompertz_shape <- mort_fit_OLS_estim$coefficients[2]
+      OLS_estim_Gompertz_rate <- exp(mort_fit_OLS_estim$coefficients[1])
     }, error=function(e){})
     
     # fit survival data with nls
@@ -244,7 +253,7 @@ lt.MC <- function(sampling,
     surv_estim_lt_Gompertz_rate <- NULL
     mort_df_estim$death <- 1
     tryCatch({
-      surv_estim_lt <- flexsurv::flexsurvreg(formula = survival::Surv(x_vec, death) ~ 1, data = mort_df_estim, dist="gompertz", weights = Dx_vec)
+      surv_estim_lt <- flexsurv::flexsurvreg(formula = survival::Surv(x_mid, death) ~ 1, data = mort_df_estim, dist="gompertz", weights = Dx_vec)
       surv_estim_lt_Gompertz_shape <- surv_estim_lt$coefficients[1]
       surv_estim_lt_Gompertz_rate <- exp(surv_estim_lt$coefficients[2])
     }, error=function(e){})
@@ -256,14 +265,18 @@ lt.MC <- function(sampling,
     # surv_ind_estim_Gompertz_rate <- exp(ind_df_estim_Gomp$coefficients[2])
     
     #Bayesian modell with anthropological age estimate
-    gomp.anthr_age(ind_df, age_beg = "age_beg", age_end = "age_end",
-                   silent.jags = TRUE,
-                   silent.runjags = TRUE,
-                   thinSteps=10) %>%
-      diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
-    bayes_anthr_gomp_b <- gomp_anthr_MCMC_diag[2,5]
-    bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]
-    
+    bayes_anthr_gomp_b <- NA
+    bayes_anthr_gomp_a <- NA
+    if (bayes == TRUE) {
+      gomp.anthr_age(ind_df, age_beg = "age_beg", age_end = "age_end",
+                     silent.jags = TRUE,
+                     silent.runjags = TRUE,
+                     thinSteps = thinSteps,
+                     numSavedSteps = numSavedSteps) %>%
+        diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
+      bayes_anthr_gomp_b <- gomp_anthr_MCMC_diag[2,5]
+      bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]
+    }
     
     ind_result <- cbind(y, #M, 
                         a_, b_, surv_Gompertz_shape, surv_Gompertz_rate,
@@ -275,6 +288,7 @@ lt.MC <- function(sampling,
                         #poisson_Gompertz_shape, poisson_Gompertz_rate,
                         #binom_Gompertz_shape, binom_Gompertz_rate,
                         WOLS_estim_Gompertz_shape, WOLS_estim_Gompertz_rate,
+                        OLS_estim_Gompertz_shape, OLS_estim_Gompertz_rate,
                         surv_estim_lt_Gompertz_shape, surv_estim_lt_Gompertz_rate,
                         #surv_ind_estim_Gompertz_shape, surv_ind_estim_Gompertz_rate,
                         NLS_Gompertz_shape, NLS_Gompertz_rate,
