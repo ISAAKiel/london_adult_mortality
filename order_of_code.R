@@ -93,9 +93,7 @@ do.call(gridExtra::grid.arrange, c(hist_lt, ncol = 3))
 
 
 # Figure 7: Global History of Health
-if (runCodeNew) {
-  source("./BoE_computation.R") # can take a while
-}
+source("./BoE_computation.R") # can take a while
 plot_all # all sites in one
 
 # plot it for the regions without Mediterranean (only 4 sites)
