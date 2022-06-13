@@ -14,11 +14,13 @@ BoE_sites_subset$period <- factor(BoE_sites_subset$period, levels = c("Pre-medie
 BoE_table_ind <- table(BoE_ext_subset$period, BoE_ext_subset$region) %>%
   addmargins() %>%
   as.data.frame.matrix() %>%
-  tibble::rownames_to_column("period") %>%
-  knitr::kable(., caption = "Global History of health, breakdown of individuals by region and period.")
+  tibble::rownames_to_column("period")  %>%
+  knitr::kable(., caption = "Global History of health, breakdown of individuals by region and period.") %>%
+ kableExtra::column_spec(., 1:5, width= "3cm")
 
 BoE_table_sites <- table(BoE_sites_subset$period, BoE_sites_subset$region) %>%
   addmargins() %>%
   as.data.frame.matrix() %>%
   tibble::rownames_to_column("period") %>%
-  knitr::kable(., caption = "Global History of health, breakdown of sites by region and period.")
+  knitr::kable(., caption = "Global History of health, breakdown of sites by region and period.") %>%
+  kableExtra::column_spec(., 1:5, width= "3cm")
