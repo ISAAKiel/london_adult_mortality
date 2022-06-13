@@ -17,6 +17,12 @@ source("./gomp_anthr_age.R")
 source("./Gomp_MLE_interval.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 
+# run extensive code anew. Set TRUE to run extensive code (6 h +)
+runCodeNew <- FALSE
+# Specify filename prefix for saved files and create a folder if needed:
+saveFileDir = "results"
+dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
+
 #############
 # Methods
 
@@ -87,7 +93,9 @@ do.call(gridExtra::grid.arrange, c(hist_lt, ncol = 3))
 
 
 # Figure 7: Global History of Health
-source("./BoE_computation.R") # can take a while
+if (runCodeNew) {
+  source("./BoE_computation.R") # can take a while
+}
 plot_all # all sites in one
 
 # plot it for the regions without Mediterranean (only 4 sites)
