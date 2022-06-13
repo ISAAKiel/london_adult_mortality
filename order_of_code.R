@@ -83,8 +83,8 @@ gridExtra::grid.arrange (
 
 
 # Figure for Human Mortality Database, this requires credentials
-credentials <- c("mueller-scheessel@gmx.net", "1498246486") # user name + password
 source("./Human_Mortality_Database.R")
+HMD_plot
 
 
 # Figure for historic life tables

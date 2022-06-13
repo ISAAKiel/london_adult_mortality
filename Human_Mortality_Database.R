@@ -1,3 +1,7 @@
+HMD_username <- readline(prompt = "Enter username: ")
+HMD_password <- readline(prompt="Enter password: ")
+credentials <- c(HMD_username, HMD_password)
+
 set.seed(9989)
 random_numb <- round(runif(n = 1, min = 1, max = 232))
 start_numb <- 1
@@ -29,7 +33,6 @@ lt_result[cols.num] <- sapply(lt_result[cols.num],as.numeric)
 
 HMD_plot <- ggplot(lt_result, aes(x = year, y = beta)) + geom_point(aes(colour = country)) + ylab("Gompertz \u03B2") +
   geom_smooth(method='loess', span = 0.25, formula = y ~ x, colour = "red", se = TRUE, level = 0.95)
-HMD_plot
 
 # plot_list <- list()
 # for (j in HDM_countries) {
