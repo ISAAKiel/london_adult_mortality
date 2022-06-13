@@ -63,29 +63,30 @@ if (runCodeNew){
   BoE_result[cols.num] <- sapply(BoE_result[cols.num],as.numeric)
   BoE_result <- merge(BoE_sites_subset, BoE_result)
   BoE_result$period <- factor(BoE_result$period, levels = c("Pre-medieval", "Early medieval", "High medieval", "Late medieval",  "Early modern", "Industrial") )
-  colnames(BoE_result) <- c("id", "site", "period", "Lat", "Lon", "region", "n", "cent.", "Gompertz \u03B2", "Gompertz \u03B1", "min ESS", "max PSRF", "max PSRF CI")
+  colnames(BoE_result) <- c("id", "site", "period", "Lat", "Lon", "region", "n", "century", "Gompertz beta", "Gompertz alpha", "min. ESS", "max. PSRF", "max. PSRF CI")
   
   # saves results in Rda-object
   save(BoE_result, file = file.path(".", saveFileDir, "BoE_result.Rda") )
 }
 load(file.path(".", saveFileDir, "BoE_result.Rda") )
 
-plot_all <- ggplot(subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1), 
-                        aes(x = mean_century, y = bayes_anthr_gomp_b) ) + geom_point(aes(group = region, colour = region)) +
+plot_all <- ggplot(subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1), 
+                        aes(x = century, y = `Gompertz beta`) ) + 
+  geom_point(aes(group = region, colour = region)) +
   geom_smooth(method='loess', span = 0.5, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) + 
   ylab("Gompertz \u03B2") + xlab("years AD") + xlim(200,1900) + ylim(0.01, 0.06)
 
 plot_list <- list()
 regions <- BoE_result$region[ which(BoE_result$region != "Mediterranean")]
 for (j in regions) {
-  region_data <- subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1)[ which(BoE_result$region == j), ]
-  plot_list[[j]] <- ggplot(region_data, aes(x = mean_century, y = bayes_anthr_gomp_b)) + geom_point() + ylab("Gompertz \u03B2") +
+  region_data <- subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1)[ which(BoE_result$region == j), ]
+  plot_list[[j]] <- ggplot(region_data, aes(x = century, y = `Gompertz beta`)) + geom_point() + ylab("Gompertz \u03B2") +
     geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
     xlab(j) + xlim(200, 1900) + ylim(0.01, 0.06)
 }
 
-BoE_good <- subset(BoE_result, `min ESS` > 5000 & `max PSRF` < 1.1)[,-c(9:11)]
-BoE_bad <- subset(BoE_result, `min ESS` < 5000 | `max PSRF` > 1.1 )[,-c(9:11)]
+BoE_good <- subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1)[,-c(9:11)]
+BoE_bad <- subset(BoE_result, `min. ESS` < 5000 | `max. PSRF` > 1.1 )[,-c(9:11)]
 
 plot_list_bad <- list()
 for (j in BoE_bad$id) {

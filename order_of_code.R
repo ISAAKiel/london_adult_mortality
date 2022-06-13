@@ -2,7 +2,7 @@
 # Prerequisites
 # Install required packages
 require(pacman) || install.packages("pacman")
-pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra,
+pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
                mortAAR, nlme, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
                coda, rjags, runjags, demogR, sf, rnaturalearth)
@@ -90,7 +90,6 @@ plot_all # all sites in one
 do.call(gridExtra::grid.arrange, c(plot_list, ncol = 3))
 
 # show table
-
 BoE_result[order((BoE_result$period) ), ] %>% 
   knitr::kable(., caption = "Global History of health")
 
