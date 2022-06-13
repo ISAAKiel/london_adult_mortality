@@ -1,7 +1,5 @@
 # Backbone of Europe data
-path <- ("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/european_module/FinalData170713.xlsx")
-# https://www.asc.ohio-state.edu/economics/osu/data/FinalData170713.xlsx
-BoE <- readxl::read_xlsx(path = path, sheet = 1)
+BoE <-  rio::import("https://www.asc.ohio-state.edu/economics/osu/data/FinalData170713.xlsx")
 BoE_ext <- data.frame(BoE$SEQID, BoE$SITE, BoE$SITENAME, BoE$Country, BoE$TIME, BoE$BCENT, BoE$AGE, BoE$Recode_age_cat, BoE$SEX_CAT, BoE$LAT, BoE$LONG, BoE$REGION)
 colnames(BoE_ext) <- c("id", "site_id", "site", "country", "period", "century", "age", "age_code", "sex", "lat", "long", "region")
 BoE_ext <- subset(BoE_ext, age >= 15)
