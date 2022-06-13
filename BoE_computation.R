@@ -68,7 +68,7 @@ if (runCodeNew){
   # saves results in Rda-object
   save(BoE_result, file = file.path(".", saveFileDir, "BoE_result.Rda") )
 }
-load("./results/BoE_result.Rda")
+load(file.path(".", saveFileDir, "BoE_result.Rda") )
 
 plot_all <- ggplot(subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1), 
                         aes(x = mean_century, y = bayes_anthr_gomp_b) ) + geom_point(aes(group = region, colour = region)) +
