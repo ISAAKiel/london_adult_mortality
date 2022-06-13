@@ -3,7 +3,7 @@
 # Install required packages
 require(pacman) || install.packages("pacman")
 pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra,
-               mortAAR, nlme, reshape2,HMDHFDplus,Metrics,
+               mortAAR, nlme, reshape2, rgdal, HMDHFDplus,Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws,
                coda, rjags, runjags, demogR, sf, rnaturalearth)
 
