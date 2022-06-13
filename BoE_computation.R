@@ -64,7 +64,11 @@ if (runCodeNew){
   BoE_result <- merge(BoE_sites_subset, BoE_result)
   BoE_result$period <- factor(BoE_result$period, levels = c("Pre-medieval", "Early medieval", "High medieval", "Late medieval",  "Early modern", "Industrial") )
   colnames(BoE_result) <- c("id", "site", "period", "Lat", "Lon", "region", "n", "cent.", "Gompertz \u03B2", "Gompertz \u03B1", "min ESS", "max PSRF", "max PSRF CI")
+  
+  # saves results in Rda-object
+  save(BoE_result, file = file.path(".", saveFileDir, "BoE_result.Rda") )
 }
+load("./results/BoE_result.Rda")
 
 plot_all <- ggplot(subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1), 
                         aes(x = mean_century, y = bayes_anthr_gomp_b) ) + geom_point(aes(group = region, colour = region)) +
