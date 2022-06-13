@@ -39,21 +39,11 @@ mean(lt_bias$lt_inaccuracy)
 
 # Figure 2: Map of Global History of Health samples
 source("./BoE_data.R")
+# table of individuals and samples of Global History of Health
+BoE_table_ind
+BoE_table_sites
 source("./BoE_map.R") # download of data from naturalearthdata
 BoE_map
-
-# table of individuals and samples of Global History of Health
-table(BoE_ext_subset$period, BoE_ext_subset$region) %>%
-  addmargins() %>%
-  as.data.frame.matrix() %>%
-  tibble::rownames_to_column("period") %>%
-  knitr::kable(., caption = "Global History of health, breakdown of individuals by region and period.")
-
-table(BoE_sites_subset$period, BoE_sites_subset$region) %>%
-  addmargins() %>%
-  as.data.frame.matrix() %>%
-  tibble::rownames_to_column("period") %>%
-  knitr::kable(., caption = "Global History of health, breakdown of sites by region and period.")
 
 
 ############
