@@ -91,7 +91,8 @@ BoE_bad <- subset(BoE_result, `min. ESS` < 5000 | `max. PSRF` > 1.1 )[,-c(9:11)]
 plot_list_bad <- list()
 for (j in BoE_bad$id) {
   site_data <- BoE_ext_subset[ which(BoE_ext_subset$site_id == j), ]
-  plot_list_bad[[j]] <- ggplot(site_data) + geom_histogram(aes(x=agebeg)) + ggtitle(j)
+  site_name <- unique(site_data$site)
+  plot_list_bad[[site_name]] <- ggplot(site_data, aes(x = agebeg)) + geom_histogram() + ggtitle(j)
 }
 
 set.seed(2930)
@@ -99,7 +100,8 @@ BoE_good_sample <- sample(BoE_good$id, 9)
 plot_list_good <- list()
 for (j in BoE_good_sample) {
   site_data <- BoE_ext_subset[ which(BoE_ext_subset$site_id == j), ]
-  plot_list_good[[j]] <- ggplot(site_data) + geom_histogram(aes(x=agebeg)) + ggtitle(j)
+  site_name <- unique(site_data$site)
+  plot_list_good[[site_name]] <- ggplot(site_data) + geom_histogram(aes(x = agebeg)) + ggtitle(j)
 }
 
 # 

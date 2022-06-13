@@ -37,7 +37,7 @@ source("./gompertz_distribution.R")
 lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.025, b_max = 0.1, error_range = 15) 
 mean(lt_bias$lt_inaccuracy)
 
-# Figure 2: Map of Global History of Health samples
+# Global History of Health samples
 source("./BoE_data.R")
 # table of individuals and samples of Global History of Health
 BoE_table_ind
@@ -91,17 +91,17 @@ do.call(gridExtra::grid.arrange, c(plot_list, ncol = 3))
 
 # show table
 BoE_result[order((BoE_result$period) ), ] %>% 
-  knitr::kable(., caption = "Global History of health")
+  knitr::kable(., caption = "Global History of health") 
 
 
 ############
 # Discussion
 
 # plot bad age diagrams of BoE
-do.call(gridExtra::grid.arrange, plot_list_bad)
+do.call(gridExtra::grid.arrange, c(plot_list_bad, ncol = 3))
 
 # plot 9 randomly selected good age diagrams
-do.call(gridExtra::grid.arrange, plot_list_good)
+do.call(gridExtra::grid.arrange, c(plot_list_good, ncol = 3))
 
 
 
