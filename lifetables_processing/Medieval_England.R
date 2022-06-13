@@ -1,6 +1,6 @@
 # Data on English monks, peers and tenants from Hatcher 1986, 38 Table 5
 
-medieval <- read.table("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/Hatcher_monks.txt", header=TRUE, sep = "\t")
+medieval <- read.table("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/data/Hatcher_monks.txt", header=TRUE, sep = "\t")
 medieval_melt <- reshape2::melt(medieval, id.vars = "Age", value.name = "qx")
 
 group <- unique(medieval_melt$variable)

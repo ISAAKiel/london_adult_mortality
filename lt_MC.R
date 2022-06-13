@@ -96,6 +96,7 @@ lt.MC <- function(sampling,
     x_length <- length(mort_life_x$x)
     x_a <- cumsum(mort_life_x$a)
     x_vec <- x_a[4:(x_length - 1)] - 15
+    x_vec2 <- c(x_vec[-1] - 1, 89)
     Dx_vec <- mort_life_x$Dx[5:x_length]
     qx_vec <- mort_life_x$qx[5:x_length]/100
     lx_vec <- mort_life_x$lx[5:x_length]/100
@@ -103,7 +104,7 @@ lt.MC <- function(sampling,
     dx_vec <- mort_life_x$dx[5:x_length]
     mx_vec <- dx_vec / Lx_vec
     kx <- Dx_vec / ( mx_vec * 5 )
-    mort_df_x <- data.frame(x_vec, Dx_vec, qx_vec, lx_vec, mx_vec, kx)
+    mort_df_x <- data.frame(x_vec, x_vec2, Dx_vec, qx_vec, lx_vec, mx_vec, kx)
     
     # #fit OLS to life table qx which has to by divided by 1,000
     OLS_Gompertz_shape <- NA
@@ -127,6 +128,15 @@ lt.MC <- function(sampling,
                      data = mort_df_x, start=list(a = 0.001, b = 0.075), weights = Dx_vec)#, method="Nelder-Mead")
       NLS_Gompertz_shape <- summary(nls_fit)$coefficients[2]
       NLS_Gompertz_rate <- summary(nls_fit)$coefficients[1]
+    }, error=function(e){})    
+    
+    # # fit home-made MLE
+    MLE_lt_Gompertz_shape <- NA
+    MLE_lt_Gompertz_rate <- NA
+    tryCatch({
+      MLE_lt <- Gomp.MLE.interval(mort_df_x, agebegin = "x_vec", ageend = "x_vec2", Dx = "Dx_vec")
+      MLE_lt_Gompertz_shape <- MLE_lt[2]
+      MLE_lt_Gompertz_rate <- MLE_lt[1]
     }, error=function(e){})
     
     # #fit survival to life table Dx
@@ -160,29 +170,6 @@ lt.MC <- function(sampling,
       surv_lt10_Gompertz_rate <- exp(surv_lt10$coefficients[2])
     }, error=function(e){})
     
-    #   # fit survival data with nls via qx
-    #   NLS_Gompertz_shape_qx <- NA
-    #   NLS_Gompertz_rate_qx <- NA
-    #   tryCatch({
-    #     nls_fit_qx <- nls(qx_vec ~ a * exp(b * x_vec ) , 
-    #                       data = mort_df_x, start=list(a = 0.001, b = 0.05), weights = Dx_vec)#, method="Nelder-Mead")
-    #     NLS_Gompertz_shape_qx <- summary(nls_fit_qx)$coefficients[2]
-    #     NLS_Gompertz_rate_qx <- summary(nls_fit_qx)$coefficients[1]
-    # }, error=function(e){})
-    
-    # #fit Loss functions of package MortalityLaws
-    # mort_life_law_LF2 <- MortalityLaws::MortalityLaw(x_mid, qx = 0.001 * qx_vec, law = 'gompertz', opt.method = 'LF2')
-    # LF2_Gompertz_shape <- mort_life_law_LF2$coefficients[2]
-    # LF2_Gompertz_rate <- mort_life_law_LF2$coefficients[1]
-    # 
-    # mort_life_law_poisson <- MortalityLaws::MortalityLaw(x_mid, qx = 0.001 * qx_vec, law = 'gompertz', opt.method = 'poissonL')
-    # poisson_Gompertz_shape <- mort_life_law_poisson$coefficients[2]
-    # poisson_Gompertz_rate <- mort_life_law_poisson$coefficients[1]
-    # 
-    # mort_life_law_binom <- MortalityLaws::MortalityLaw(x_mid, qx = 0.001 * qx_vec, law = 'gompertz', opt.method = 'binomialL')
-    # binom_Gompertz_shape <- mort_life_law_binom$coefficients[2]
-    # binom_Gompertz_rate <- mort_life_law_binom$coefficients[1]
-    
     # Bayes model
     bayes_gomp_b <- NA
     bayes_gomp_a <- NA
@@ -201,10 +188,10 @@ lt.MC <- function(sampling,
     # compute life table from "archaeological" data
     if(age_categories == "Wellcome") {
       mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
-                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 2, 6, 8, 10, 10, 54))
+                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 2, 6, 8, 10, 10, 55))
     } else {
       mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
-                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 5, 5, 5, 5, 5, 5, 59))
+                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 5, 5, 5, 5, 5, 5, 60))
     }
     mort_life_estim <- mortAAR::life.table(mort_prep_estim)
     x_length <- length(mort_life_estim$x)
@@ -212,8 +199,8 @@ lt.MC <- function(sampling,
     nax <- mort_life_estim$a[5:x_length]
     x_vec <- x_a[4:(x_length - 1)] - 15
     #x_vec <- x_a[4:(x_length - 1)] - 12
-    x_vec2 <- c(x_vec[-1], Inf)
-    x_mid <- ( x_vec + c(x_vec[-1], 99) ) / 2
+    x_vec2 <- c(x_vec[-1] - 1, 89)
+    x_mid <- ( x_vec + x_vec2 ) / 2
     Dx_vec <- mort_life_estim$Dx[5:x_length]
     qx_vec <- mort_life_estim$qx[5:x_length]
     lx_vec <- mort_life_estim$lx[5:x_length]/100
@@ -249,13 +236,22 @@ lt.MC <- function(sampling,
     }, error=function(e){})
     
     # #fit survival to estimated life table Dx
-    surv_estim_lt_Gompertz_shape <- NULL
-    surv_estim_lt_Gompertz_rate <- NULL
+    surv_estim_lt_Gompertz_shape <- NA
+    surv_estim_lt_Gompertz_rate <- NA
     mort_df_estim$death <- 1
     tryCatch({
       surv_estim_lt <- flexsurv::flexsurvreg(formula = survival::Surv(x_mid, death) ~ 1, data = mort_df_estim, dist="gompertz", weights = Dx_vec)
       surv_estim_lt_Gompertz_shape <- surv_estim_lt$coefficients[1]
       surv_estim_lt_Gompertz_rate <- exp(surv_estim_lt$coefficients[2])
+    }, error=function(e){})
+    
+    # fit home-made MLE
+    MLE_estim_lt_Gompertz_shape <- NA
+    MLE_estim_lt_Gompertz_rate <- NA
+    tryCatch({
+      MLE_estim_lt <- Gomp.MLE.interval(mort_df_estim, agebegin = "x_vec", ageend = "x_vec2", Dx = "Dx_vec")
+      MLE_estim_lt_Gompertz_shape <- MLE_estim_lt[2]
+      MLE_estim_lt_Gompertz_rate <- MLE_estim_lt[1]
     }, error=function(e){})
     
     # # fit Gompertz distribution to age estimations with Survival package
@@ -284,17 +280,14 @@ lt.MC <- function(sampling,
                         WOLS_Gompertz_shape, WOLS_Gompertz_rate,
                         surv_lt_Gompertz_shape, surv_lt_Gompertz_rate,
                         surv_lt10_Gompertz_shape, surv_lt10_Gompertz_rate,
-                        #LF2_Gompertz_shape, LF2_Gompertz_rate,
-                        #poisson_Gompertz_shape, poisson_Gompertz_rate,
-                        #binom_Gompertz_shape, binom_Gompertz_rate,
+                        MLE_lt_Gompertz_shape, MLE_lt_Gompertz_rate,
+                        bayes_gomp_b, bayes_gomp_a,
                         WOLS_estim_Gompertz_shape, WOLS_estim_Gompertz_rate,
+                        NLS_Gompertz_shape, NLS_Gompertz_rate,
                         OLS_estim_Gompertz_shape, OLS_estim_Gompertz_rate,
                         surv_estim_lt_Gompertz_shape, surv_estim_lt_Gompertz_rate,
-                        #surv_ind_estim_Gompertz_shape, surv_ind_estim_Gompertz_rate,
-                        NLS_Gompertz_shape, NLS_Gompertz_rate,
-                        #NLS_Gompertz_shape_qx, NLS_Gompertz_rate_qx,
                         NLS_estim_Gompertz_shape, NLS_estim_Gompertz_rate,
-                        bayes_gomp_b, bayes_gomp_a,
+                        MLE_estim_lt_Gompertz_shape, MLE_estim_lt_Gompertz_rate,
                         bayes_anthr_gomp_b, bayes_anthr_gomp_a)
     lt_result <- rbind(lt_result, ind_result)
     

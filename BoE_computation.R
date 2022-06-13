@@ -1,57 +1,101 @@
+set.seed(4510)
+start_time <- Sys.time()
+
 BoE_result <- data.frame()
-for (i in 1:length(unique(BoE_ext_subset$site_id)) ) {
+BoE_count <- length(unique(BoE_ext_subset$site_id))
+for (i in 1:BoE_count ) {
+  
   site_id_i <- unique(BoE_ext_subset$site_id)[i]
   site_data <- BoE_ext_subset[ which(BoE_ext_subset$site_id == site_id_i), ]
   site <- unique(site_data$site)
   period <- unique(site_data$period)
-  site_data$age <- round(site_data$age)
-  site_data$age2 <- round(site_data$age)
   
-  mort_prep <- prep.life.table(site_data, agebeg = "agebeg", ageend = "ageend", agerange = "include", method = c(1, 4, 5, 5, 5, 5, 5, 5, 5, 60))
-  mort_life <- life.table(mort_prep)
-  x_length <- length(mort_life$x)
-  x <- cumsum(mort_life$a)
-  x_vec <- x[4:(x_length - 1)]
-  x_vec2 <- c(x_vec[-1], Inf)
-  Dx_vec <- mort_life$Dx[5:x_length]
-  qx_vec <- mort_life$qx[5:x_length]
-  x_mid <- ( x_vec + c(x_vec[-1], 99) ) / 2
-  mort_df <- data.frame(x_vec,  x_vec2, x_mid, Dx_vec)
+  site_data <- site_data %>% mutate(age_beg_w = ifelse(age < 24, 15, age - 9))
+  site_data <- site_data %>% mutate(age_end_w = ifelse(age > 40, 99, age + 10))
   
-  #fit WOLS to life table qx which has to by divided by 1,000
-  mort_fit_WOLS_estim <- lm(log(qx_vec*0.001)  ~ x_mid, data = mort_df, weights  = Dx_vec)
-  WOLS_estim_Gompertz_shape <- mort_fit_WOLS_estim$coefficients[2]
-  WOLS_estim_Gompertz_rate <- exp(mort_fit_WOLS_estim$coefficients[1])
-  
-  # fit Gompertz distribution to estimated age with Survival package + individual age
-  site_data$death <- 1
-  ind_dfGomp <- flexsurv::flexsurvreg(formula = survival::Surv(age - 15, death) ~ 1, data = site_data, dist="gompertz")
-  surv_Gompertz_shape <- ind_dfGomp$coefficients[1]
-  surv_Gompertz_rate <- exp(ind_dfGomp$coefficients[2])
-  
+  # site_data <- site_data %>% mutate (age_beg_w = 
+  #   ifelse(age < 18, 15,
+  #   ifelse(age < 26, 18,
+  #   ifelse(age < 36, 26,
+  #   ifelse(age < 46, 36, 46
+  #   ) ) ) ) )
+  # site_data <- site_data %>% mutate (age_end_w = 
+  #                         ifelse(age < 18, 17,
+  #                                ifelse(age < 26, 25,
+  #                                       ifelse(age < 36, 35,
+  #                                              ifelse(age < 46, 45, 99
+  #                                              ) ) ) ) )
+
   #Bayesian modell with anthropological age estimate
-  gomp.anthr_age(site_data, age_beg = "agebeg", age_end = "ageend",
-                 silent.jags = TRUE,
-                 silent.runjags = TRUE) %>%
-    diagnostic.summary(., HDImass = 0.95) -> BoE_anthr_MCMC_diag
-  bayes_anthr_gomp_b <- BoE_anthr_MCMC_diag[2,5]
-  bayes_anthr_gomp_a <- BoE_anthr_MCMC_diag[1,5]
+  bayes_anthr_gomp_b <- NA
+  bayes_anthr_gomp_a <- NA
+  tryCatch({#gomp.anthr_age(site_data, age_beg = "age_beg_w", age_end = "age_end_w",
+                          gomp.anthr_age(site_data, age_beg = "agebeg", age_end = "ageend",
+                           silent.jags = TRUE,
+                           silent.runjags = TRUE,
+                           thinSteps = 20,
+                           numSavedSteps = 20000) %>%
+      diagnostic.summary(., HDImass = 0.95) -> BoE_anthr_MCMC_diag
+    bayes_anthr_gomp_b <- BoE_anthr_MCMC_diag[2,5]
+    bayes_anthr_gomp_a <- BoE_anthr_MCMC_diag[1,5]
+    min_ESS <- min(BoE_anthr_MCMC_diag[,6])
+    max_PSRF <- max(BoE_anthr_MCMC_diag[,1])
+    max_PSRF_CI <- max(BoE_anthr_MCMC_diag[,2])
+  }, error=function(e){})
   
   ind_result <- cbind(site_id = site_id_i, site, period,
-                      WOLS_estim_Gompertz_shape, WOLS_estim_Gompertz_rate,
-                      surv_Gompertz_shape,surv_Gompertz_rate,
-                      bayes_anthr_gomp_b, bayes_anthr_gomp_a)
+                      bayes_anthr_gomp_b, bayes_anthr_gomp_a,
+                      min_ESS, max_PSRF, max_PSRF_CI)
   BoE_result <- rbind(BoE_result, ind_result )
+  
+  svMisc::progress(i/BoE_count * 100, (BoE_count-1)/BoE_count * 100, progress.bar = TRUE)
+  Sys.sleep(0.0001)
+  if (i == BoE_count) message("Done!")
+  
 }
 rownames(BoE_result) <- NULL
-cols.num <- c("WOLS_estim_Gompertz_shape", "WOLS_estim_Gompertz_rate",
-              "surv_Gompertz_shape", "surv_Gompertz_rate", "bayes_anthr_gomp_b", "bayes_anthr_gomp_a")
+
+end_time <- Sys.time()
+print(end_time - start_time)
+
+cols.num <- c("bayes_anthr_gomp_b", "bayes_anthr_gomp_a", "min_ESS", "max_PSRF", "max_PSRF_CI")
 BoE_result[cols.num] <- sapply(BoE_result[cols.num],as.numeric)
-BoE_result <- merge(BoE_result, BoE_sites_subset)
+BoE_result <- merge(BoE_sites_subset, BoE_result)
 BoE_result$period <- factor(BoE_result$period, levels = c("Pre-medieval", "Early medieval", "High medieval", "Late medieval",  "Early modern", "Industrial") )
 
+plot_all <- ggplot(subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1), 
+                        aes(x = mean_century, y = bayes_anthr_gomp_b) ) + geom_point(aes(group = region, colour = region)) +
+  geom_smooth(method='loess', span = 0.5, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) + 
+  ylab("Gompertz \u03B2") + xlab("years AD") + xlim(200,1900) + ylim(0.01, 0.06)
 
-# BoE_result[order((BoE_result$period) ), ]
+plot_list <- list()
+regions <- BoE_result$region[ which(BoE_result$region != "Mediterranean")]
+for (j in regions) {
+  region_data <- subset(BoE_result, min_ESS > 5000 & max_PSRF < 1.1)[ which(BoE_result$region == j), ]
+  plot_list[[j]] <- ggplot(region_data, aes(x = mean_century, y = bayes_anthr_gomp_b)) + geom_point() + ylab("Gompertz \u03B2") +
+    geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
+    xlab(j) + xlim(200, 1900) + ylim(0.01, 0.06)
+}
+
+colnames(BoE_result) <- c("id", "site", "period", "Lat", "Lon", "region", "n", "cent.", "Gompertz \u03B2", "Gompertz \u03B1", "min ESS", "max PSRF", "max PSRF CI")
+
+BoE_good <- subset(BoE_result, `min ESS` > 5000 & `max PSRF` < 1.1)[,-c(9:11)]
+BoE_bad <- subset(BoE_result, `min ESS` < 5000 | `max PSRF` > 1.1 )[,-c(9:11)]
+
+plot_list_bad <- list()
+for (j in BoE_bad$id) {
+  site_data <- BoE_ext_subset[ which(BoE_ext_subset$site_id == j), ]
+  plot_list_bad[[j]] <- ggplot(site_data) + geom_histogram(aes(x=agebeg)) + ggtitle(j)
+}
+
+set.seed(2930)
+BoE_good_sample <- sample(BoE_good$id, 9)
+plot_list_good <- list()
+for (j in BoE_good_sample) {
+  site_data <- BoE_ext_subset[ which(BoE_ext_subset$site_id == j), ]
+  plot_list_good[[j]] <- ggplot(site_data) + geom_histogram(aes(x=agebeg)) + ggtitle(j)
+}
+
 # 
 # BoE_result$M <- 1 / BoE_result$WOLS_estim_Gompertz_shape * 
 #   log(BoE_result$WOLS_estim_Gompertz_shape/BoE_result$WOLS_estim_Gompertz_rate) + 15
@@ -73,13 +117,3 @@ BoE_result$period <- factor(BoE_result$period, levels = c("Pre-medieval", "Early
 # ggplot(BoE_result, aes(x = mean_century, y = WOLS_estim_Gompertz_shape) ) + geom_point(aes(group = region, colour = region)) +
 #   geom_smooth(method='loess', span = 0.5, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) + 
 #   ylab("Gompertz \u03B2") + xlab("years AD")
-
-# regions <- BoE_result$region
-# plot_list <- list()
-# for (j in regions) {
-#   region_data <- BoE_result[ which(BoE_result$region == j), ]
-#   plot_list[[j]] <- ggplot(region_data, aes(x = mean_century, y = WOLS_estim_Gompertz_shape)) + geom_point() + ylab("Gompertz \u03B2") +
-#     geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) + 
-#     xlab(j) + xlim(200, 1900)
-# }
-# do.call(gridExtra::grid.arrange, plot_list)

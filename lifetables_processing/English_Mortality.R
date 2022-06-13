@@ -1,6 +1,6 @@
 #English data, from Wrigley et al. 1997, 290 Tab. 6.19 (Adult mortality, sexes combined (1000qx)), 1640-1809, for age groups 25-84 years
 #eng_mort <- read.table(file.choose(), header=TRUE, sep = "\t")
-eng_mort <- read.table("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t")
+eng_mort <- read.table("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/data/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t")
 
 eng_mort_melt <- reshape2::melt(eng_mort, id.vars = "Age", value.name = "qx")
 

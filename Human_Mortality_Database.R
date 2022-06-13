@@ -1,5 +1,3 @@
-credentials <- c("mueller-scheessel@gmx.net", "1498246486")
-
 set.seed(9989)
 random_numb <- round(runif(n = 1, min = 1, max = 232))
 start_numb <- 1
@@ -28,6 +26,10 @@ for(t in HDM_countries) {
 rownames(lt_result) <- NULL
 cols.num <- c("year", "beta", "alpha")
 lt_result[cols.num] <- sapply(lt_result[cols.num],as.numeric)
+
+HMD_plot <- ggplot(lt_result, aes(x = year, y = beta)) + geom_point(aes(colour = country)) + ylab("Gompertz \u03B2") +
+  geom_smooth(method='loess', span = 0.25, formula = y ~ x, colour = "red", se = TRUE, level = 0.95)
+HMD_plot
 
 # plot_list <- list()
 # for (j in HDM_countries) {

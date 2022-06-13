@@ -30,7 +30,7 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
     init_list <- list(
       .RNG.name = sample(RNG_list, 1),
       .RNG.seed = sample(1:1e+06, 1),
-      b = 0.05
+      b = rnorm(1, 0.05, 0.005)
     )
     return(init_list)
   }
@@ -69,7 +69,9 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
                   silent.runjags = silent.runjags)
   
   # RUN THE CHAINS
-  parameters = c( "a", "b", "M" , "age.s")
+  parameters = c( "a", "b", 
+                  #"M" , 
+                  "age.s")
   runJagsOut <- run.jags( method = runjagsMethod ,
                           model = modelString ,
                           monitor = parameters ,
