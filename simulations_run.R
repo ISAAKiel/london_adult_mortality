@@ -1,3 +1,4 @@
+if (runCodeNew){
 set.seed(209)
 lt_sim <- lt.MC(sampling = 1000,
                 n_min = 50,
@@ -12,6 +13,11 @@ lt_sim <- lt.MC(sampling = 1000,
                 thinSteps = 1,
                 numSavedSteps = 10000
 )
+
+# saves results in Rda-object
+save(lt_sim, file = file.path(".", saveFileDir, "lt_sim.Rda") )
+}
+load(file.path(".", saveFileDir, "lt_sim.Rda") )
 
 lt_sim_shapes <- c("surv_Gompertz_shape", "surv_lt_Gompertz_shape", "surv_lt10_Gompertz_shape",
                    "OLS_Gompertz_shape", "WOLS_Gompertz_shape", "NLS_Gompertz_shape",
@@ -70,3 +76,10 @@ for (t in lt_sim_estim_shapes) {
 rmse_estim_result <- data.frame(lt_sim_estim_shapes_names, rmse_estim_result, NAs)
 rownames(rmse_estim_result) <- NULL
 colnames(rmse_estim_result) <- c("method", "RMSE", "NAs")
+
+plot_list_bayes_diff <- list(
+  ggplot(lt_sim, aes(x = b_, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
+    xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2"),
+  ggplot(lt_sim, aes(x = y, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
+    xlab("sample size") + ylab("original \u03B2 - estimated \u03B2")
+)

@@ -68,5 +68,7 @@ rbind(cbind(mode = "known_age", thinning = 1, steps = 10000, parameter = row.nam
       cbind(mode = "estimation", thinning = 1, steps = 10000, parameter = row.names(gomp_anthr_MCMC_diag_thinSteps1[1:3,]), gomp_anthr_MCMC_diag_thinSteps1[1:3,]),
       cbind(mode = "estimation", thinning = 20, steps = 100000, parameter = row.names(gomp_anthr_MCMC_diag_thinSteps20[1:3,]), gomp_anthr_MCMC_diag_thinSteps20[1:3,])) -> bayes_complete
 row.names(bayes_complete) = NULL
-knitr::kable(bayes_complete, caption = paste0("Bayesian model with simulated dataset. n = ", y, 
-                                              ", Gompertz \u03B2 = ", round(b_,4), ", Gompertz \u03B1 = ", round(a_,4), ".", sep = ""))
+bayes_complete_table <- knitr::kable(bayes_complete, caption = paste0("Bayesian model with simulated dataset. n = ", y, 
+                                              ", Gompertz \u03B2 = ", round(b_,4), ", 
+                                              Gompertz \u03B1 = ", round(a_,4), ".", sep = ""))  %>% 
+  kableExtra::column_spec(., 1:9, width_max = "3cm")

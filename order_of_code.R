@@ -20,8 +20,9 @@ RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodi
 # run extensive code anew. Set TRUE to run extensive code (6 h +)
 runCodeNew <- FALSE
 # Specify filename prefix for saved files and create a folder if needed:
-saveFileDir = "results"
+saveFileDir = "preprocessed_files"
 dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
+
 
 #############
 # Methods
@@ -63,26 +64,20 @@ do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
 # table of RMSEs
 rmse_estim_result[order(rmse_estim_result$RMSE) ,]
 # plot for Bayesian model of difference
-gridExtra::grid.arrange (
-  ggplot(lt_sim, aes(x = b_, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
-    xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2"),
-  ggplot(lt_sim, aes(x = y, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
-    xlab("sample size") + ylab("original \u03B2 - estimated \u03B2"),
-  ncol = 2
-)
+do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 
-# Figure for Human Mortality Database, this requires credentials
+# Human Mortality Database, this requires credentials
 source("./Human_Mortality_Database.R")
 HMD_plot
 
 
-# Figure for historic life tables
+# Historic life tables
 source("./historical_lifetables.R")
 do.call(gridExtra::grid.arrange, c(hist_lt, ncol = 3))
 
 
-# Figure 7: Global History of Health
+# Global History of Health
 source("./BoE_computation.R") # can take a while
 plot_all # all sites in one
 
@@ -91,7 +86,9 @@ do.call(gridExtra::grid.arrange, c(plot_list, ncol = 3))
 
 # show table
 BoE_result[order((BoE_result$period) ), ] %>% 
-  knitr::kable(., caption = "Global History of health") 
+  as.data.frame.matrix() %>%
+  knitr::kable(., caption = "Global History of health")  %>%
+  kableExtra::column_spec(., 1:13, width= "3cm")
 
 
 ############
@@ -99,16 +96,12 @@ BoE_result[order((BoE_result$period) ), ] %>%
 
 # plot bad age diagrams of BoE
 do.call(gridExtra::grid.arrange, c(plot_list_bad, ncol = 3))
-
 # plot 9 randomly selected good age diagrams
 do.call(gridExtra::grid.arrange, c(plot_list_good, ncol = 3))
-
-
 
 # Minimum Gompertz beta in Coale/Demeny-Tables
 source("./coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
-
 
 
 ##############
@@ -116,4 +109,5 @@ min(gompertz_df$Gompertz_shape)
 
 # one complete Bayesian example, with different settings
 set.seed(1312)
-source("./bayes_complete.R") # can take a while
+source("./bayes_complete.R") # can take a few minutes
+bayes_complete_table
