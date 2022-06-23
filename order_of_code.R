@@ -68,9 +68,9 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 
 # Human Mortality Database, this requires credentials
-source("./Human_Mortality_Database.R")
+source("./Human_Mortality_Database.R") # processing takes some seconds
 HMD_plot
-
+do.call(gridExtra::grid.arrange, c(swe_list, ncol = 2))
 
 # Historic life tables
 source("./historical_lifetables.R")
