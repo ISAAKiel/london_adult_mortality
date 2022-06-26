@@ -77,13 +77,25 @@ plot_all <- ggplot(subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1),
   ylab("Gompertz \u03B2") + xlab("years AD") + xlim(200,1900) + ylim(0.01, 0.06)
 
 plot_list <- list()
-regions <- BoE_result$region[ which(BoE_result$region != "Mediterranean")]
+regions <- unique(BoE_result$region[ which(BoE_result$region != "Mediterranean")])
 for (j in regions) {
   region_data <- subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1)[ which(BoE_result$region == j), ]
   plot_list[[j]] <- ggplot(region_data, aes(x = century, y = `Gompertz beta`)) + geom_point() + ylab("Gompertz \u03B2") +
     geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
     xlab(j) + xlim(200, 1900) + ylim(0.01, 0.06)
 }
+
+BoE_result <- merge(BoE_sites_subset, BoE_result)
+
+plot_urbanity <- list()
+urbanity <- unique(BoE_result$urban)
+for (j in urbanity) {
+  urban_data <- subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1)[ which(BoE_result$urban == j), ]
+  plot_urbanity[[j]] <- ggplot(urban_data, aes(x = century, y = `Gompertz beta`)) + geom_point() + ylab("Gompertz \u03B2") +
+    geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
+    xlab(j) + xlim(200, 1900) + ylim(0.01, 0.06)
+}
+do.call(gridExtra::grid.arrange, c(plot_urbanity, ncol = 2))
 
 BoE_good <- subset(BoE_result, `min. ESS` > 5000 & `max. PSRF` < 1.1)[,-c(9:11)]
 BoE_bad <- subset(BoE_result, `min. ESS` < 5000 | `max. PSRF` > 1.1 )[,-c(9:11)]

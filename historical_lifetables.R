@@ -7,8 +7,10 @@ source("./lifetables_processing/Germany.R")
 source("./lifetables_processing/blayo_france.R")
 source("./lifetables_processing/germany_imhof.R")
 
-comp_df <- rbind(London_result, Paris_result, halley_result, 
-                 suessmilch_result, medieval_result, uelzen_result, blayo_result )
+comp_df <- rbind(#London_result, Paris_result, halley_result, 
+                 #suessmilch_result, 
+  medieval_result, #uelzen_result, 
+  blayo_result )
 rownames(comp_df) <- NULL
 cols.num <- c("year", "beta", "alpha")
 comp_df[cols.num] <- sapply(comp_df[cols.num],as.numeric)

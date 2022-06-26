@@ -8,29 +8,29 @@ group <- unique(medieval_melt$variable)
 medieval_result <- data.frame()
 for(i in group) {
   group_data <- medieval_melt[ which(medieval_melt$variable == i), ]
-  group_data$age_mod <- group_data$Age - 22.5
+  group_data$age_mod <- group_data$Age - 20
   
-  # calculation of lx
-  lx_c <- NULL
+  df_length <- length(group_data$age_mod)
+  
+  # calculation of dx
+  dx <- NULL
+  lx_ <- NULL
   lx <- 1
-  for (k in 2:length(group_data$Age)) {
-    lx_1 <- lx * (1 - group_data$qx[k-1]* 0.001)
-    lx_c <- c(lx_c, lx_1)
-    lx <- lx_1
+  for (k in 1: df_length ) {
+    dx_1 <- group_data$qx[k] * lx / 1000
+    lx <- lx - dx_1
+    dx <- c(dx, dx_1)
+    lx_ <- c(lx_, lx)
   }
-  group_data$lx <- c(1, lx_c)
+  group_data$dx <- dx
   
-  # mort_fit_OLS <- lm(log(qx*0.001)  ~ age_mod, data = year_data)
-  # OLS_Gompertz_shape <- mort_fit_OLS$coefficients[2]
-  # OLS_Gompertz_rate <- exp(mort_fit_OLS$coefficients[1])
+  group_data$death <- 1
+  sample_data_lt <- flexsurv::flexsurvreg(formula = survival::Surv(age_mod, death) ~ 1, 
+                                          data = group_data, dist="gompertz", weights = dx)
+  sample_data_lt_Gompertz_shape <- sample_data_lt$coefficients[1]
+  sample_data_lt_Gompertz_rate <- exp(sample_data_lt$coefficients[2])
   
-  # fit survival data with nls
-  nls_estim_fit <- nls(lx ~ exp(a/b - a/b * exp(b * (Age - 20) ) ) , 
-                       data = group_data, start=list(a = 0.001, b = 0.075) )
-  NLS_estim_Gompertz_shape <- summary(nls_estim_fit)$coefficients[2]
-  NLS_estim_Gompertz_rate <- summary(nls_estim_fit)$coefficients[1]
-  
-  ind_result <- cbind(group = i, beta = NLS_estim_Gompertz_shape, alpha = NLS_estim_Gompertz_rate)
+  ind_result <- cbind(group = i, beta = sample_data_lt_Gompertz_shape, alpha = sample_data_lt_Gompertz_rate)
   medieval_result <- rbind(medieval_result, ind_result )
 }
 

@@ -75,7 +75,7 @@ do.call(gridExtra::grid.arrange, c(swe_list, ncol = 2))
 # Historic life tables
 source("./historical_lifetables.R")
 do.call(gridExtra::grid.arrange, c(hist_lt, ncol = 3))
-
+do.call(gridExtra::grid.arrange, c(germany_list, ncol = 2))
 
 # Global History of Health
 source("./BoE_computation.R") # can take a while
