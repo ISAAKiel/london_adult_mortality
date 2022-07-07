@@ -1,4 +1,4 @@
-Age	Monks	Peerage	Tenants_1401	Tenants_1425
+Age	Monks	Peerage	Tenants_I	Tenants_II
 20	65	35	104	102
 25	75	72	92	135
 30	105	90	98	106

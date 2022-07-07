@@ -77,6 +77,15 @@ rmse_estim_result <- data.frame(lt_sim_estim_shapes_names, rmse_estim_result, NA
 rownames(rmse_estim_result) <- NULL
 colnames(rmse_estim_result) <- c("method", "RMSE", "NAs")
 
+# computing RMSE by hand for extreme outliers of MLE
+lt_sim_sub <- subset(lt_sim, MLE_estim_lt_Gompertz_shape < 0.15)
+MLE_wo_OL <- Metrics::rmse(lt_sim_sub$b_, lt_sim_sub$MLE_estim_lt_Gompertz_shape)
+MLE_wo_OL_count <- 1000 - count(lt_sim_sub)
+MLE_wo_OL_df <- data.frame("MLE_wo_OL", MLE_wo_OL, MLE_wo_OL_count)
+colnames(MLE_wo_OL_df) <- c("method", "RMSE", "NAs")
+rmse_estim_result <- rbind(rmse_estim_result,MLE_wo_OL_df)
+
+
 plot_list_bayes_diff <- list(
   ggplot(lt_sim, aes(x = b_, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2"),
