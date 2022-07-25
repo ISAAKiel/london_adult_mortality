@@ -24,7 +24,7 @@ for(i in years) {
     lx_ <- c(lx_, lx)
   }
   year_data$dx <- dx
-  
+
   year_data$death <- 1
   sample_data_lt <- flexsurv::flexsurvreg(formula = survival::Surv(age_mod, death) ~ 1, 
                                           data = year_data, dist="gompertz", weights = dx)

@@ -92,3 +92,10 @@ plot_list_bayes_diff <- list(
   ggplot(lt_sim, aes(x = y, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("sample size") + ylab("original \u03B2 - estimated \u03B2")
 )
+
+ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = surv_Gompertz_shape)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$surv_Gompertz_shape), max(lt_sim$surv_Gompertz_shape), by = 0.01),2))
+ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = MLE_lt_Gompertz_shape)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$MLE_lt_Gompertz_shape), max(lt_sim$MLE_lt_Gompertz_shape), by = 0.01),2))
+ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = bayes_gomp_b)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$bayes_gomp_b), max(lt_sim$bayes_gomp_b), by = 0.01),2))

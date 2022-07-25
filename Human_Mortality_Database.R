@@ -91,22 +91,36 @@ merge_1 <- merge(lt_result_Dx, lt_result_dx, by="year")
 merge_2 <- merge(merge_1, lt_result_pop, by="year")
 merge_swe <- merge(merge_2, swe_e15, by="year")
 
+# swe_list <- list() 
+# swe_list[[1]] <- ggplot(merge_swe) + geom_line(aes(x = year, y = beta.x, colour = "red")) + 
+#   geom_line(aes(x = year, y = beta.y, colour = "black"))  + ylab("Gompertz \u03B2") +
+#   #labs(color = "parameter") + 
+#   theme(legend.position = c(0.125, 0.8)) +
+#   scale_color_manual(labels = c(expression(d[x]), expression(D[x])), values = c("black", "red"))
+# swe_list[[2]] <- ggplot(merge_swe, aes(x = (beta.y - beta.x)/beta.x*100)) + 
+#   geom_density(bw = 2) + xlab("Difference in Gompertz \u03B2 in %")
+# swe_list[[3]] <- ggplot(merge_swe, aes(x = year, y = (beta.y - beta.x)/beta.x*100)) + 
+#   geom_point() + ylab("Difference in Gompertz \u03B2 in %")
+# swe_list[[4]] <- ggplot(merge_swe, aes(x = diff * 100, y = (beta.y - beta.x)/beta.x*100)) + 
+#   geom_point() + geom_smooth(method='lm', formula= y~x) + ylab("difference in Gompertz \u03B2 in %") +
+#   xlab("population increase in %")
+
 swe_list <- list() 
 swe_list[[1]] <- ggplot(merge_swe) + geom_line(aes(x = year, y = beta.x, colour = "red")) + 
   geom_line(aes(x = year, y = beta.y, colour = "black"))  + ylab("Gompertz \u03B2") +
   #labs(color = "parameter") + 
   theme(legend.position = c(0.125, 0.8)) +
   scale_color_manual(labels = c(expression(d[x]), expression(D[x])), values = c("black", "red"))
-swe_list[[2]] <- ggplot(merge_swe, aes(x = (beta.y - beta.x)/beta.x*100)) + 
-  geom_density(bw = 2) + xlab("Difference in Gompertz \u03B2 in %")
-swe_list[[3]] <- ggplot(merge_swe, aes(x = year, y = (beta.y - beta.x)/beta.x*100)) + 
-  geom_point() + ylab("Difference in Gompertz \u03B2 in %")
-swe_list[[4]] <- ggplot(merge_swe, aes(x = diff * 100, y = (beta.y - beta.x)/beta.x*100)) + 
-  geom_point() + geom_smooth(method='lm', formula= y~x) + ylab("difference in Gompertz \u03B2 in %") +
+swe_list[[2]] <- ggplot(merge_swe, aes(x = (beta.y - beta.x)) ) + 
+  geom_density(bw = 0.001) + xlab("Difference in Gompertz \u03B2")
+swe_list[[3]] <- ggplot(merge_swe, aes(x = year, y = (beta.y - beta.x)) ) + 
+  geom_point() + ylab("Difference in Gompertz \u03B2")
+swe_list[[4]] <- ggplot(merge_swe, aes(x = diff * 100, y = (beta.y - beta.x))) + 
+  geom_point() + geom_smooth(method='lm', formula= y~x) + ylab("difference in Gompertz \u03B2") +
   xlab("population increase in %")
 
-# fit <- lm((beta.x - beta.y)/beta.x*100 ~ diff, data = subset(merge_swe, year !=1825 & year !=1775) ) 
-# summary(fit)
+ fit <- lm((beta.x - beta.y) ~ diff, data = merge_swe) #subset(merge_swe, year !=1825 & year !=1775) ) 
+ summary(fit)
 
 # plot_list <- list()
 # for (j in HDM_countries) {

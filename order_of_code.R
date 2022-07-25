@@ -5,7 +5,7 @@ require(pacman) || install.packages("pacman")
 pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
                mortAAR, nlme, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
-               coda, rjags, runjags, demogR, sf, rnaturalearth)
+               coda, rjags, runjags, demogR, sf, rnaturalearth, readxl)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
@@ -89,6 +89,16 @@ BoE_result[order((BoE_result$period) ), ] %>%
   as.data.frame.matrix() %>%
   knitr::kable(., caption = "Global History of health")  %>%
   kableExtra::column_spec(., 1:13, width= "3cm")
+
+
+# Wellcome Database
+source("./Wellcome_DB.R") # can take a while
+# show table
+Wellcome_result %>% 
+  as.data.frame.matrix() %>%
+  knitr::kable(., caption = "Wellcome Database")  %>%
+  kableExtra::column_spec(., 1:3, width= "5cm")
+
 
 
 ############

@@ -119,3 +119,17 @@ lt.sampling <- function(sampling,
   print(end_time - start_time)
   return(lt_result)
 }
+
+# read WELLCOME database data: xlsx-files with two sheets
+xls.amtl <- function(path) {
+  options(dplyr.summarise.inform = FALSE)
+  my_data1 <- readxl::read_excel(path, sheet = 1)
+  my_data2 <- readxl::read_excel(path, sheet = 2)
+  merged <- bind_rows(my_data1,my_data2)
+  colnames(merged) <- c("site", "ind", "tp", "sex", "age", "tooth")
+  merged_sub <- subset(merged, age > 6 & age < 12)
+  ind_list <- merged_sub %>% group_by(ind, sex, age) %>% summarize(n())
+  colnames(ind_list) <-c("ind", "sex", "age", "tp")
+  ind_list <- ind_list[,-4]
+  return(ind_list)
+}
