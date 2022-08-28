@@ -127,9 +127,36 @@ xls.amtl <- function(path) {
   my_data2 <- readxl::read_excel(path, sheet = 2)
   merged <- bind_rows(my_data1,my_data2)
   colnames(merged) <- c("site", "ind", "tp", "sex", "age", "tooth")
-  merged_sub <- subset(merged, age > 6 & age < 12)
+  merged_sub <- subset(merged, age > 5 & age < 12)
   ind_list <- merged_sub %>% group_by(ind, sex, age) %>% summarize(n())
   colnames(ind_list) <-c("ind", "sex", "age", "tp")
   ind_list <- ind_list[,-4]
   return(ind_list)
+}
+
+
+# this function generates starting values for the Gompertz distribution
+# if the starting age is not 15
+gomp.a0 <- function(
+    sampling = 100000,
+    b_min = 0.02,
+    b_max = 0.1,
+    minimum_age = 15) {
+  
+  # we do not want too much overhead so no computation if the default age of 15 is true
+  if (minimum_age == 15) {
+    fit_coeff <- c(-66.77, -2.324914, 0.0823) 
+  } else {
+    null_age <- minimum_age - 15
+    
+    ind_df <- data.frame(b = runif(n = sampling, min = b_min, max = b_max)) %>%
+      mutate(a = exp(rnorm(n(), (-66.77 * (b - 0.0718) - 7.119), sqrt(0.0823) ))) %>% 
+      mutate(a0 = a * exp(b * null_age))
+    
+    fit <- lm(log(a0) ~ b, data = ind_df)
+    rse <- sum(fit$residuals**2)/fit$df.residual # without squaring
+    fit_coeff <- c(fit$coefficients[2], fit$coefficients[1], rse )
+    fit_coeff <- unname(fit_coeff)
+  }
+  return(fit_coeff)
 }

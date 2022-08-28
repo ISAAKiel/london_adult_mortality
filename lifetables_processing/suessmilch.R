@@ -23,8 +23,7 @@ Paris_lt_Gompertz_shape <- Paris_lt$coefficients[1]
 Paris_lt_Gompertz_rate <- exp(Paris_lt$coefficients[2])
 Paris_result <- data.frame(names = "Paris", group = "Süßmilch", year = 1750, beta = Paris_lt_Gompertz_shape, alpha = Paris_lt_Gompertz_rate)
 
-suessmilch_data <- read.table("~/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/data/Suessmilch_data.txt", 
-                              header = TRUE, sep = "\t")
+suessmilch_data <- read.table("./data/Suessmilch_data.txt", header = TRUE, sep = "\t")
 
 suessmilch_melt <- reshape2::melt(suessmilch_data, id.vars = c("Age", "group"), value.name = "Dx")
 

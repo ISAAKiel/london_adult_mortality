@@ -2,43 +2,45 @@ HMD_username <- readline(prompt = "Enter username: ")
 HMD_password <- readline(prompt="Enter password: ")
 credentials <- c(HMD_username, HMD_password)
 
-set.seed(9989)
-random_numb <- round(runif(n = 1, min = 1, max = 232))
-start_numb <- 1
-HDM_countries <- c("SWE", "CHE", "DNK", "FRATNP", "GBRTENW", "NLD")
-lt_result <- data.frame()
-for(t in HDM_countries) {
-  # this extracts life table data for both sexes
-  country_lt <- HMDHFDplus::readHMDweb(t, "bltper_5x5", credentials[1], credentials[2])
-  years <- unique(country_lt$Year)
-  for(i in years) {
-    year_data <- country_lt[ which(country_lt$Year == i), ]
-    year_data <- subset(year_data, Age >= 15)
-    year_data$death <- 1 
-    surv_lt <- flexsurv::flexsurvreg(formula = survival::Surv(Age - 15, death) ~ 1, data = year_data, dist="gompertz", weights = dx)
-    surv_lt_Gompertz_shape <- surv_lt$coefficients[1]
-    surv_lt_Gompertz_rate <- exp(surv_lt$coefficients[2])
-    ind_result <- cbind(country = t, year = i, beta = surv_lt_Gompertz_shape, alpha = surv_lt_Gompertz_rate)
-    lt_result <- rbind(lt_result, ind_result )
-    if(start_numb == random_numb){
-      random_data <- year_data
-      random_Gompertz_shape <- surv_lt_Gompertz_shape
-      random_Gompertz_rate <- surv_lt_Gompertz_rate
-    }
-    start_numb <- start_numb + 1
-  }
-}
-rownames(lt_result) <- NULL
-cols.num <- c("year", "beta", "alpha")
-lt_result[cols.num] <- sapply(lt_result[cols.num],as.numeric)
+# set.seed(9989)
+# random_numb <- round(runif(n = 1, min = 1, max = 232))
+# start_numb <- 1
+# HDM_countries <- c("SWE", "CHE", "DNK", "FRATNP", "GBRTENW", "NLD")
+# lt_result <- data.frame()
+# for(t in HDM_countries) {
+#   # this extracts life table data for both sexes
+#   country_lt <- HMDHFDplus::readHMDweb(t, "bltper_5x5", credentials[1], credentials[2])
+#   years <- unique(country_lt$Year)
+#   for(i in years) {
+#     year_data <- country_lt[ which(country_lt$Year == i), ]
+#     year_data <- subset(year_data, Age >= 15)
+#     year_data$death <- 1 
+#     surv_lt <- flexsurv::flexsurvreg(formula = survival::Surv(Age - 15, death) ~ 1, data = year_data, dist="gompertz", weights = dx)
+#     surv_lt_Gompertz_shape <- surv_lt$coefficients[1]
+#     surv_lt_Gompertz_rate <- exp(surv_lt$coefficients[2])
+#     ind_result <- cbind(country = t, year = i, beta = surv_lt_Gompertz_shape, alpha = surv_lt_Gompertz_rate)
+#     lt_result <- rbind(lt_result, ind_result )
+#     if(start_numb == random_numb){
+#       random_data <- year_data
+#       random_Gompertz_shape <- surv_lt_Gompertz_shape
+#       random_Gompertz_rate <- surv_lt_Gompertz_rate
+#     }
+#     start_numb <- start_numb + 1
+#   }
+# }
+# rownames(lt_result) <- NULL
+# cols.num <- c("year", "beta", "alpha")
+# lt_result[cols.num] <- sapply(lt_result[cols.num],as.numeric)
+# 
+# HMD_plot <- ggplot(lt_result, aes(x = year, y = beta)) + geom_point(aes(colour = country)) + ylab("Gompertz \u03B2") +
+#   geom_smooth(method='loess', span = 0.25, formula = y ~ x, colour = "red", se = TRUE, level = 0.95)
 
-HMD_plot <- ggplot(lt_result, aes(x = year, y = beta)) + geom_point(aes(colour = country)) + ylab("Gompertz \u03B2") +
-  geom_smooth(method='loess', span = 0.25, formula = y ~ x, colour = "red", se = TRUE, level = 0.95)
 
+HMDHFDplus::getHMDitemavail("SWE", credentials[1], credentials[2])
 
 # comparing Gompertz beta values for Dx and dx
-swe_dx <- HMDHFDplus::readHMDweb("SWE", "bltper_5x5", credentials[1], credentials[2])
-swe_Dx <- HMDHFDplus::readHMDweb("SWE", "Deaths_5x5", credentials[1], credentials[2])
+swe_dx <- HMDHFDplus::readHMDweb("SWE", "bltper_5x10", credentials[1], credentials[2])
+swe_Dx <- HMDHFDplus::readHMDweb("SWE", "Deaths_5x10", credentials[1], credentials[2])
 swe_pop <- HMDHFDplus::readHMDweb("SWE", "Population5", credentials[1], credentials[2])
 
 lt_result_dx <- data.frame()
@@ -82,7 +84,7 @@ for(i in years) {
   lt_result_pop <- rbind(lt_result_pop, pop_result )
 }
 colnames(lt_result_pop) <- c("year", "pop")
-lt_result_pop$diff <- c(0, lt_result_pop$pop[-1] - lt_result_pop$pop[-55]) / lt_result_pop$pop
+lt_result_pop$diff <- c(0, lt_result_pop$pop[-1] - lt_result_pop$pop[-28]) / lt_result_pop$pop
 
 swe_e15 <- swe_dx[which(swe_dx$Age == 15),]
 colnames(swe_e15) <- c("year", "age", "mx", "qx", "ax", "lx", "dx", "Lx", "Tx", "ex","OpenInterval")
@@ -119,7 +121,7 @@ swe_list[[4]] <- ggplot(merge_swe, aes(x = diff * 100, y = (beta.y - beta.x))) +
   geom_point() + geom_smooth(method='lm', formula= y~x) + ylab("difference in Gompertz \u03B2") +
   xlab("population increase in %")
 
- fit <- lm((beta.x - beta.y) ~ diff, data = merge_swe) #subset(merge_swe, year !=1825 & year !=1775) ) 
+ fit <- lm((beta.x - beta.y) ~ diff, data = merge_swe) #subset(merge_swe, year < 1850) ) 
  summary(fit)
 
 # plot_list <- list()

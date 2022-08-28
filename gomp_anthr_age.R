@@ -20,6 +20,9 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
   ones <- rep(1,Ntotal)
   C <- 100000
   
+  # Generate values for Gompertz alpha if minimum age is not 15
+  gomp_a0 <- gomp.a0(minimum_age = minimum_age)
+  
   # Generate inits-list with custom function,
   # including RNGs and seed for JAGS for reproducible results
   initsList <- function(){
@@ -44,7 +47,10 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
     ones = ones,
     minimum_age = minimum_age,
     age_end = age_end,
-    age_beg = age_beg
+    age_beg = age_beg,
+    gomp_a0_m = gomp_a0[1],
+    gomp_a0_ic = gomp_a0[2],
+    gomp_a0_var = gomp_a0[3]
   )
   #-----------------------------------------------------------------------------
   # THE MODEL.
@@ -57,8 +63,10 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
       ones[i] ~ dbern( spy[i]  )
       }
     b  ~ dgamma(0.01, 0.01) # a must not be null
-    log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
-    log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
+    #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
+    #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
+    log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
+    log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
     a <- exp(log_a * (-1))
     M <- 1 / b * log (b/a) + minimum_age
 
@@ -70,8 +78,9 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
   
   # RUN THE CHAINS
   parameters = c( "a", "b", 
-                  #"M" , 
-                  "age.s")
+                  "M"  
+                  #,"age.s"
+                  )
   runJagsOut <- run.jags( method = runjagsMethod ,
                           model = modelString ,
                           monitor = parameters ,

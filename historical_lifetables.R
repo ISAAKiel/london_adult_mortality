@@ -1,29 +1,26 @@
-source("./lifetables_processing/geneva.R")
 source("./lifetables_processing/English_Mortality.R")
-source("./lifetables_processing/halley_Breslau.R")
-source("./lifetables_processing/suessmilch.R")
 source("./lifetables_processing/Medieval_England.R")
-source("./lifetables_processing/Germany.R")
-source("./lifetables_processing/blayo_france.R")
-source("./lifetables_processing/germany_imhof.R")
+source("./lifetables_processing/London_1841_raw_all.R")
+source("./lifetables_processing/Landers_1997_London_series.R")
+source("./lifetables_processing/HMD_UK.R")
 
-hist_lt <- list()
-hist_lt[[1]] <-    ggplot(medieval_result, aes(x = year, y = beta, label = names ) ) + geom_point() + 
-  ylab("Gompertz \u03B2") + xlab("year") + ylim(0.025, 0.075) + 
-  ggtitle("Medieval England") +  theme(plot.title = element_text(hjust = 0.5)) +
-  ggrepel::geom_text_repel()
-hist_lt[[2]] <-  ggplot(geneva_result, aes(x = year, y = beta)) + geom_point() + ylab("Gompertz \u03B2") + ylim(0.025, 0.075) +
-    geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
-    ggtitle("Geneva") +  theme(plot.title = element_text(hjust = 0.5))
-hist_lt[[3]] <-    ggplot(eng_mort_result, aes(x = year, y = beta)) + geom_point() + ylab("Gompertz \u03B2") + ylim(0.025, 0.075) +
-    geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
-    ggtitle("England") +  theme(plot.title = element_text(hjust = 0.5))
-hist_lt[[4]] <-    ggplot(blayo_result, aes(x = year, y = beta)) + geom_point() + ylab("Gompertz \u03B2") +
-  #geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
-  ggtitle("France") + xlim(1740, 1850) + ylim(0.025, 0.075) +  theme(plot.title = element_text(hjust = 0.5))
-hist_lt[[5]] <-    ggplot(subset(germany_result_qx, group == "gesamt"), aes(x = year, y = beta)) + geom_point() + ylab("Gompertz \u03B2") +
-    geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
-    ggtitle("Germany (rural)") + xlim(1740, 1850) + ylim(0.025, 0.075) +  theme(plot.title = element_text(hjust = 0.5))
-hist_lt[[6]] <-    ggplot(subset(germany_result_qx, group == "hamburg"), aes(x = year, y = beta)) + geom_point() + ylab("Gompertz \u03B2") +
-  geom_smooth(method='loess', span = 0.75, formula = y ~ x, colour = "red", se = TRUE, level = 0.95) +
-  ggtitle("Hamburg") + xlim(1740, 1850) + ylim(0.025, 0.075) +  theme(plot.title = element_text(hjust = 0.5))
+# Gompertz beta
+monks_df <- data.frame(group = "Monks", year = "X1450", Mode = monks_result[2,5])
+england <- data.frame(group = "England", eng_mort_result[which(eng_mort_result$parameter == "beta"),c(1,7)])
+London <- data.frame(group = "London", London_Landers_result[which(London_Landers_result$parameter == "beta"),c(1,7)])
+London_1841 <- data.frame(group = "London 1841", year = "X1841", Mode = London_1841_result[2,5])
+english_mortality <- rbind(monks_df, england, London, London_1841)
+
+ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = source ) ) + geom_point() + 
+  ylab("Gompertz \u03B2") + xlab("year") + ylim(0.025, 0.075)
+
+# modal age M
+monks_df <- data.frame(source = "Monks", year = "X1450", Mode = monks_result[3,5])
+england <- data.frame(source = "Family Reconst.", eng_mort_result[which(eng_mort_result$parameter == "M"),c(1,7)])
+London <- data.frame(source = "London (Landers)", London_Landers_result[which(London_Landers_result$parameter == "M"),c(1,7)])
+London_1841 <- data.frame(source = "London 1841", year = "X1841", Mode = London_1841_result[3,5])
+HMD_UK <- data.frame(source = "HMD UK", HMD_UK_result[which(HMD_UK_result$parameter == "M"),c(1,7)])
+english_mortality <- rbind(monks_df, england, London, London_1841, HMD_UK)
+
+english_mortality_M <- ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = source ) ) + geom_point() + 
+  ylab("modal age") + xlab("year") + ylim(10, 70)

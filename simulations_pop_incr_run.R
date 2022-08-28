@@ -9,19 +9,13 @@ if (runCodeNew){
       geom_boxplot()  + 
       ylab("Gompertz \u03B2") + ggtitle(paste0("Original Gompertz \u03B2: ", (k + 1)/100) ) +
       xlab("population increase")
+    lt_sim_list[[k + 6]] <-   ggplot(lt_sim, aes(y = 1 / surv_Gompertz_shape * log(surv_Gompertz_shape/surv_Gompertz_rate) + 15, x = pop_inc_fac) ) + 
+      geom_boxplot()  + 
+      ylab("modal age M") + ggtitle(paste0("Original Gompertz \u03B2: ", (k + 1)/100) ) +
+      xlab("population increase")
   }
   
   # saves results in Rda-object
   save(lt_sim_list, file = file.path(".", saveFileDir, "lt_sim_list.Rda") )
 }
 load(file.path(".", saveFileDir, "lt_sim_list.Rda") )
-
-do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 2) )
-
-
-head(lt_sim)
-
-ggplot(lt_sim) + geom_point(aes(x = j, y = surv_Gompertz_shape, group = pop_inc, colour = pop_inc) )
-
-ggplot(lt_sim) + geom_boxplot(aes(y = surv_Gompertz_shape, group = pop_inc) )
-
