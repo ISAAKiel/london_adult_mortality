@@ -15,7 +15,7 @@ ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colo
   ylab("Gompertz \u03B2") + xlab("year") + ylim(0.025, 0.075)
 
 # modal age M
-monks_df <- data.frame(source = "Monks", year = "X1450", Mode = monks_result[3,5])
+monks_df <- data.frame(source = "Christ Church Monks", year = "X1450", Mode = monks_result[3,5])
 england <- data.frame(source = "Family Reconst.", eng_mort_result[which(eng_mort_result$parameter == "M"),c(1,7)])
 London <- data.frame(source = "London (Landers)", London_Landers_result[which(London_Landers_result$parameter == "M"),c(1,7)])
 London_1841 <- data.frame(source = "London 1841", year = "X1841", Mode = London_1841_result[3,5])

@@ -36,6 +36,10 @@ dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
 # Figure 1: Gompertz.
 source("./gompertz_distribution.R")
 
+# Minimum Gompertz beta in Coale/Demeny-Tables
+source("./lifetables_processing/coale_demeny_life_tables_gompertz.R")
+min(gompertz_df$Gompertz_shape)
+
 
 #############
 # Data
@@ -82,16 +86,12 @@ gridExtra::grid.arrange(stbrides_crypt_plot,
 # show overview of Wellcome data
 wellcome_overview
 
-# modal ages from historical and osteological data
-gridExtra::grid.arrange(english_mortality_M, wellcome_plot, ncol = 2)
-
 
 ############
 # Discussion
 
-# Minimum Gompertz beta in Coale/Demeny-Tables
-source("./coale_demeny_life_tables_gompertz.R")
-min(gompertz_df$Gompertz_shape)
+# modal ages from historical and osteological data
+gridExtra::grid.arrange(english_mortality_M, wellcome_plot, ncol = 2)
 
 
 ##############
