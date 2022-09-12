@@ -1,47 +1,11 @@
-# St. Bride's crypt
-molas_data <- c("../Wellcome_Database/ST\ BRIDES\ CRYPT_SB79_DENTAL\ DATA_NILS\ MUELLER-SCHEESSEL_SEPT\ 2021.xlsx")
-my_data3 <- readxl::read_excel(molas_data, sheet = 3) [, 1:8]
-colnames(my_data3) <- c("site", "ind", "birth", "death", "known_sex", "known_age", "sex", "age")
-stbrides <- as.data.frame(my_data3)
-stbrides$known_age <- as.integer(stbrides$known_age)
-stbrides$birth <- as.integer(stbrides$birth)
-stbrides$death <- as.integer(stbrides$death)
-stbrides <- na.omit(stbrides)
-stbrides <- subset(stbrides, known_age >= 12 & ind != 105)
-
-length_stbrides <- nrow(stbrides)
-for (i in 1:length_stbrides) {
-  if(stbrides$age[i] == 6) {
-    stbrides$age_beg[i] <-  12
-    stbrides$age_end[i] <-  18
-  } else if(stbrides$age[i] == 7) {
-    stbrides$age_beg[i] <-  18
-    stbrides$age_end[i] <-  26
-  } else if(stbrides$age[i] == 8) {
-    stbrides$age_beg[i] <-  26
-    stbrides$age_end[i] <-  36
-  } else if(stbrides$age[i] == 9) {
-    stbrides$age_beg[i] <-  36
-    stbrides$age_end[i] <-  46
-  } else if(stbrides$age[i] == 10) {
-    stbrides$age_beg[i] <-  46
-    stbrides$age_end[i] <-  100
-  } else if(stbrides$age[i] == 11) {
-    stbrides$age_beg[i] <-  18
-    stbrides$age_end[i] <-  100
-  } 
-}
-
-gomp.anthr_age.cat(stbrides, age_beg = "age_beg", age_end = "age_end", category = "sex",
-                   thinSteps = 10, minimum_age = 12,
-                   numSavedSteps = 100000) %>%
+gomp.anthr_age.error(stbrides, age_beg = "age_beg", age_end = "age_end",
+                     thinSteps = 1, minimum_age = 12,
+                     numSavedSteps = 300000) %>%
   diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
 
-
-gomp.anthr_age.cat <- function(x, # data.frame with needed columns
+gomp.anthr_age.error <- function(x, # data.frame with needed columns
                            age_beg, # column name: documented age of the individual,
                            age_end,
-                           category,
                            minimum_age = 15,
                            numSavedSteps = numSavedSteps,
                            thinSteps = thinSteps,
@@ -58,8 +22,6 @@ gomp.anthr_age.cat <- function(x, # data.frame with needed columns
   age_beg = x[,age_beg]
   age_end = x[,age_end]
   Ntotal <- length(age_beg) # number of individuals  
-  c = as.numeric(as.factor(x[,category]))
-  Ncat = length(unique(c))
   ones <- rep(1,Ntotal)
   C <- 100000
   
@@ -75,9 +37,8 @@ gomp.anthr_age.cat <- function(x, # data.frame with needed columns
                   "base::Mersenne-Twister")
     init_list <- list(
       .RNG.name = sample(RNG_list, 1),
-      .RNG.seed = sample(1:1e+06, 1)
-      #,
-      #b = rnorm(1, 0.05, 0.005)
+      .RNG.seed = sample(1:1e+06, 1),
+      b = rnorm(1, 0.05, 0.005)
     )
     return(init_list)
   }
@@ -92,8 +53,6 @@ gomp.anthr_age.cat <- function(x, # data.frame with needed columns
     minimum_age = minimum_age,
     age_end = age_end,
     age_beg = age_beg,
-    c = c,
-    Ncat = Ncat,
     gomp_a0_m = gomp_a0[1],
     gomp_a0_ic = gomp_a0[2],
     gomp_a0_var = gomp_a0[3]
@@ -103,20 +62,22 @@ gomp.anthr_age.cat <- function(x, # data.frame with needed columns
   modelString = "
   model {
     for ( i in 1:Ntotal ) {
-      age[i] ~ dunif(age_beg[i] - minimum_age, age_end[i] - minimum_age)
+      age_we[i] ~ dunif(age_beg[i] - minimum_age, age_end[i] - minimum_age)
+      age_error[i]  ~ dnorm(age_we[i], 1/15^2) T(0, 85)
+      age_beg_[i] <- ifelse(age_error[i] < age_beg[i], age_error[i], age_beg[i])
+      age_end_[i] <- ifelse(age_error[i] > age_end[i], age_error[i], age_end[i])
+      age[i] ~ dunif(age_beg_[i] - minimum_age, age_end_[i] - minimum_age)
       age.s[i] <- age[i] + minimum_age
-      spy[i] <- a[c[i]] * exp(b[c[i]] * age[i]) * exp(-a[c[i]]/b[c[i]] * (exp(b[c[i]] * age[i]) - 1)) / C # implementing Gompertz probability density
+      spy[i] <- a * exp(b * age[i]) * exp(-a/b * (exp(b * age[i]) - 1)) / C # implementing Gompertz probability density
       ones[i] ~ dbern( spy[i]  )
-    }
-        for ( k in 1:Ncat ) {
-          b[k] ~ dgamma(beta_gamma_mu, 1 / beta_gamma_sd^2)
-          log_a_M[k] <- (gomp_a0_m * b[k] + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
-          log_a[k]  ~ dgamma(log_a_M[k]^2 / gomp_a0_var, log_a_M[k] / gomp_a0_var)
-          a[k] <- exp(log_a[k] * (-1))
-          M[k] <- 1 / b[k] * log (b[k]/a[k]) + minimum_age
-        }
-    beta_gamma_mu ~ dgamma(0.01, 0.01)
-    beta_gamma_sd ~ dgamma(0.01, 0.01)
+      }
+    b  ~ dgamma(0.01, 0.01) # a must not be null
+    #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
+    #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
+    log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
+    log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
+    a <- exp(log_a * (-1))
+    M <- 1 / b * log (b/a) + minimum_age
 
   }
   " # close quote for modelString
@@ -125,7 +86,7 @@ gomp.anthr_age.cat <- function(x, # data.frame with needed columns
                   silent.runjags = silent.runjags)
   
   # RUN THE CHAINS
-  parameters = c( "beta_gamma_mu", "beta_gamma_sd", "a", "b", 
+  parameters = c( "a", "b", 
                   "M"  
                   #,"age.s"
   )

@@ -70,11 +70,11 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 ## Historical Data
 # Written sources, pre-processed
 source("./historical_lifetables.R")
-London_series_ranges
+monks_ranges
+London_1758_ranges
 London_1841_ranges
 eng_mort_ranges
 HMD_UK_ranges
-monks_ranges
 
 # Wellcome Data
 source("./lifetables_processing/stbrides_crypt.R")
@@ -112,7 +112,7 @@ do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 6) )
 
 # Written sources, pre-processed
 source("./historical_lifetables.R")
-London_Landers_result
+London_1758_result
 London_1841_result
 eng_mort_result
 HMD_UK_result

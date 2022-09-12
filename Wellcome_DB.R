@@ -11,8 +11,8 @@ if (runCodeNew){
   st_benet <- c(12, 9, 33, 50, 32, 43)
   st_marylebone <- c(3, 20, 42, 69, 52, 40)
   st_brides_lower <- c(10, 10, 44, 88, 162, 65)
-  molas_dating_start <- c(1089, 1117, 1350, 1500, 1742, 1770)
-  molas_dating_end <- c(1538, 1538, 1540, 1699, 1817, 1849)
+  molas_dating_start <- c(1089, 1117, 1350, 1670, 1742, 1770)
+  molas_dating_end <- c(1538, 1538, 1540, 1740, 1817, 1849)
   wellcome_data <- data.frame(age_beg, age_end, #guildhall, 
                               bermondsey_abbey, merton_priory, st_mary, st_benet, st_marylebone, st_brides_lower)
   length(wellcome_data)

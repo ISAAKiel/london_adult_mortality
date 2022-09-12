@@ -1,4 +1,4 @@
-# London data, from Landers 1997, 180 Tab. 5.8
+# London age distribution, from Landers 1997, 180 Tab. 5.8, not suitable for mortality!
 if (runCodeNew){
   set.seed(98)
   eng_mort <- read.table("./data/Landers_1997_London_series.txt", header=TRUE, sep = "\t")
