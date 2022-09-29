@@ -48,6 +48,9 @@ min(gompertz_df$Gompertz_shape)
 lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15) 
 mean(lt_bias$lt_inaccuracy)
 
+# show map of London with sites
+source("./London_places.R") # not working yet
+
 
 ############
 # Results
