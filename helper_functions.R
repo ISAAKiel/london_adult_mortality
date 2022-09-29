@@ -5,6 +5,32 @@ gomp_lx <- function(x, a, b) {
   return(lx)
 }
 
+# derives from https://github.com/scpatricio/bell_mortality/blob/main/script/functions.R
+# see also Castellares et al. 2020
+gomp.ex <- function(x, a, b, age_start = 15) {
+  t <- x - age_start
+  
+  E1 = function(z){
+    integrate(function(t){
+      (exp(-t))/t
+    }, z, Inf)$value
+  }
+  
+  ex <- exp(a * exp(b *t) / b) * E1(a * exp(b * t )/ b ) / b
+  return(ex)
+}
+
+beta_mom <- function(x) {
+  
+  m_x <- mean(x, na.rm = TRUE)
+  s_x <- sd(x, na.rm = TRUE)
+  
+  alpha <- m_x*((m_x*(1 - m_x)/s_x^2) - 1)
+  beta <- (1 - m_x)*((m_x*(1 - m_x)/s_x^2) - 1)
+  
+  return(list(alpha = alpha, beta = beta))
+}
+
 diagnostic.summary <- function(codaMCMClist, HDImass = 0.95, gelman_diag = TRUE) {
   parameterNames = varnames(codaMCMClist)
   mcmcMat = as.matrix(codaMCMClist,chains=TRUE)

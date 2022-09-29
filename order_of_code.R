@@ -70,6 +70,7 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 ## Historical Data
 # Written sources, pre-processed
 source("./historical_lifetables.R")
+Peers_ranges
 monks_ranges
 London_1758_ranges
 London_1841_ranges
@@ -91,8 +92,16 @@ wellcome_overview
 # Discussion
 
 # modal ages from historical and osteological data
-gridExtra::grid.arrange(english_mortality_M, wellcome_plot, ncol = 2)
+english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
+english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
 
+english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
+    ylab("modal age")  + xlab("year") + ylim(15, 70) +
+  geom_errorbar(aes(x = (start + end) / 2, y = M, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
+  geom_errorbarh(aes(x = (start + end) / 2, y = M, xmax = start, xmin = end, height = 0), colour = "dark grey") +
+  geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
+  geom_point(aes(x = (start + end) / 2, y = M), size= 3) + guides(size = "none")
+suppressWarnings(print(english_wellcome_plot))
 
 ##############
 # Supplement
@@ -112,6 +121,8 @@ do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 6) )
 
 # Written sources, pre-processed
 source("./historical_lifetables.R")
+Peers_result
+Landers_result
 London_1758_result
 London_1841_result
 eng_mort_result

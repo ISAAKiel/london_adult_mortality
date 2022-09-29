@@ -3,6 +3,8 @@ source("./lifetables_processing/Medieval_England.R")
 source("./lifetables_processing/London_1841_raw_all.R")
 source("./lifetables_processing/HMD_UK.R")
 source("./lifetables_processing/London_1758.R")
+source("./lifetables_processing/Landers_1997_London.R")
+source("./lifetables_processing/English_Peers.R")
 
 # Gompertz beta
 monks_df <- data.frame(group = "Monks", year = "X1450", Mode = monks_result[2,5])
@@ -18,9 +20,11 @@ ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colo
 monks_df <- data.frame(source = "Christ Church Monks", year = "X1450", Mode = monks_result[3,5])
 england <- data.frame(source = "Family Reconst.", eng_mort_result[which(eng_mort_result$parameter == "M"),c(1,7)])
 London_1841 <- data.frame(source = "London 1841", year = "X1841", Mode = London_1841_result[3,5])
-London_1758 <- data.frame(source = "London 1728-57", year = "X1740", Mode = London_1758_result[3,5])
 HMD_UK <- data.frame(source = "HMD UK", HMD_UK_result[which(HMD_UK_result$parameter == "M"),c(1,7)])
-english_mortality <- rbind(monks_df, england, London_1758, London_1841, HMD_UK)
-
+english_mortality <- rbind(england, London_1841, HMD_UK)
+english_mortality_prep <- data.frame(source = "written", data = english_mortality$source, 
+                                     M = english_mortality$Mode, year = english_mortality$year,
+                                     start = NA, end = NA, HDIlow = NA, HDIhigh = NA)
+english_mortality_prep <- rbind(Peers_prep, monks_prep, London_1758_prep, english_mortality_prep)
 english_mortality_M <- ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = source ) ) + geom_point() + 
   ylab("modal age") + xlab("year") + ylim(10, 70)
