@@ -82,6 +82,7 @@ HMD_UK_ranges
 
 # Wellcome Data
 source("./lifetables_processing/stbrides_crypt.R")
+source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R") # can take a while
 # St. Bride's crypt data, comparison of known age and osteological estimates
 gridExtra::grid.arrange(stbrides_crypt_plot,
@@ -99,7 +100,7 @@ english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
 english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
 
 english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
-    ylab("modal age")  + xlab("year") + ylim(15, 70) +
+    ylab("modal age")  + xlab("year") + ylim(10, 70) +
   geom_errorbar(aes(x = (start + end) / 2, y = M, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(x = (start + end) / 2, y = M, xmax = start, xmin = end, height = 0), colour = "dark grey") +
   geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
@@ -134,5 +135,6 @@ monks_result
 
 # Mortality in the Wellcome dataset, pre-processed
 source("./lifetables_processing/stbrides_crypt.R")
+source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R")
 wellcome_result
