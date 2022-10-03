@@ -89,7 +89,8 @@ gridExtra::grid.arrange(stbrides_crypt_plot,
                         bottom = "black = density of actual ages (bandwidth = 5)\n blue = Gompertz distribution of actual ages\n red = Gompertz distribution of osteological estimates")
 
 # show overview of Wellcome data
-wellcome_overview
+wellcome_overview 
+# to do: sample size
 
 
 ############

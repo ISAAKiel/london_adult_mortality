@@ -56,6 +56,9 @@ load(file.path(".", saveFileDir, "monks_result.Rda") )
 # mode values
 modes <- monks_result[2:3,]$Mode
 monks_result <-  monks_result[1:3,]
+monks_20ex <- gomp.ex(20, monks_result[1,8], monks_result[2,8], age_start = 20)
+monks_25ex <- gomp.ex(25, monks_result[1,8], monks_result[2,8], age_start = 20)
+
 # range of Gompertz beta values
 beta_range <- paste0(format(round(monks_result[2,]$HDIlow, digits = 4), nsmall = 4 ), "-",
                      format(round(monks_result[2,]$HDIhigh, digits = 4), nsmall = 4  ) )
@@ -63,7 +66,9 @@ beta_range <- paste0(format(round(monks_result[2,]$HDIlow, digits = 4), nsmall =
 M_range <- paste0(format(round(monks_result[3,]$HDIlow, digits = 1), nsmall = 1 ), "-",
                   format(round(monks_result[3,]$HDIhigh, digits = 1), nsmall = 1 ) )
 
-monks_ranges <- data.frame(parameter = c("beta", "M"), modes = format(round(modes, 4), nsmall = 4), HDI.ranges = c(beta_range, M_range))
+monks_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"), 
+                           modes = format(round(c(modes, monks_20ex, monks_25ex), 4), nsmall = 4), 
+                           HDI.ranges = c(beta_range, M_range, NA, NA))
 
 monks_prep <- data.frame(source = "written", data = "Christ Church monks", M = monks_result[3,8], start = 1395, end = 1505, 
                          year = NA, monks_result[3,c(12, 13)])

@@ -42,6 +42,8 @@ save(Peers_result, file = file.path(".", saveFileDir, "Peers_result.Rda") )
 load(file.path(".", saveFileDir, "Peers_result.Rda") )
 
 modes <- Peers_result[2:3,]$Mode
+Peers_20ex <- gomp.ex(20, Peers_result[1,5], Peers_result[2,5])
+Peers_25ex <- gomp.ex(25, Peers_result[1,5], Peers_result[2,5])
 
 # range of Gompertz beta values
 beta_range <- paste0(format(round(Peers_result[2,]$HDIlow, digits = 4), nsmall = 4 ), "-",
@@ -50,7 +52,9 @@ beta_range <- paste0(format(round(Peers_result[2,]$HDIlow, digits = 4), nsmall =
 M_range <- paste0(format(round(Peers_result[3,]$HDIlow, digits = 1), nsmall = 1 ), "-",
                   format(round(Peers_result[3,]$HDIhigh, digits = 1), nsmall = 1 ) )
 
-Peers_ranges <- data.frame(parameter = c("beta", "M"), modes = format(round(modes, 4), nsmall = 4), HDI.ranges = c(beta_range, M_range))
+Peers_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"), 
+                           modes = format(round(c(modes, Peers_20ex, Peers_25ex), 4), nsmall = 4), 
+                           HDI.ranges = c(beta_range, M_range, NA, NA))
 
 Peers_prep <- data.frame(source = "written", data = "English Peers", M = Peers_result[3,5], start = 1275, end = 1300, 
                          year = NA, Peers_result[3,c(9, 10)])
