@@ -1,7 +1,7 @@
 molas_cemeteries <- c("Merton Priory", "Merton Priory", "Merton Priory", "Merton Priory", "Merton Priory",
                       "Bermondsey Abbey", "East Smithfield", "St. Mary Graces", 
                       #"St. Mary Graces OA2", "St. Mary Graces OA9", "St. Mary Graces church", 
-                      "St. Benet Sherehog", "St. Marylebone", "St. Bride's lower churchyard")
+                      "St. Benet Sherehog", "Chelsea Old church", "St. Marylebone", "St. Bride's lower churchyard")
 
 if (runCodeNew){
   set.seed(982)
@@ -15,18 +15,19 @@ if (runCodeNew){
   # st_mary_OA9 <- c(4, 8, 12, 13, 10, 21)
   # st_mary_church <- c(5, 3, 14, 19, 18, 29)
   st_benet <- c(12, 9, 33, 50, 32, 43)
+  chelsea_old_church <- c(3, 14, 17, 46, 72, 16)
   st_marylebone <- c(3, 20, 42, 69, 52, 40)
   st_brides_lower <- c(10, 10, 44, 88, 162, 65)
   molas_dating_start <- c(1089, 1348, 1350, 
                           # 1350, 1400, 1361, 
-                          1670, 1742, 1770)
+                          1670, 1712, 1742, 1770)
   molas_dating_end <- c(1538, 1350, 1540, 
                         # 1400, 1539, 1539, 
-                        1740, 1817, 1849)
+                        1740, 1842, 1817, 1849)
   wellcome_data <- data.frame(age_beg, age_end, #guildhall, 
                               bermondsey_abbey, east_smithfield, st_mary, 
                               # st_mary_OA2,st_mary_OA9, st_mary_church, 
-                              st_benet, st_marylebone, st_brides_lower)
+                              st_benet, chelsea_old_church, st_marylebone, st_brides_lower)
   length(wellcome_data)
   wellcome_names <- colnames(wellcome_data)
   
