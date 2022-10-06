@@ -6,19 +6,8 @@ source("./lifetables_processing/London_1758.R")
 source("./lifetables_processing/Landers_1997_London.R")
 source("./lifetables_processing/English_Peers.R")
 
-# Gompertz beta
-monks_df <- data.frame(group = "Monks", year = "X1450", Mode = monks_result[2,5])
-england <- data.frame(group = "England", eng_mort_result[which(eng_mort_result$parameter == "beta"),c(1,7)])
-London_1841 <- data.frame(group = "London 1841", year = "X1841", Mode = London_1841_result[2,5])
-London_1758 <- data.frame(group = "London 1728-57", year = "X1740", Mode = London_1758_result[2,5])
-english_mortality <- rbind(monks_df, england, London_1758, London_1841)
-
-ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = group ) ) + geom_point() + 
-  ylab("Gompertz \u03B2") + xlab("year") + ylim(0.025, 0.075)
-
 # modal age M
-monks_df <- data.frame(source = "Christ Church Monks", year = "X1450", Mode = monks_result[3,5])
-england <- data.frame(source = "Family Reconst.", eng_mort_result[which(eng_mort_result$parameter == "M"),c(1,7)])
+england <- data.frame(source = "Family Reconstitution", eng_mort_result[which(eng_mort_result$parameter == "M"),c(1,7)])
 London_1841 <- data.frame(source = "London 1841", year = "X1841", Mode = London_1841_result[3,5])
 HMD_UK <- data.frame(source = "HMD UK", HMD_UK_result[which(HMD_UK_result$parameter == "M"),c(1,7)])
 english_mortality <- rbind(england, London_1841, HMD_UK)
@@ -28,3 +17,13 @@ english_mortality_prep <- data.frame(source = "written", data = english_mortalit
 english_mortality_prep <- rbind(Peers_prep, monks_prep, London_1758_prep, english_mortality_prep)
 english_mortality_M <- ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = source ) ) + geom_point() + 
   ylab("modal age") + xlab("year") + ylim(10, 70)
+
+# Gompertz beta
+england_beta <- data.frame(source = "Family Reconstitution", eng_mort_result[which(eng_mort_result$parameter == "beta"),c(1,7)])
+London_1841_beta <- data.frame(source = "London 1841", year = "X1841", Mode = London_1841_result[2,5])
+HMD_UK_beta <- data.frame(source = "HMD UK", HMD_UK_result[which(HMD_UK_result$parameter == "beta"),c(1,7)])
+english_mortality_beta <- rbind(england_beta, London_1841_beta, HMD_UK_beta)
+english_mortality_beta_prep <- data.frame(source = "written", data = english_mortality_beta$source, 
+                                     beta = english_mortality_beta$Mode, year = english_mortality_beta$year,
+                                     start = NA, end = NA, HDIlow = NA, HDIhigh = NA)
+english_mortality_beta_prep <- rbind(Peers_beta_prep, monks_beta_prep, London_1758_beta_prep, english_mortality_beta_prep)

@@ -72,3 +72,5 @@ monks_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"),
 
 monks_prep <- data.frame(source = "written", data = "Christ Church monks", M = monks_result[3,8], start = 1395, end = 1505, 
                          year = NA, monks_result[3,c(12, 13)])
+monks_beta_prep <- data.frame(source = "written", data = "Christ Church monks", beta = monks_result[2,8], start = 1395, end = 1505, 
+                         year = NA, monks_result[2,c(12, 13)])

@@ -40,6 +40,9 @@ source("./gompertz_distribution.R")
 source("./lifetables_processing/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 
+# hazard curve (mx) to show turning point
+source("./hazard_curve.R")
+do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 
 #############
 # Data
@@ -100,6 +103,18 @@ english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = sou
   geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
   geom_point(aes(x = (start + end) / 2, y = M), size= 3) + guides(size = "none")
 suppressWarnings(print(english_wellcome_plot))
+
+# Gompertz beta from historical and osteological data
+english_wellcome_beta <- rbind(english_mortality_beta_prep, wellcome_prep_beta)
+english_wellcome_beta$data <- factor(english_wellcome_beta$data, levels = unique(english_wellcome_beta$data))
+
+english_wellcome_plot_beta <- ggplot(english_wellcome_beta, aes(colour = data, shape = source) ) +  
+  ylab("Gompertz \u03B2")  + xlab("year") + #ylim(10, 70) +
+  geom_errorbar(aes(x = (start + end) / 2, y = beta, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
+  geom_errorbarh(aes(x = (start + end) / 2, y = beta, xmax = start, xmin = end, height = 0), colour = "dark grey") +
+  geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = beta), size= 3 )+ 
+  geom_point(aes(x = (start + end) / 2, y = beta), size= 3) + guides(size = "none")
+suppressWarnings(print(english_wellcome_plot_beta))
 
 ##############
 # Supplement

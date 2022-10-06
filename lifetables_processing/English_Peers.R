@@ -58,3 +58,6 @@ Peers_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"),
 
 Peers_prep <- data.frame(source = "written", data = "English Peers", M = Peers_result[3,5], start = 1275, end = 1300, 
                          year = NA, Peers_result[3,c(9, 10)])
+
+Peers_beta_prep <- data.frame(source = "written", data = "English Peers", beta = Peers_result[2,5], start = 1275, end = 1300, 
+                         year = NA, Peers_result[2,c(9, 10)])

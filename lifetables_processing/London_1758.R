@@ -48,3 +48,5 @@ London_1758_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"),
 
 London_1758_prep <- data.frame(source = "written", data = "London 1728-57", M = London_1758_result[3,5], start = 1728, end = 1757, 
                          year = NA, HDIlow = NA, HDIhigh = NA)
+London_1758_beta_prep <- data.frame(source = "written", data = "London 1728-57", beta = London_1758_result[2,5], start = 1728, end = 1757, 
+                               year = NA, HDIlow = NA, HDIhigh = NA)
