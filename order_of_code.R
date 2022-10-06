@@ -55,20 +55,13 @@ source("./London_places.R") # not working yet
 ############
 # Results
 
-# Simulations
-source("./simulations_run.R")
-# plot of difference between expected and observed value
-do.call(gridExtra::grid.arrange, plot_list_diff)
-# table of RMSEs
-rmse_result[order(rmse_result$RMSE) ,]
+# London population
+source("./London_population.R")
+do.call(gridExtra::grid.arrange, c(london_pop_list, ncol = 1) )
 
-# plot of results of methods with estimated age-at-death
-do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
-# table of RMSEs
-rmse_estim_result[order(rmse_estim_result$RMSE) ,]
-# plot for Bayesian model of difference
-do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
-
+# Simulation of population increase
+source("./simulations_pop_incr_run.R")
+do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 6) )
 
 ## Historical Data
 # Written sources, pre-processed
@@ -120,9 +113,17 @@ source("./simulations_run.R")
 # plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, plot_list_shapes)
 
-# simulation of population increase
-source("./simulations_pop_incr_run.R")
-do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 6) )
+# plot of difference between expected and observed value
+do.call(gridExtra::grid.arrange, plot_list_diff)
+# table of RMSEs
+rmse_result[order(rmse_result$RMSE) ,]
+
+# plot of results of methods with estimated age-at-death
+do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
+# table of RMSEs
+rmse_estim_result[order(rmse_estim_result$RMSE) ,]
+# plot for Bayesian model of difference
+do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 # Written sources, pre-processed
 source("./historical_lifetables.R")
