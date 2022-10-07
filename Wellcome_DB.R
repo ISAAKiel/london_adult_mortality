@@ -1,4 +1,4 @@
-molas_cemeteries <- c("Merton Priory", "Merton Priory", "Merton Priory", "Merton Priory", "Merton Priory",
+molas_cemeteries <- c("Merton Priory", #"Merton Priory", "Merton Priory", "Merton Priory", "Merton Priory",
                       "Bermondsey Abbey", "East Smithfield", "St. Mary Graces", 
                       #"St. Mary Graces OA2", "St. Mary Graces OA9", "St. Mary Graces church", # samples get too small
                       "Broadgate", #"Broadgate Phase 1", "Broadgate Phase 2",

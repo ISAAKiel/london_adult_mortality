@@ -27,7 +27,7 @@ if (runCodeNew){
   merton_names <- colnames(merton_priory)
   
   merton_result <- data.frame()
-  for (t in 1:(length(merton_priory) - 2) ) {
+  for (t in 1:1 ) {
     molas_ind <- data.frame(merton_priory[,1:2], dx = merton_priory[,(t + 2)])
     year_data_uncount <- molas_ind %>% uncount(dx)
     
