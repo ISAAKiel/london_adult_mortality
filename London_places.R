@@ -1,8 +1,8 @@
 # still unfinished, for plotting sites in London
 
-london_names <- c("St. Marylebone", "St. Mary Graces", "Merton Priory", "St. Benet", "St. Bride", "Bermondesy Abbey")
-latitude <- c(51.5225, 51.509289, 51.414517, 51.513194, 51.513889, 51.4975)
-longitude <- c(-0.152222, -0.072916, -0.181272, -0.091389, -0.100278, -0.080833)
+london_names <- c("Bow Baptist church", "Sheen's burial ground", "St Mary and St Michael's burial ground", "St. Marylebone", "St. Mary Graces", "Merton Priory", "St. Benet", "St. Bride", "Bermondsey Abbey")
+latitude <- c(51.529487, 51.514478, 51.51263, 51.5225, 51.509289, 51.414517, 51.513194, 51.513889, 51.4975)
+longitude <- c(-0.017780, -0.067358, -0.04872, -0.152222, -0.072916, -0.181272, -0.091389, -0.100278, -0.080833)
 london_data <- data.frame(london_names, latitude, longitude)
 london_boundary_lat_max <- max(london_data$latitude) + 0.1
 london_boundary_lat_min <- min(london_data$latitude) - 0.1
@@ -13,3 +13,5 @@ bbox <- get_bbox (c (london_boundary_long_min, london_boundary_lat_min,
 dat_B <- extract_osm_objects (key = "building", bbox = bbox)
 map <- osm_basemap (bbox = bbox, bg = "gray20")
 map <- add_osm_objects (map, dat_B, col = "gray40")
+
+ggplot(london_data, aes(x = longitude, y = latitude)) + geom_point() 
