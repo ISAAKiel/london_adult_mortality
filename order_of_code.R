@@ -22,13 +22,15 @@ source("./lt_MC_Gomp.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 
 # run extensive code anew. Set TRUE to run extensive code (6 h +)
-runCodeNew <- FALSE
+#runCodeNew <- FALSE
 runCodeNew <- TRUE
 
 # Specify filename prefix for saved files and create a folder if needed:
 saveFileDir = "preprocessed_files"
-dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
-
+if (saveFileDir %in% list.files(getwd())) 
+{}else{
+  dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
+}
 
 #############
 # Methods
@@ -48,7 +50,12 @@ do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 # Data
 
 # computing the inaccuracy of resampled "age estimations"
-lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15) 
+if (runCodeNew) {
+  lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
+  save(lt_bias, file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
+} else {
+  load(file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
+}
 mean(lt_bias$lt_inaccuracy)
 
 # show map of London with sites
