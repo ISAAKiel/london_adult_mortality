@@ -47,7 +47,7 @@ Install required packages, set some options and link the sources for the helper 
 ```{r echo=FALSE}
 require(pacman) || install.packages("pacman")
 pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
-               mortAAR, nlme, reshape2, rgdal, HMDHFDplus, Metrics,
+               mortAAR, nlme, osmplotr, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
                coda, rjags, runjags, demogR, sf, rnaturalearth, readxl,
                ggrepel)
@@ -104,7 +104,7 @@ if (runCodeNew) {
 lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
 save(lt_bias, file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
 } else {
-load(file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
+  load(file = file.path("..", saveFileDir, "lt_bias.Rdata")) 
 }
 mean(lt_bias$lt_inaccuracy)
 ```
