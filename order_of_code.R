@@ -52,9 +52,9 @@ do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 # computing the inaccuracy of resampled "age estimations"
 if (runCodeNew) {
   lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
-  save(lt_bias, file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
+  save(lt_bias, file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
 } else {
-  load(file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
+  load(file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
 }
 mean(lt_bias$lt_inaccuracy)
 
