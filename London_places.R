@@ -13,16 +13,19 @@ london_data$lon<-as.numeric(london_data$lon)
 
 bbox <- get_bbox(
   c(
-    min(london_data$lon) + 0.1,
-    min(london_data$lat) + 0.1,
-    max(london_data$lon) - 0.1,
-    max(london_data$lat) - 0.1
+    min(london_data$lon) - 0.1,
+    min(london_data$lat) - 0.1,
+    max(london_data$lon) + 0.1,
+    max(london_data$lat) + 0.1
   )
 )
 
 dat_Res <- extract_osm_objects (key = "landuse", value = "residential", geom_only = TRUE, bbox = bbox)
+dat_Hwy <- extract_osm_objects (key = "highway", value = "primary", geom_only = TRUE, bbox = bbox)
+dat_Adm <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
 
-map <- osm_basemap (bbox = bbox, bg = "gray20")
-map <- add_osm_objects (map, dat_Res, col = "gray40")
-plot(map)
-
+map <- osm_basemap (bbox = bbox, bg = "gray90")
+#map <- add_osm_objects (map, dat_Adm, col = "gray70")
+map <- add_osm_objects (map, dat_Res, col = "gray60")
+map <- add_osm_objects (map, dat_Hwy, col = "gray20")
+print_osm_map(map)
