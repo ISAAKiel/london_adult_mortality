@@ -26,10 +26,10 @@ bbox <- get_bbox(
 
 dat_Res <- extract_osm_objects (key = "landuse", value = "residential", geom_only = TRUE, bbox = bbox)
 dat_Hwy <- extract_osm_objects (key = "highway", value = "primary", geom_only = TRUE, bbox = bbox)
-#dat_Adm <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
+dat_Adm <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
 
 map <- osm_basemap (bbox = bbox, bg = "gray90")
-#map <- add_osm_objects (map, dat_Adm, col = "gray70")
+map <- add_osm_objects (map, dat_Adm, col = "gray70")
 map <- add_osm_objects (map, dat_Res, col = "gray60")
 map <- add_osm_objects (map, dat_Hwy, col = "gray20")
 map <- add_osm_objects(map, dat_sites, col = "black", size=2)
@@ -38,9 +38,11 @@ print_osm_map(map)
 
 #Baustelle
 
-ggplot(data=map) 
+ggplot() +
+  geom_sf(dat_Res, aes()) 
 
-+
+
+
   geom_sf(colour = "grey") +
   geom_sf(data = dat_sites, shape = 16, colour = "red", size = 5) +
   geom_sf_text(data = dat_sites, aes(label = name), nudge_x = c(5.5, 1, 4),
