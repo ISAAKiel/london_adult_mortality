@@ -39,7 +39,7 @@ dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", ext
 #build the map
 ggplot() +
   geom_sf(data = dat_Adm8, aes()) +
-  geom_sf(data = dat_sites,aes(colour=nr), shape = 16, colour = "black", size = 2) +
+  geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   geom_sf_label(data = dat_sites, aes(label = nr, vjust=-.25), size=4) +
   geom_sf_text(data =dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3)+
   xlim (-0.28, 0.05) +
