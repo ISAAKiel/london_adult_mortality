@@ -1,6 +1,7 @@
 # get the coordinates of sites to be plotted
 library(osmplotr)
 library(ggplot2)
+library(sf)
 sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
     c("2","St. Mary Graces",51.509289,-0.072916 ),
@@ -42,9 +43,11 @@ ggplot() +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   geom_sf_label(data = dat_sites, aes(label = nr, vjust=-.25), size=4) +
   geom_sf_text(data =dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3)+
+  annotate("label", x = -0.025, y = 51.395, hjust = 0,
+           label = paste(apply(sites_data[,1:2],1,paste,collapse = ": "), 
+                         collapse = "\n")) +
   xlim (-0.28, 0.05) +
   ylim (51.38,NA) +
   theme_light() +
   theme(panel.grid = element_blank()) +
   theme(axis.title = element_blank()) 
-  
