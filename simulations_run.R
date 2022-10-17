@@ -23,15 +23,18 @@ lt_sim_shapes <- c("OLS_Gompertz_shape", "WOLS_Gompertz_shape", "NLS_Gompertz_sh
                    "surv_Gompertz_shape", "surv_lt_Gompertz_shape", "surv_lt10_Gompertz_shape",
                    #"MLE_Gompertz_shape", 
                    "MLE_adapted_Gompertz_shape", "MLE_lt_Gompertz_shape", "MLE_lt10_Gompertz_shape",
-                   "bayes_gomp_b", "bayes_anthr_gomp_5y_b", "bayes_anthr_gomp_10y_b")
+                   "bayes_gomp_b", "bayes_anthr_gomp_5y_b", "bayes_anthr_gomp_10y_b",
+                   "bayes_poisson_b")
 lt_sim_shapes_names <- c("OLS", "WOLS", "WNLS",  
                          "survival", "survival (5y-cat)", "survival (10y-cat)",
                          # "MLE", 
                          "MLE", "MLE (5y-cat)", "MLE (10y-cat)",
-                         "Bayes", "Bayes (5y-cat)", "Bayes (10y-cat)")
+                         "Bayes", "Bayes (5y-cat)", "Bayes (10y-cat)", "Bayes poisson")
 lt_sim_estim_shapes <- c("OLS_estim_Gompertz_shape", "WOLS_estim_Gompertz_shape","NLS_estim_Gompertz_shape",  
-                         "surv_estim_lt_Gompertz_shape", "MLE_estim_lt_Gompertz_shape", "bayes_anthr_gomp_b")
-lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (cat)", "Bayes (cat)")
+                         "surv_estim_lt_Gompertz_shape", "MLE_estim_lt_Gompertz_shape", "bayes_anthr_gomp_b",
+                         "bayes_estim_poisson_b")
+lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (cat)", "Bayes (cat)",
+                               "Bayes poisson")
 
 plot_list_shapes <- list()
 for (i in 1:length(lt_sim_shapes)) {

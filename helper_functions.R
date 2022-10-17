@@ -7,6 +7,7 @@ gomp_lx <- function(x, a, b) {
 
 # derives from https://github.com/scpatricio/bell_mortality/blob/main/script/functions.R
 # see also Castellares et al. 2020
+# see also Frankenberg/Konigsberg 2006
 gomp.ex <- function(x, a, b, age_start = 15) {
   t <- x - age_start
   
