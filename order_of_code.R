@@ -6,7 +6,7 @@ pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
                mortAAR, nlme, osmplotr, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
                coda, rjags, runjags, demogR, sf, rnaturalearth, readxl,
-               ggrepel)
+               ggrepel, psych)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
@@ -104,7 +104,7 @@ english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
 english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
 
 english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
-    ylab("modal age")  + xlab("year") + ylim(10, 70) +
+    ylab("modal age")  + xlab("year") + ylim(2, 75) +
   geom_errorbar(aes(x = (start + end) / 2, y = M, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(x = (start + end) / 2, y = M, xmax = start, xmin = end, height = 0), colour = "dark grey") +
   geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 

@@ -36,23 +36,26 @@
     set.seed(92311)
     stbrides_crypt_result <- NA
   #Bayesian modell with anthropological age estimate
+    cem_dates <- c(1740, 1853)
+    london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
+    pop_rate <- psych::geometric.mean(london_sub$rate) - 1
   
-  gomp.anthr_age(stbrides, age_beg = "age_beg", age_end = "age_end",
+  gomp.anthr_age.r(stbrides, age_beg = "age_beg", age_end = "age_end",
                  thinSteps = 1, minimum_age = 12,
-                 numSavedSteps = 300000) %>%
+                 numSavedSteps = 300000, r = pop_rate) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
   
-  gomp.known_age(stbrides, known_age = "known_age",
+  gomp.known_age.r(stbrides, known_age = "known_age",
                  thinSteps = 1,
-                 numSavedSteps = 200000, minimum_age = 12) %>%
+                 numSavedSteps = 200000, minimum_age = 12, r = pop_rate) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
   
   stbrides_crypt_full <- rbind(cbind(cemetery = "St. Bride's crypt (known age)", 
                                      start = 1740, end = 1853,
-                                     parameter = c("alpha", "beta", "M"), gomp_known_age_MCMC_diag), 
+                                     parameter = c("alpha", "beta", "M"), gomp_known_age_MCMC_diag[1:3,]), 
                                cbind(cemetery = "St. Bride's crypt (estimates)",
                                      start = 1740, end = 1853,
-                                     parameter = c("alpha", "beta", "M"), gomp_anthr_MCMC_diag))
+                                     parameter = c("alpha", "beta", "M"), gomp_anthr_MCMC_diag[1:3,]))
   rownames(stbrides_crypt_full) <- NULL
   
   # saves results in Rda-object

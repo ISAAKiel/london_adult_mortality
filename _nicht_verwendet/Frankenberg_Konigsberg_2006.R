@@ -33,27 +33,36 @@ optim(c(0.2, 0.7, 0.002, 0.08), Gompertz, control=list (fnscale=-1) )
 
 # population decrease
 
-Gompertz <- function(x,r = -.015,deaths = pecos) { 
+Gompertz <- function(x) { 
   a1 <- x[1]
   b1<-  x[2]
   a3 <- x[3]
   b3 <- x[4]
-  t<-deaths[1:7,1]
-  ipdf <- function(t) {
+  t<-pecos[1:7,1]
+  r = -.015
+  # ipdf <- function(t) {
+  #   dgpmp <- exp(-a1/b1*(1-exp(-b1*t)))*exp(a3/b3*(1- exp(b3*t)))*exp(-r*t)*(a1*exp(-b1*t)+a3*exp(b3*t))
+  #   return(dgomp)
+  #   }
+  # for(i in 1:7) {
+  #   L[i]<-integrate(ipdf,t[i],80)$value
+  # }
+  integrand <- function(t) {
     exp(-a1/b1*(1-exp(-b1*t)))*exp(a3/b3*(1- exp(b3*t)))*exp(-r*t)*(a1*exp(-b1*t)+a3*exp(b3*t))
   }
+  L <- NULL
   for(i in 1:7) {
-    L[i]<-integrate(ipdf,t[i],80)$value
+    L[i]<-integrate(integrand,lower = t[i], upper = 80, abs.tol=1E-7)$value
   }
   
   L<-L/L[1]
-  d<-L[1:6]-1[2:7]
+  d<-L[1:6]-L[2:7]
   d<-c(d,L[7],1-d[1]-d[2]-d[3])
-  obs<-deaths[,3]
+  obs<-pecos[,3]
   lnlk <- crossprod(obs,log(d))
   return(lnlk)
 }
-optim(c(0.2, 0.7, 0.002, 0.08), Gompertz, control=list (fnscale=-1) )
+optim(c(0.2, 0.7, 0.002, 0.08), Gompertz, control=list (fnscale=-1) , method = "Nelder-Mead")
 
 year_data_uncount <- pecos[-c(1:4),] %>% uncount(pecos_count)
 gomp.anthr_age.r(year_data_uncount, age_beg = "age1", age_end = "age2",

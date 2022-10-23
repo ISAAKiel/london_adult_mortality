@@ -31,10 +31,14 @@ if (runCodeNew){
     molas_ind <- data.frame(merton_priory[,1:2], dx = merton_priory[,(t + 2)])
     year_data_uncount <- molas_ind %>% uncount(dx)
     
+    cem_dates <- c(molas_dating_start[t],molas_dating_end[t])
+    london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
+    pop_rate <- psych::geometric.mean(london_sub$rate) - 1
+    
     #Bayesian modell with anthropological age estimate
-    gomp.anthr_age(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
+    gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
                    thinSteps = 1, minimum_age = 13,
-                   numSavedSteps = 400000) %>%
+                   numSavedSteps = 400000, r = pop_rate) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     ind_result <- cbind( cemetery = merton_names[t+2], start = molas_dating_start[t], end = molas_dating_end[t],
                          parameter = c("alpha", "beta", "M"), gomp_anthr_MCMC_diag[1:3,])

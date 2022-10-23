@@ -17,9 +17,13 @@ if (runCodeNew){
   
   london_1758_uncount <- london_1758[-c(1:15, 95),-2] %>% uncount(dx)
   
-  gomp.known_age(london_1758_uncount, known_age = "age",
+  cem_dates <- c(1728, 1757)
+  london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
+  pop_rate <- psych::geometric.mean(london_sub$rate) - 1
+  
+  gomp.known_age.r(london_1758_uncount, known_age = "age",
                  thinSteps = 1,
-                 numSavedSteps = 200000, minimum_age = 15) %>%
+                 numSavedSteps = 200000, minimum_age = 15, r = pop_rate) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
   
   London_1758_result <- gomp_known_age_MCMC_diag

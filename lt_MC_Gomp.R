@@ -14,7 +14,9 @@ lt.MC.Gomp <- function(
                           surv_Gompertz_rate = NA,
                           bayes_gomp_b = NA,
                           bayes_gomp_a = NA,
-                          bayes_gomp_M = NA)
+                          bayes_gomp_M = NA,
+                          bayes_gomp_r = NA,
+                          bayes_gomp_unity = NA)
   pop_inc_length <- length(pop_inc)
   for (g in 1:pop_inc_length) {
     years_df <- data.frame()
@@ -49,18 +51,22 @@ lt.MC.Gomp <- function(
       bayes_gomp_b <- NA
       bayes_gomp_a <- NA
       bayes_gomp_M <- NA
+      bayes_gomp_r <- NA
+      bayes_gomp_unity <- NA
       if (bayes == TRUE) {
-      gomp.anthr_age(death_count, age_beg = "age_beg", age_end = "age_end",
+      gomp.anthr_age.r(death_count, age_beg = "age_beg", age_end = "age_end",
                      silent.jags = TRUE,
                      silent.runjags = TRUE,
                      thinSteps = 1,
                      numSavedSteps = 10000,
-                     minimum_age = 15) %>%
+                     minimum_age = 15,
+                     r = pop_inc[g]) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
         bayes_gomp_b <- gomp_anthr_MCMC_diag[2,5]
         bayes_gomp_a <- gomp_anthr_MCMC_diag[1,5]
         bayes_gomp_M <- gomp_anthr_MCMC_diag[3,5]
-        
+        bayes_gomp_r <- gomp_anthr_MCMC_diag[4,5]
+        bayes_gomp_unity <- gomp_anthr_MCMC_diag[5,5]
       }
       
       lt_result[nrow(lt_result) + 1,] <- c(pop_inc = pop_inc[g], j, 
@@ -69,8 +75,10 @@ lt.MC.Gomp <- function(
                                            surv_Gompertz_rate,
                                            bayes_gomp_b,
                                            bayes_gomp_a,
-                                           bayes_gomp_M)
-    }
+                                           bayes_gomp_M,
+                                           bayes_gomp_r,
+                                           bayes_gomp_unity)
+      }
   }
   
   lt_result <- lt_result[-1,]
