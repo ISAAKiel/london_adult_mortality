@@ -4,11 +4,12 @@ library(ggplot2)
 library(sf)
 sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
-    c("2","St. Mary Graces",51.509289,-0.072916 ),
-    c("3","Merton Priory",51.414517,-0.181272),
-    c("4","St. Benet",51.513194,-0.091389),
-    c("5","St. Bride",51.513889,-0.100278),
-    c("6","Bermondesy Abbey", 51.4975,-0.080833)
+    c("2","St. Marylebone's Paddington Street north", 51.520869, -0.154515),
+    c("3","St. Mary Graces",51.509289,-0.072916 ),
+    c("4","Merton Priory",51.414517,-0.181272),
+    c("5","St. Benet",51.513194,-0.091389),
+    c("6","St. Bride",51.513889,-0.100278),
+    c("7","Bermondesy Abbey", 51.4975,-0.080833)
   ) 
 colnames(sites_data) <-c("nr", "name", "lat", "lon")
 sites_data$lat<-as.numeric(sites_data$lat)

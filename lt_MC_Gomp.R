@@ -1,6 +1,6 @@
 lt.MC.Gomp <- function(
   pop_inc = c(0.01), # vector of population increase
-  pop_start = 1000, # starting population
+  pop_start = c(1000), # starting population
   beta = 0.05, # Gompertz beta
   years = 100, # duration of observation
   obs_start,
@@ -20,7 +20,7 @@ lt.MC.Gomp <- function(
   pop_inc_length <- length(pop_inc)
   for (g in 1:pop_inc_length) {
     years_df <- data.frame()
-    pop_actu <- pop_start
+    pop_actu <- pop_start[g]
     for (t in 1:years) {
       ind_df <- data.frame(t = t, ind = 1:pop_actu) %>%
         mutate(age = (round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) ) %>% 

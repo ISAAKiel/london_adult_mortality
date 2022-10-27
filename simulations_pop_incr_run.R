@@ -2,8 +2,8 @@ if (runCodeNew){
   set.seed(3674)
   lt_sim_list <- list()
   for(k in 1:6) {
-    lt_sim <- lt.MC.Gomp(pop_start = 1000, pop_inc = c(-0.02, 0, 0.005, 0.01, 0.02), years = 200,   
-                         obs_start = 100, obs_end = 200, beta = (k + 1)/100)
+    lt_sim <- lt.MC.Gomp(pop_start = c(10000, 1000, 500, 200, 100), pop_inc = c(-0.02, 0, 0.005, 0.01, 0.02), years = 200,   
+                         obs_start = 150, obs_end = 200, beta = (k + 1)/100, bayes = TRUE)
     lt_sim$pop_inc_fac <- as.factor(lt_sim$pop_inc)
     lt_sim_list[[k]] <-   ggplot(lt_sim, aes(y = surv_Gompertz_shape, x = pop_inc_fac) ) + 
       geom_boxplot()  + 

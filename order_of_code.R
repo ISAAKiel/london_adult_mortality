@@ -15,6 +15,8 @@ source("./helper_functions.R")
 source("./lt_MC.R")
 source("./gomp_bayes_known_age.R")
 source("./gomp_anthr_age.R")
+source("./gomp_known_age_r.R")
+source("./gomp_anthr_age_r.R")
 source("./Gomp_MLE.R")
 source("./Gomp_MLE_adapted.R")
 source("./Gomp_MLE_interval.R")
@@ -105,10 +107,12 @@ english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_w
 
 english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
     ylab("modal age")  + xlab("year") + ylim(2, 75) +
-  geom_errorbar(aes(x = (start + end) / 2, y = M, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-  geom_errorbarh(aes(x = (start + end) / 2, y = M, xmax = start, xmin = end, height = 0), colour = "dark grey") +
+  geom_errorbar(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M, 
+                    ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
+  geom_errorbarh(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M, 
+                     xmax = as.numeric(start), xmin = as.numeric(end), height = 0), colour = "dark grey") +
   geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
-  geom_point(aes(x = (start + end) / 2, y = M), size= 3) + guides(size = "none")
+  geom_point(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M), size= 3) + guides(size = "none")
 suppressWarnings(print(english_wellcome_plot))
 
 # Gompertz beta from historical and osteological data
