@@ -6,10 +6,13 @@ sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
     c("2","St. Marylebone's Paddington Street north", 51.520869, -0.154515),
     c("3","St. Mary Graces",51.509289,-0.072916 ),
-    c("4","Merton Priory",51.414517,-0.181272),
-    c("5","St. Benet",51.513194,-0.091389),
-    c("6","St. Bride",51.513889,-0.100278),
-    c("7","Bermondesy Abbey", 51.4975,-0.080833)
+    c("4","St. Benet",51.513194,-0.091389),
+    c("5","St. Bride",51.513802,-0.105292),
+    c("6","Bermondsey Abbey", 51.4975,-0.080833),
+    c("7", "New Churchyard", 51.517403, -0.084216),
+    c("8", "St. Mary Spital", 51.518716, -0.079161),
+    c("9", "Chelsea Old Church", 51.483222, -0.170795),
+    c("10", "St. Bride's lower churchyard", 51.515253, -0.104973)
   ) 
 colnames(sites_data) <-c("nr", "name", "lat", "lon")
 sites_data$lat<-as.numeric(sites_data$lat)
@@ -39,11 +42,12 @@ dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", ext
 
 
 #build the map
-ggplot() +
+London_map <- ggplot() +
   geom_sf(data = dat_Adm8, aes()) +
+  geom_sf_text(data = dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3) +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
-  geom_sf_label(data = dat_sites, aes(label = nr, vjust=-.25), size=4) +
-  geom_sf_text(data =dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3)+
+  ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
+  stat = "sf_coordinates", min.segment.length = 0, size=4) +
   annotate("label", x = -0.025, y = 51.395, hjust = 0,
            label = paste(apply(sites_data[,1:2],1,paste,collapse = ": "), 
                          collapse = "\n")) +
@@ -51,4 +55,4 @@ ggplot() +
   ylim (51.38,NA) +
   theme_light() +
   theme(panel.grid = element_blank()) +
-  theme(axis.title = element_blank()) 
+  theme(axis.title = element_blank())

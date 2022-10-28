@@ -3,7 +3,11 @@ wellcome_data <- cbind.data.frame(
   age_end = c(NA, NA, NA, 18, 26, 36, 46, 100, 100),
   bermondsey_abbey = c("Bermondsey Abbey", 1089, 1538, 1, 15, 28, 51, 37, 69),
   st_mary = c("St. Mary Graces", 1350, 1540, 24, 30, 58, 69, 40, 77),
-  broadgate = c("Broadgate", 1569, 1739, 53, 126, 153, 132, 66, 26),
+  st_mary_hospital_p14 <- c("St. Mary Hospital, 1120-1200", 1120, 1200, 34, 51, 104, 97, 32, 11),
+  st_mary_hospital_p15 <- c("St. Mary Hospital, 1200-1250", 1200, 1250, 60, 100, 151, 115, 33, 11),
+  st_mary_hospital_p16 <- c("St. Mary Hospital, 1250-1400", 1250, 1400, 91, 244, 414, 344, 117, 64),
+  st_mary_hospital_p17 <- c("St. Mary Hospital, 1400-1539", 1400, 1539, 36, 107, 157, 107, 48,12),
+  new_churchyard = c("New Churchyard", 1569, 1739, 53, 126, 153, 132, 66, 26),
   st_benet = c("St. Benet Sherehog", 1670, 1740, 12, 9, 33, 50, 32, 43),
   chelsea_old_church = c("Chelsea Old church", 1712, 1842, 3, 14, 17, 46, 72, 16),
   st_marylebone = c("St. Marylebone", 1742, 1817, 3, 20, 42, 69, 52, 40),
@@ -34,8 +38,8 @@ if (runCodeNew){
     ind_result <- cbind( cemetery = wellcome_data[1, t], 
                          start = wellcome_data[2, t], 
                          end = wellcome_data[3, t], 
-                         parameter = c("alpha", "beta", "M"), 
-                         gomp_anthr_MCMC_diag[1:3,])
+                         parameter = c("alpha", "beta", "M", "rate"), 
+                         gomp_anthr_MCMC_diag[1:4,])
     rownames(ind_result) <- NULL
     wellcome_result <- rbind(wellcome_result, ind_result )
     
@@ -46,7 +50,7 @@ if (runCodeNew){
 }
 load(file.path(".", saveFileDir, "Wellcome_result.Rda") )
 
-wellcome_result <- rbind(merton_result, wellcome_result, stbrides_crypt_full)
+wellcome_result <- rbind(wellcome_result, stbrides_crypt_full)
 
 # range of Gompertz beta values
 beta_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "beta"),]$HDIlow, 4), "-",
@@ -54,6 +58,9 @@ beta_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "b
 # range of age modes M
 M_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "M"),]$HDIlow, 1), "-",
                   round(wellcome_result[which(wellcome_result$parameter == "M"),]$HDIhigh, 1) )
+# range of rate
+rate_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "rate"),]$HDIlow, 3), "-",
+                  round(wellcome_result[which(wellcome_result$parameter == "rate"),]$HDIhigh, 3) )
 
 # expectation of life
 wellcome_names <- unique(wellcome_result$cemetery)
@@ -72,12 +79,13 @@ for (k in wellcome_names) {
   wellcome_25ex <- c(wellcome_25ex, w25ex)
 }
 
-wellcome_overview <- data.frame(cemetery = c("Merton Priory", as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (known age)", "St. Bride's crypt (osteological estimates)"),
+wellcome_overview <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (known age)", "St. Bride's crypt (osteological estimates)"),
                                 beta = round(wellcome_result[which(wellcome_result$parameter == "beta"),]$Mode, 4),
                                 beta_range, 
-                                M = round(wellcome_result[which(wellcome_result$parameter == "M"),]$Mode, 1),
-                                M_range, ex20 = round(wellcome_20ex, 1), ex25 = round(wellcome_25ex, 1))
-wellcome_subset <- data.frame(cemetery = c("Merton Priory", as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (estimates)"),
+                                M = round(wellcome_result[which(wellcome_result$parameter == "M"),]$Mode, 1), M_range, 
+                                rate = round(wellcome_result[which(wellcome_result$parameter == "rate"),]$Mode, 3), rate_range,
+                                ex20 = round(wellcome_20ex, 1), ex25 = round(wellcome_25ex, 1))
+wellcome_subset <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (estimates)"),
                               wellcome_result[which(wellcome_result$parameter == "M" & wellcome_result$cemetery != "St. Bride's crypt (known age)"),])
 wellcome_prep <- data.frame(source = "osteological", wellcome_subset[,c(1, 10)], year = NA,
                             wellcome_subset[,c(3, 4, 14, 15)])

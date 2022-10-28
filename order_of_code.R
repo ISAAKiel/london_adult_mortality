@@ -62,14 +62,15 @@ mean(lt_bias$lt_inaccuracy)
 
 # show map of London with sites
 source("./London_places.R") # not working yet
-
+suppressWarnings(print(London_map))
 
 ############
 # Results
 
 # London population
 source("./London_population.R")
-do.call(gridExtra::grid.arrange, c(london_pop_list, ncol = 1) )
+grid::grid.newpage()
+grid::grid.draw(rbind(london_pop1, london_pop2))
 
 # Simulation of population increase
 source("./simulations_pop_incr_run.R")
@@ -87,7 +88,6 @@ HMD_UK_ranges
 
 # Wellcome Data
 source("./lifetables_processing/stbrides_crypt.R")
-source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R") # can take a while
 # St. Bride's crypt data, comparison of known age and osteological estimates
 gridExtra::grid.arrange(stbrides_crypt_plot,

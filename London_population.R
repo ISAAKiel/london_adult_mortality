@@ -12,17 +12,23 @@ year_date <- cumsum(date_diff) + 1200
 
 london_pop <- data.frame(date, size, rate = c(NA, rate))
 
-london_pop_list <- list(
-  ggplot(london_pop, aes(x = date, y =size/1000)) + geom_line() + geom_point(colour = "dark grey") +
-    scale_y_continuous(trans='log10') + ylab("population in thousand\n(log scale)") +
-    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 15)) + xlab("year AD"),
-  ggplot(london_pop, aes(x = date, y = (rate - 1) * 100) ) + geom_line() + geom_point(colour = "dark grey") +
-    ylab("population increase\nper year in per cent") + xlab("year AD") +
-    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 15))
-)
+london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =size/1000)) + geom_line() + geom_point(colour = "dark grey") +
+                            scale_y_continuous(trans='log10') + ylab("population in thousand\n(log scale)") + xlim(1100, 1850) +
+                            theme(axis.text = element_text(size = 12), axis.title = element_text(size = 15)) + xlab("year AD"))
+london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = (rate - 1) * 100) ) + geom_bar(stat='identity') +
+                            ylab("population increase\nper year in per cent") + xlab("year AD") + xlim(1100, 1850) +
+                            theme(axis.text = element_text(size = 12), axis.title = element_text(size = 15)) )
 
+# yearly rates of population increase for averaging
 london_df <- data.frame()
 for (i in 1:(length(date)- 1)) {
   year_rate <- data.frame(year = seq(date[i]+1, date[i + 1], 1), rate = rate[i])
   london_df <- rbind(london_df, year_rate)
 }
+
+# re-calculation of rates for Razzell/Spence 2007
+razz_dates <- c(1520 , 1600, 1650, 1700, 1750, 1801, 1851)
+razz_pop <- c(55000, 200000, 400000, 575000, 675000, 960000, 2685000)
+razz_date_diff <- razz_dates[-1] - razz_dates[-length(razz_dates)]
+razz_size_diff <- razz_pop[-1] / razz_pop[-length(razz_pop)]
+razz_rate <- 10^(log10(razz_size_diff) / razz_date_diff)
