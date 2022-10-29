@@ -1,7 +1,8 @@
-# get the coordinates of sites to be plotted
+# Libraries needed
 library(osmplotr)
 library(ggplot2)
 library(sf)
+# Get the coordinates of sites to be plotted
 sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
     c("2","St. Marylebone's Paddington Street north", 51.520869, -0.154515),
@@ -32,7 +33,7 @@ bbox <- get_bbox(
   )
 )
 
-# querry the osm data
+# Querry the osm data
 dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
 #dat_Adm6 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "6") bbox = bbox)
 #dat_Res <- extract_osm_objects (key = "landuse", value = "residential", geom_only = TRUE, bbox = bbox)
@@ -40,8 +41,7 @@ dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", ext
 #dat_water <-extract_osm_objects (key = "natural", "water", bbox=bbox)
 #dat_Wwy <-extract_osm_objects (key = "water", value="river", bbox=bbox)
 
-
-#build the map
+# Build the map
 London_map <- ggplot() +
   geom_sf(data = dat_Adm8, aes()) +
   geom_sf_text(data = dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3) +
@@ -56,5 +56,11 @@ London_map <- ggplot() +
   theme_light() +
   theme(panel.grid = element_blank()) +
   theme(axis.title = element_blank())
-# call the finishes map object
-London_map
+
+# Save the finished map object
+ggsave(
+  filename = "london_map.pdf",
+  plot = London_map, 
+  device = "pdf",
+  path = "documented"
+)
