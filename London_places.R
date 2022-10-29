@@ -48,11 +48,13 @@ London_map <- ggplot() +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
   stat = "sf_coordinates", min.segment.length = 0, size=4) +
-  annotate("label", x = -0.025, y = 51.395, hjust = 0,
+  annotate("label", x = -0.05, y = 51.465, hjust = 0, size = 3,
            label = paste(apply(sites_data[,1:2],1,paste,collapse = ": "), 
                          collapse = "\n")) +
-  xlim (-0.28, 0.05) +
-  ylim (51.38,NA) +
+  xlim (-0.28, 0.02) +
+  ylim (51.45,NA) +
   theme_light() +
   theme(panel.grid = element_blank()) +
   theme(axis.title = element_blank())
+# call the finishes map object
+London_map
