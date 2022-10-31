@@ -28,7 +28,7 @@ gridExtra::grid.arrange (
     geom_function(fun = function(x) gomp_lx(x - 15,  exp((-66.77) * (0.06 - 0.0718) - 7.119), 0.06), aes(col = "\u03B2 = 0.06")) +
     geom_function(fun = function(x) gomp_lx(x - 15,  exp((-66.77) * (0.09 - 0.0718) - 7.119), 0.09), aes(col = "\u03B2 = 0.09")) +
     ylab("survival") + xlab("age in years") + scale_colour_manual(values = c("red","blue","green", "dark grey")) +
-    theme(legend.position = c(-1.25, -0.5), legend.title = element_blank()),
+    theme(legend.position = c(0.88, 0.78), legend.title = element_blank()),
   
   ncol = 2
 )
