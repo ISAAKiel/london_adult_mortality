@@ -21,6 +21,7 @@ source("./Gomp_MLE.R")
 source("./Gomp_MLE_adapted.R")
 source("./Gomp_MLE_interval.R")
 source("./lt_MC_Gomp.R")
+source("./bayes_cat_poisson.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 
 # run extensive code anew. Set TRUE to run extensive code (6 h +)
@@ -74,7 +75,7 @@ grid::grid.draw(rbind(london_pop1, london_pop2))
 
 # Simulation of population increase
 source("./simulations_pop_incr_run.R")
-do.call(gridExtra::grid.arrange, c(lt_sim_list, ncol = 6) )
+do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
 ## Historical Data
 # Written sources, pre-processed

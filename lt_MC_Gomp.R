@@ -1,5 +1,5 @@
 lt.MC.Gomp <- function(
-  pop_inc = c(0.01), # vector of population increase
+  pop_inc = c(0.0), # vector of population increase
   pop_start = c(1000), # starting population
   beta = 0.05, # Gompertz beta
   years = 100, # duration of observation
@@ -15,8 +15,8 @@ lt.MC.Gomp <- function(
                           bayes_gomp_b = NA,
                           bayes_gomp_a = NA,
                           bayes_gomp_M = NA,
-                          bayes_gomp_r = NA,
-                          bayes_gomp_unity = NA)
+                          bayes_gomp_unity = NA,
+                          bayes_gomp_r_ = NA)
   pop_inc_length <- length(pop_inc)
   for (g in 1:pop_inc_length) {
     years_df <- data.frame()
@@ -24,7 +24,7 @@ lt.MC.Gomp <- function(
     for (t in 1:years) {
       ind_df <- data.frame(t = t, ind = 1:pop_actu) %>%
         mutate(age = (round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) ) %>% 
-        mutate(death_t = t + age - 15) %>% 
+        mutate(death_t = t + age - 15) %>% # 15 is deliberately not subtracted so that population count starts from 0 for t
         mutate(age_beg = ifelse(age < 18, 15,
                                 ifelse(age < 26, 18,
                                        ifelse(age < 36, 26,
@@ -32,7 +32,7 @@ lt.MC.Gomp <- function(
         mutate(age_end = ifelse(age < 18, 18,
                                 ifelse(age < 26, 26,
                                        ifelse(age < 36, 36,
-                                              ifelse(age < 46, 46, 100)))))
+                                              ifelse(age < 46, 46, 120)))))
       
       years_df <- rbind(years_df, ind_df)
       pop_actu <- round(pop_actu * (1 + pop_inc[g]))
@@ -51,22 +51,25 @@ lt.MC.Gomp <- function(
       bayes_gomp_b <- NA
       bayes_gomp_a <- NA
       bayes_gomp_M <- NA
-      bayes_gomp_r <- NA
       bayes_gomp_unity <- NA
+      bayes_gomp_r_ <- NA
       if (bayes == TRUE) {
       gomp.anthr_age.r(death_count, age_beg = "age_beg", age_end = "age_end",
+                       
+                    # gomp.anthr_age(death_count, age_beg = "age_beg", age_end = "age_end",
                      silent.jags = TRUE,
                      silent.runjags = TRUE,
                      thinSteps = 1,
                      numSavedSteps = 10000,
                      minimum_age = 15,
-                     r = pop_inc[g]) %>%
+                     r = pop_inc[g]
+                     ) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
         bayes_gomp_b <- gomp_anthr_MCMC_diag[2,5]
         bayes_gomp_a <- gomp_anthr_MCMC_diag[1,5]
         bayes_gomp_M <- gomp_anthr_MCMC_diag[3,5]
-        bayes_gomp_r <- gomp_anthr_MCMC_diag[4,5]
-        bayes_gomp_unity <- gomp_anthr_MCMC_diag[5,5]
+        bayes_gomp_unity <- gomp_anthr_MCMC_diag[4,5]
+        bayes_gomp_r_ <- gomp_anthr_MCMC_diag[5,5]
       }
       
       lt_result[nrow(lt_result) + 1,] <- c(pop_inc = pop_inc[g], j, 
@@ -76,8 +79,8 @@ lt.MC.Gomp <- function(
                                            bayes_gomp_b,
                                            bayes_gomp_a,
                                            bayes_gomp_M,
-                                           bayes_gomp_r,
-                                           bayes_gomp_unity)
+                                           bayes_gomp_unity,
+                                           bayes_gomp_r_)
       }
   }
   

@@ -60,22 +60,22 @@ lt.MC <- function(sampling,
       } else {
         if(x_used < 20) {
           age_beg = 15
-          age_end = 19
+          age_end = 20
         } else if(x_used < 25) {
           age_beg = 20
-          age_end = 24
+          age_end = 25
         } else if(x_used < 30) {
           age_beg = 25
-          age_end = 29
+          age_end = 30
         } else if(x_used < 35) {
           age_beg = 30
-          age_end = 34
+          age_end = 35
         } else if(x_used < 40) {
           age_beg = 35
-          age_end = 39
+          age_end = 40
         } else {
           age_beg = 40
-          age_end = 99
+          age_end = 120
         } 
       }
       
@@ -357,7 +357,7 @@ lt.MC <- function(sampling,
     bayes_estim_poisson_b <- gomp_anthr_MCMC_diag[2,5]
     bayes_estim_poisson_a <- gomp_anthr_MCMC_diag[1,5]
     
-    #Bayesian modell with anthropological age estimate
+    #Bayesian model with anthropological age estimate
     bayes_anthr_gomp_b <- NA
     bayes_anthr_gomp_a <- NA
     if (bayes == TRUE) {
@@ -366,7 +366,7 @@ lt.MC <- function(sampling,
                      silent.runjags = TRUE,
                      thinSteps = thinSteps,
                      numSavedSteps = numSavedSteps,
-                     minimum_age = 12) %>%
+                     minimum_age = 15) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
       bayes_anthr_gomp_b <- gomp_anthr_MCMC_diag[2,5]
       bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]

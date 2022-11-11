@@ -7,13 +7,16 @@ sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
     c("2","St. Marylebone's Paddington Street north", 51.520869, -0.154515),
     c("3","St. Mary Graces",51.509289,-0.072916 ),
-    c("4","St. Benet",51.513194,-0.091389),
-    c("5","St. Bride",51.513802,-0.105292),
+    c("4","St. Benet Sherehog",51.513194,-0.091389),
+    c("5","St. Bride's crypt",51.513802,-0.105292),
     c("6","Bermondsey Abbey", 51.4975,-0.080833),
     c("7", "New Churchyard", 51.517403, -0.084216),
     c("8", "St. Mary Spital", 51.518716, -0.079161),
     c("9", "Chelsea Old Church", 51.483222, -0.170795),
-    c("10", "St. Bride's lower churchyard", 51.515253, -0.104973)
+    c("10", "St. Bride's lower churchyard", 51.515253, -0.104973),
+    c("11", "St. Mary and St. Michael", 51.51330, -0.05190),
+    c("12", "Sheen's burial ground", 51.51480, -0.06760),
+    c("13", "Bow Baptist church", 51.529540, -0.01580)
   ) 
 colnames(sites_data) <-c("nr", "name", "lat", "lon")
 sites_data$lat<-as.numeric(sites_data$lat)
@@ -55,7 +58,8 @@ London_map <- ggplot() +
   ylim (51.45,NA) +
   theme_light() +
   theme(panel.grid = element_blank()) +
-  theme(axis.title = element_blank())
+  theme(axis.title = element_blank())+
+  ggspatial::annotation_scale(location = 'tl', height= unit(0.15, "cm"))
 
 # Save the finished map object
 ggsave(
