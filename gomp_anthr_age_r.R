@@ -69,7 +69,7 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
   for (j in 1:(121 - minimum_age)) {
       gomp_sum[j] <- exp(-r_ * (age_abs[j] + minimum_age)) * a * exp(b * age_abs[j]) * exp(-a/b * (exp(b * age_abs[j]) - 1))
   }
-    r_  ~ dnorm(r, 1/0.001^2) 
+    r_  ~ dnorm(r, 1/0.0025^2) 
     b  ~ dgamma(0.01, 0.01) # a must not be null
     #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
     #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)

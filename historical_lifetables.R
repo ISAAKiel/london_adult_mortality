@@ -14,6 +14,7 @@ english_mortality <- rbind(england, London_1841, HMD_UK)
 english_mortality_prep <- data.frame(source = "written", data = english_mortality$source, 
                                      M = english_mortality$Mode, year = english_mortality$year,
                                      start = NA, end = NA, HDIlow = NA, HDIhigh = NA)
+english_mortality_prep_r <- rbind(Peers_prep, monks_prep, London_1758_prep_r, english_mortality_prep)
 english_mortality_prep <- rbind(Peers_prep, monks_prep, London_1758_prep, english_mortality_prep)
 english_mortality_M <- ggplot(english_mortality, aes(x = as.numeric(substr(year, 2, 5)), y = Mode, colour = source ) ) + geom_point() + 
   ylab("modal age") + xlab("year") + ylim(10, 70)

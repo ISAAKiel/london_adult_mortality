@@ -1,5 +1,5 @@
 if (runCodeNew){
-  set.seed(3674)
+  set.seed(3673)
   lt_sim_list <- list()
   for(k in 1:4) {
     lt_sim <- lt.MC.Gomp(pop_start = c(10000, 1000, 500, 200, 100), pop_inc = c(-0.02, 0, 0.005, 0.01, 0.02), years = 200,   

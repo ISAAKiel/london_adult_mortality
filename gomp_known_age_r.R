@@ -18,7 +18,7 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
   Ntotal <- length(y) # number of individuals
   ones <- rep(1,Ntotal)
   C <- 100000
-  age_abs <- seq(0, (100 - minimum_age - 1), 1) # for integral calculation in 1-year-intervals from 0-1 to 99-100
+  age_abs <- seq(0, (120 - minimum_age), 1) # for integral calculation in 1-year-intervals from 0-1 to 99-100
   
   # Generate values for Gompertz alpha if minimum age is not 15
   gomp_a0 <- gomp.a0(minimum_age = minimum_age)
@@ -60,11 +60,11 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
       rate_exp[i] <- exp(-rate * y[i] )
       ones[i] ~ dbern( spy[i]  )
     }
-  unity <- sum(gomp_sum[1:(100 - minimum_age)])
-  for (j in 1:(100 - minimum_age)) {
+  unity <- sum(gomp_sum[1:(121 - minimum_age)])
+  for (j in 1:(121 - minimum_age)) {
       gomp_sum[j] <- exp(-rate * age_abs[j] ) * a * exp(b * age_abs[j]) * exp(-a/b * (exp(b * age_abs[j]) - 1))
   }
-  rate  ~ dnorm(r, 1 / 0.0001^2)
+  rate  ~ dnorm(r, 1/0.0001^2)
     b  ~ dgamma(0.01, 0.01) T(0.02, 0.2) # a must not be null
     log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
     log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
@@ -77,8 +77,8 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
                   silent.runjags = silent.runjags)
   
   # RUN THE CHAINS
-  parameters = c( "a", "b", "M", "rate", 
-                  "unity")
+  parameters = c( "a", "b", "M", 
+                  "unity", "rate")
   runJagsOut <- run.jags( method = runjagsMethod ,
                           model = modelString ,
                           monitor = parameters ,

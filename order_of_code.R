@@ -52,17 +52,8 @@ do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 #############
 # Data
 
-# computing the inaccuracy of resampled "age estimations"
-if (runCodeNew) {
-  lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
-  save(lt_bias, file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
-} else {
-  load(file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
-}
-mean(lt_bias$lt_inaccuracy)
-
 # show map of London with sites
-source("./London_places.R") # not working yet
+source("./London_places.R")
 suppressWarnings(print(London_map))
 
 ############
@@ -83,6 +74,7 @@ source("./historical_lifetables.R")
 Peers_ranges
 monks_ranges
 London_1758_ranges
+London_1758_ranges_r
 London_1841_ranges
 eng_mort_ranges
 HMD_UK_ranges
@@ -95,38 +87,20 @@ gridExtra::grid.arrange(stbrides_crypt_plot,
                         bottom = "black = density of actual ages (bandwidth = 5)\n blue = Gompertz distribution of actual ages\n red = Gompertz distribution of osteological estimates")
 
 # show overview of Wellcome data
-wellcome_overview 
-# to do: sample size
+wellcome_overview_all
+write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep="\t", quote = FALSE)
 
+# show ranges for St. Marylebone
+source("./lifetables_processing/Marylebone.R")
+Marylebone_ranges
 
 ############
 # Discussion
 
 # modal ages from historical and osteological data
-english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
-english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
-
-english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
-    ylab("modal age")  + xlab("year") + ylim(2, 75) +
-  geom_errorbar(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M, 
-                    ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-  geom_errorbarh(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M, 
-                     xmax = as.numeric(start), xmin = as.numeric(end), height = 0), colour = "dark grey") +
-  geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
-  geom_point(aes(x = (as.numeric(start) + as.numeric(end)) / 2, y = M), size= 3) + guides(size = "none")
-suppressWarnings(print(english_wellcome_plot))
-
-# Gompertz beta from historical and osteological data
-english_wellcome_beta <- rbind(english_mortality_beta_prep, wellcome_prep_beta)
-english_wellcome_beta$data <- factor(english_wellcome_beta$data, levels = unique(english_wellcome_beta$data))
-
-english_wellcome_plot_beta <- ggplot(english_wellcome_beta, aes(colour = data, shape = source) ) +  
-  ylab("Gompertz \u03B2")  + xlab("year") + #ylim(10, 70) +
-  geom_errorbar(aes(x = (start + end) / 2, y = beta, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-  geom_errorbarh(aes(x = (start + end) / 2, y = beta, xmax = start, xmin = end, height = 0), colour = "dark grey") +
-  geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = beta), size= 3 )+ 
-  geom_point(aes(x = (start + end) / 2, y = beta), size= 3) + guides(size = "none")
-suppressWarnings(print(english_wellcome_plot_beta))
+source("./english_wellcome.R")
+grid::grid.newpage()
+grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
 
 ##############
 # Supplement
@@ -157,6 +131,7 @@ source("./historical_lifetables.R")
 Peers_result
 Landers_result
 London_1758_result
+London_1758_result_r
 London_1841_result
 eng_mort_result
 HMD_UK_result
@@ -167,3 +142,16 @@ source("./lifetables_processing/stbrides_crypt.R")
 source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R")
 wellcome_result
+wellcome_result_r
+
+
+##### out-dated code
+
+# # computing the inaccuracy of resampled "age estimations"
+# if (runCodeNew) {
+#   lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
+#   save(lt_bias, file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
+# } else {
+#   load(file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
+# }
+# mean(lt_bias$lt_inaccuracy)

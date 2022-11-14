@@ -44,6 +44,7 @@ dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", ext
 #dat_water <-extract_osm_objects (key = "natural", "water", bbox=bbox)
 #dat_Wwy <-extract_osm_objects (key = "water", value="river", bbox=bbox)
 
+
 # Build the map
 London_map <- ggplot() +
   geom_sf(data = dat_Adm8, aes()) +

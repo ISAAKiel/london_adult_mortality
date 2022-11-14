@@ -21,16 +21,27 @@ if (runCodeNew){
   london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
   pop_rate <- psych::geometric.mean(london_sub$rate) - 1
   
+  # including population growth
   gomp.known_age.r(london_1758_uncount, known_age = "age",
                  thinSteps = 1,
                  numSavedSteps = 200000, minimum_age = 15, r = pop_rate) %>%
+    diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag_r
+  
+  London_1758_result_r <- gomp_known_age_MCMC_diag_r
+  
+  # without population growth
+  gomp.known_age(london_1758_uncount, known_age = "age",
+                   thinSteps = 1,
+                   numSavedSteps = 200000, minimum_age = 15) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
   
   London_1758_result <- gomp_known_age_MCMC_diag
   
   # saves results in Rda-object
+  save(London_1758_result_r, file = file.path(".", saveFileDir, "London_1758_result_r.Rda") )
   save(London_1758_result, file = file.path(".", saveFileDir, "London_1758_result.Rda") )
 }
+load(file.path(".", saveFileDir, "London_1758_result_r.Rda") )
 load(file.path(".", saveFileDir, "London_1758_result.Rda") )
 
 # mode values
@@ -48,9 +59,34 @@ M_range <- paste0(format(round(London_1758_result[3,]$HDIlow, digits = 1), nsmal
 London_1758_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"), 
                                  modes = format(round(c(modes,London_1758_20ex, London_1758_25ex), 4), nsmall = 4), 
                                  HDI.ranges = c(beta_range, M_range, NA, NA))
-#ggplot(london_1758[-c(1:15),]) + geom_line(aes(x = age, y = dx))
 
 London_1758_prep <- data.frame(source = "written", data = "London 1728-57", M = London_1758_result[3,5], start = 1728, end = 1757, 
                          year = NA, HDIlow = NA, HDIhigh = NA)
 London_1758_beta_prep <- data.frame(source = "written", data = "London 1728-57", beta = London_1758_result[2,5], start = 1728, end = 1757, 
                                year = NA, HDIlow = NA, HDIhigh = NA)
+
+
+# all measures once more for results with r
+# mode values
+modes_r <- London_1758_result_r[2:4,]$Mode
+London_1758_20ex_r <- gomp.ex(20, London_1758_result_r[1,5], London_1758_result_r[2,5])
+London_1758_25ex_r <- gomp.ex(25, London_1758_result_r[1,5], London_1758_result_r[2,5])
+
+# range of Gompertz beta values
+beta_range_r <- paste0(format(round(London_1758_result_r[2,]$HDIlow, digits = 4), nsmall = 4 ), "-",
+                     format(round(London_1758_result_r[2,]$HDIhigh, digits = 4), nsmall = 4  ) )
+# range of age modes M
+M_range_r <- paste0(format(round(London_1758_result_r[3,]$HDIlow, digits = 1), nsmall = 1 ), "-",
+                  format(round(London_1758_result_r[3,]$HDIhigh, digits = 1), nsmall = 1 ) )
+# range of r values
+r_range_r <- paste0(format(round(London_1758_result_r[4,]$HDIlow, digits = 4), nsmall = 4 ), "-",
+                       format(round(London_1758_result_r[4,]$HDIhigh, digits = 4), nsmall = 4  ) )
+
+London_1758_ranges_r <- data.frame(parameter = c("beta", "M", "r", "e20", "e25"), 
+                                 modes = format(round(c(modes_r,London_1758_20ex_r, London_1758_25ex_r), 4), nsmall = 4), 
+                                 HDI.ranges = c(beta_range_r, M_range_r, r_range_r, NA, NA))
+
+London_1758_prep_r <- data.frame(source = "written", data = "London 1728-57", M = London_1758_result_r[3,5], start = 1728, end = 1757, 
+                               year = NA, HDIlow = NA, HDIhigh = NA)
+London_1758_beta_prep_r <- data.frame(source = "written", data = "London 1728-57", beta = London_1758_result_r[2,5], start = 1728, end = 1757, 
+                                    year = NA, HDIlow = NA, HDIhigh = NA)
