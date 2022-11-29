@@ -25,8 +25,8 @@ source("./bayes_cat_poisson.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 
 # run extensive code anew. Set TRUE to run extensive code (6 h +)
-#runCodeNew <- FALSE
-runCodeNew <- TRUE
+runCodeNew <- FALSE
+#runCodeNew <- TRUE
 
 # Specify filename prefix for saved files and create a folder if needed:
 saveFileDir = "preprocessed_files"
@@ -73,8 +73,8 @@ do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 source("./historical_lifetables.R")
 Peers_ranges
 monks_ranges
-London_1758_ranges
-London_1758_ranges_r
+london_1728_1840_ranges
+london_1728_1840_ranges_r
 London_1841_ranges
 eng_mort_ranges
 HMD_UK_ranges
@@ -130,8 +130,8 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 source("./historical_lifetables.R")
 Peers_result
 Landers_result
-London_1758_result
-London_1758_result_r
+london_1728_1840_result
+london_1728_1840_result_r
 London_1841_result
 eng_mort_result
 HMD_UK_result
@@ -139,7 +139,6 @@ monks_result
 
 # Mortality in the Wellcome dataset, pre-processed
 source("./lifetables_processing/stbrides_crypt.R")
-source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R")
 wellcome_result
 wellcome_result_r
