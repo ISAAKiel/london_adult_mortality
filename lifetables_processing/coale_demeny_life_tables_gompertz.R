@@ -11,7 +11,8 @@ for (s in sex) {
   lt_cdmlte <- demogR::cdmlte(s)
   lt_cdmlts <- demogR::cdmlts(s)
   lt_cdmltn <- demogR::cdmltn(s)
-  lt_cd_all <- list(lt_cdmltw = lt_cdmltw, lt_cdmlte = lt_cdmlte, lt_cdmlts = lt_cdmlts, lt_cdmltn = lt_cdmltn)
+  lt_cd_all <- list(lt_cdmltw = lt_cdmltw, lt_cdmlte = lt_cdmlte, 
+                    lt_cdmlts = lt_cdmlts, lt_cdmltn = lt_cdmltn)
   for (t in 1:length(lt_cd_all)) {
     for (v in 1:25) {
       dx_vec <- round(lt_cd_all[[t]]$ndx[v,-(1:4)] * 100000)
@@ -31,7 +32,18 @@ for (s in sex) {
 gompertz_df <- gompertz_df[-1,]
 cols.num <- c("Gompertz_shape", "Gompertz_rate", "mx_15")
 gompertz_df[cols.num] <- sapply(gompertz_df[cols.num],as.numeric)
-gompertz_df$M <- 1 / gompertz_df$Gompertz_shape * log (gompertz_df$Gompertz_shape/gompertz_df$Gompertz_rate) + 15
+
+#gompertz_df$M <- 1 / gompertz_df$Gompertz_shape * log (gompertz_df$Gompertz_shape/gompertz_df$Gompertz_rate) + 15
+gompertz_df$M <- with(gompertz_df, 1 / Gompertz_shape * log (Gompertz_shape/Gompertz_rate) + 15)
+
+ggplot (gompertz_df, aes(Gompertz_shape,Gompertz_rate)) +
+  geom_line(aes(color = substr(i,1,11)))
+
+ggplot (gompertz_df, aes(substr(i,1,11),Gompertz_shape)) +
+  geom_boxplot() +
+  coord_flip() +
+  ylab("Gompertz shape") + xlab("Sex and regions: N, S, E, W")
+
 # ggplot(gompertz_df) + geom_point(aes(x = Gompertz_shape, y = (Gompertz_rate)))
 # ggplot(gompertz_df) + geom_point(aes(x = mx_15, y = (Gompertz_rate)))
 # ggplot(gompertz_df) + geom_histogram(aes(x = (Gompertz_shape)))
