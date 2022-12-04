@@ -1,15 +1,19 @@
+# Login needed to retreave data from the Human Mortality Database
+# https://mortality.org/
+
 if (runCodeNew){
-  HMD_username <- readline(prompt = "Enter username: ")
-  HMD_password <- readline(prompt="Enter password: ")
-  credentials <- c(HMD_username, HMD_password)
-  
-  # HMDHFDplus::getHMDitemavail("GBRTENW", credentials[1], credentials[2])
-  
+  login <- askYesNo(paste("Login for Human Mortality Database needed.",
+                          "Do you want to proceed?", sep = "\n"),
+                    default = FALSE)
   # get dx
-  HMD_UK_result_1_year <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_1x1", credentials[1], credentials[2])
-  
+  if (login){
+    HMD_UK_result_1_year <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_1x1", 
+                                                   readline(prompt = "Enter username: "), 
+                                                   readline(prompt="Enter password: "))
+    
     # saves results in Rda-object
     save(HMD_UK_result_1_year, file = file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
+  }
 }
 load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
 
