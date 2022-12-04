@@ -18,11 +18,19 @@ if (runCodeNew){
 load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
 
 HMD_UK_result_1_year_list <- list(
-  ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),]) + geom_line(aes(x = Age, y = mx)) +
+  ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),]) + 
+    geom_line(aes(x = Age, y = mx)) +
     scale_y_continuous(trans='log10') + ylab("mx (log scale)") +
-    annotate("rect", xmin = 7, xmax = 17, ymin = 0.004, ymax = 0.01, alpha = .1,fill = "blue"),
-  ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),], aes(x = Age, y = mx)) + geom_line() +
+    annotate("rect", xmin = 7, xmax = 17, ymin = 0.004, ymax = 0.01, 
+             alpha = .1,fill = "blue") +
+    annotate (geom = "text", x = 12, y = 0.012, label = "zoom")+
+    annotate (geom = "text", x = 10, y = 0.3, label = "year: 1841"),
+  ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),], 
+         aes(x = Age, y = mx)) + 
+    geom_line() + geom_point() +
     xlim(7,17) + ylim(0.004, 0.01) +
-    ylab("mx") + geom_point() + geom_segment(aes(x = 12, y = 0.007, xend = 12, yend = 0.0055),
+    ylab("mx") +
+    annotate (geom = "text", x = 10, y = 0.009, label = "zoomed in") +
+    geom_segment(aes(x = 12, y = 0.007, xend = 12, yend = 0.0055),
                  arrow = arrow(length = unit(0.25, "cm")), colour = "red")
 )
