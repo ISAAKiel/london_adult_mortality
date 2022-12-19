@@ -70,3 +70,10 @@ ggsave(
   device = "pdf",
   path = "documented"
 )
+
+ggsave(
+  filename = "london_map.pdf",
+  plot = London_map, 
+  device = "png",
+  path = "documented"
+)
