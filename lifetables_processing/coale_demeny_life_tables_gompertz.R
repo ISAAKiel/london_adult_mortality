@@ -37,12 +37,14 @@ gompertz_df[cols.num] <- sapply(gompertz_df[cols.num],as.numeric)
 gompertz_df$M <- with(gompertz_df, 1 / Gompertz_shape * log (Gompertz_shape/Gompertz_rate) + 15)
 
 ggplot (gompertz_df, aes(Gompertz_shape,Gompertz_rate)) +
-  geom_line(aes(color = substr(i,1,11)))
+  geom_line(aes(color = paste(substr(i,1,1),'CDM', toupper(substr(i,11,11)), sep=' '))) +
+  labs(color='Sex & Region')
+  
 
 ggplot (gompertz_df, aes(substr(i,1,11),Gompertz_shape)) +
-  geom_boxplot() +
+  geom_boxplot(aes(paste(toupper(substr(i,11,11)),'CDM', substr(i,1,1), sep=' '))) +
   coord_flip() +
-  ylab("Gompertz shape") + xlab("Sex and regions: N, S, E, W")
+  ylab("Gompertz shape") + xlab("Regions & Sex")
 
 # ggplot(gompertz_df) + geom_point(aes(x = Gompertz_shape, y = (Gompertz_rate)))
 # ggplot(gompertz_df) + geom_point(aes(x = mx_15, y = (Gompertz_rate)))
