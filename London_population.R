@@ -15,7 +15,7 @@ rate_p_a <- ((pop[-1] / pop[-length(pop)]) ^
 
 # year_date <- cumsum(date_diff) + 1200 # unused var
 
-london_pop <- data.frame(date, pop, rate_p_a = c(NA, rate))
+london_pop <- data.frame(date, pop, rate_p_a = c(NA, rate_p_a))
 
 london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =pop/1000)) + 
                             geom_line() + geom_point(colour = "dark grey") +
