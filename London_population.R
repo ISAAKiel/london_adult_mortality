@@ -23,8 +23,11 @@ london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =pop/1000)) +
                             ylab("population in thousand\n(log scale)") + 
                             xlim(1100, 1850) +
                             theme(axis.text = element_text(size = 12), 
-                                  axis.title = element_text(size = 15)) + 
-                            xlab("year AD"))
+                                  axis.title = element_text(size = 15),
+                                  axis.title.x = element_blank(), 
+                                  axis.text.x = element_blank(), 
+                                  axis.ticks.x = element_blank())) 
+                            #xlab("year AD"))
 london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = rate_p_a )) + 
                             geom_bar(stat='identity') +
                             ylab("population increase (% p.a.) \n since last zensus") + 
