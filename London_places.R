@@ -72,7 +72,7 @@ ggsave(
 )
 
 ggsave(
-  filename = "london_map.pdf",
+  filename = "london_map.png",
   plot = London_map, 
   device = "png",
   path = "documented"
