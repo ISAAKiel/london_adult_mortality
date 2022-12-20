@@ -34,30 +34,30 @@ if (runCodeNew){
                  thinSteps = 1,
                  numSavedSteps = 200000,
                  minimum_age = 15) %>%
-    diagnostic.summary(., HDImass = 0.95) -> Peers_result
+    diagnostic.summary(., HDImass = 0.95) -> peers_result
 
 # saves results in Rda-object
-save(Peers_result, file = file.path(".", saveFileDir, "Peers_result.Rda") )
+save(peers_result, file = file.path(".", saveFileDir, "peers_result.Rda") )
 }
-load(file.path(".", saveFileDir, "Peers_result.Rda") )
+load(file.path(".", saveFileDir, "peers_result.Rda") )
 
-modes <- Peers_result[2:3,]$Mode
-Peers_20ex <- gomp.ex(20, Peers_result[1,5], Peers_result[2,5])
-Peers_25ex <- gomp.ex(25, Peers_result[1,5], Peers_result[2,5])
+modes <- peers_result[2:3,]$Mode
+Peers_20ex <- gomp.ex(20, peers_result[1,5], peers_result[2,5])
+Peers_25ex <- gomp.ex(25, peers_result[1,5], peers_result[2,5])
 
 # range of Gompertz beta values
-beta_range <- paste0(format(round(Peers_result[2,]$HDIlow, digits = 4), nsmall = 4 ), "-",
-                     format(round(Peers_result[2,]$HDIhigh, digits = 4), nsmall = 4  ) )
+beta_range <- paste0(format(round(peers_result[2,]$HDIlow, digits = 4), nsmall = 4 ), "-",
+                     format(round(peers_result[2,]$HDIhigh, digits = 4), nsmall = 4  ) )
 # range of age modes M
-M_range <- paste0(format(round(Peers_result[3,]$HDIlow, digits = 1), nsmall = 1 ), "-",
-                  format(round(Peers_result[3,]$HDIhigh, digits = 1), nsmall = 1 ) )
+M_range <- paste0(format(round(peers_result[3,]$HDIlow, digits = 1), nsmall = 1 ), "-",
+                  format(round(peers_result[3,]$HDIhigh, digits = 1), nsmall = 1 ) )
 
-Peers_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"), 
+peers_ranges <- data.frame(parameter = c("beta", "M", "e20", "e25"), 
                            modes = format(round(c(modes, Peers_20ex, Peers_25ex), 4), nsmall = 4), 
                            HDI.ranges = c(beta_range, M_range, NA, NA))
 
-peers_prep <- data.frame(source = "written", data = "English Peers", M = Peers_result[3,5], start = 1275, end = 1300, 
-                         year = NA, Peers_result[3,c(9, 10)])
+peers_prep <- data.frame(source = "written", data = "English Peers", M = peers_result[3,5], start = 1275, end = 1300, 
+                         year = NA, peers_result[3,c(9, 10)])
 
-peers_beta_prep <- data.frame(source = "written", data = "English Peers", beta = Peers_result[2,5], start = 1275, end = 1300, 
-                         year = NA, Peers_result[2,c(9, 10)])
+peers_beta_prep <- data.frame(source = "written", data = "English Peers", beta = peers_result[2,5], start = 1275, end = 1300, 
+                         year = NA, peers_result[2,c(9, 10)])

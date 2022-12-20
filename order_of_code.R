@@ -71,7 +71,7 @@ do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 ## Historical Data
 # Written sources, pre-processed
 source("./historical_lifetables.R")
-Peers_ranges
+peers_ranges
 monks_ranges
 london_1728_1840_ranges
 london_1728_1840_ranges_r
@@ -128,7 +128,7 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 # Written sources, pre-processed
 source("./historical_lifetables.R")
-Peers_result
+peers_result
 Landers_result
 london_1728_1840_result
 london_1728_1840_result_r
