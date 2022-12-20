@@ -1,5 +1,6 @@
-#English data, from Wrigley et al. 1997, 290 Tab. 6.19 (Adult mortality, sexes combined (1000qx)), 1640-1809, for age groups 25-84 years
-#eng_mort <- read.table(file.choose(), header=TRUE, sep = "\t")
+# English data, from Wrigley et al. 1997, 290 Tab. 6.19 
+# Adult mortality, sexes combined (1000qx), 1640-1809, for age groups 25-84 years
+# eng_mort <- read.table(file.choose(), header=TRUE, sep = "\t")
 if (runCodeNew){
   set.seed(9871)
 eng_mort <- read.table("./data/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t")

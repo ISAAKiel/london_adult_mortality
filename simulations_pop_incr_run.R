@@ -2,8 +2,13 @@ if (runCodeNew){
   set.seed(3673)
   lt_sim_list <- list()
   for(k in 1:4) {
-    lt_sim <- lt.MC.Gomp(pop_start = c(10000, 1000, 500, 200, 100), pop_inc = c(-0.02, 0, 0.005, 0.01, 0.02), years = 200,   
-                         obs_start = 150, obs_end = 200, beta = (k + 2)/100, bayes = TRUE)
+    lt_sim <- lt.MC.Gomp(pop_start = c(10000, 1000, 500, 200, 100), 
+                         pop_inc = c(-0.02, 0, 0.005, 0.01, 0.02), 
+                         years = 200,   
+                         obs_start = 150, 
+                         obs_end = 200, 
+                         beta = (k + 2)/100, 
+                         bayes = TRUE)
     lt_sim_list[[k]] <- lt_sim
   }
   
