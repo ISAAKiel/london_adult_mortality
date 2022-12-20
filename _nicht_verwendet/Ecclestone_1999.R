@@ -66,5 +66,5 @@ M_range <- paste0(format(round(Peers_result[3,]$HDIlow, digits = 1), nsmall = 1 
 
 Peers_ranges <- data.frame(parameter = c("beta", "M"), modes = format(round(modes, 4), nsmall = 4), HDI.ranges = c(beta_range, M_range))
 
-Peers_prep <- data.frame(source = "written", data = "English Peers", M = Peers_result[3,5], start = 1275, end = 1300, 
+peers_prep <- data.frame(source = "written", data = "English Peers", M = Peers_result[3,5], start = 1275, end = 1300, 
                          year = NA, Peers_result[3,c(9, 10)])
