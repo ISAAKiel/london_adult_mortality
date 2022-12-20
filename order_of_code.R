@@ -29,8 +29,9 @@ runCodeNew <- FALSE
 
 # Specify filename prefix for saved files and create a folder if needed:
 saveFileDir = "preprocessed_files"
-if (saveFileDir %in% list.files(getwd())) 
-{}else{
+if (saveFileDir %in% list.files(getwd())) {
+  # Dir exists
+}else{
   dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
 }
 
