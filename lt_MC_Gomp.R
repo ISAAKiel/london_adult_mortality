@@ -19,9 +19,12 @@ lt.MC.Gomp <- function(
                           bayes_gomp_r_ = NA)
   pop_inc_length <- length(pop_inc)
   for (g in 1:pop_inc_length) {
+    print(paste('population increase step: ', g, '/', pop_inc_length))
     years_df <- data.frame()
     pop_actu <- pop_start[g]
+    pb1 <- txtProgressBar(max = years)
     for (t in 1:years) {
+      setTxtProgressBar(pb1,t)
       ind_df <- data.frame(t = t, ind = 1:pop_actu) %>%
         mutate(age = (round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) ) %>% 
         mutate(death_t = t + age - 15) %>% # 15 is deliberately not subtracted so that population count starts from 0 for t
@@ -39,7 +42,11 @@ lt.MC.Gomp <- function(
     }
     
     # sampling of death counts
+    pb2<- txtProgressBar(max = (obs_end - obs_start), char = '*', style = 3)
+    pb2_i = 0
     for (j in obs_start:obs_end) {
+      pb2_i = pb2_i + 1
+      setTxtProgressBar(pb2, pb2_i)
       death_count <- subset(years_df, death_t == j)
       death_count_n <- nrow(death_count)
       # fit Gompertz distribution to known age with Survival package + individual age
@@ -54,16 +61,15 @@ lt.MC.Gomp <- function(
       bayes_gomp_unity <- NA
       bayes_gomp_r_ <- NA
       if (bayes == TRUE) {
-      gomp.anthr_age.r(death_count, age_beg = "age_beg", age_end = "age_end",
-                       
-                    # gomp.anthr_age(death_count, age_beg = "age_beg", age_end = "age_end",
-                     silent.jags = TRUE,
-                     silent.runjags = TRUE,
-                     thinSteps = 1,
-                     numSavedSteps = 10000,
-                     minimum_age = 15,
-                     r = pop_inc[g]
-                     ) %>%
+      gomp.anthr_age.r(death_count, 
+                       age_beg = "age_beg", 
+                       age_end = "age_end",
+                       silent.jags = TRUE,
+                       silent.runjags = TRUE,
+                       thinSteps = 1,
+                       numSavedSteps = 10000,
+                       minimum_age = 15,
+                       r = pop_inc[g]) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
         bayes_gomp_b <- gomp_anthr_MCMC_diag[2,5]
         bayes_gomp_a <- gomp_anthr_MCMC_diag[1,5]
