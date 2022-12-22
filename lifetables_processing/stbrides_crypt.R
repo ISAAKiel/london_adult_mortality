@@ -1,5 +1,20 @@
 # St. Bride's crypt
-molas_data <- c("../Wellcome_Database/ST\ BRIDES\ CRYPT_SB79_DENTAL\ DATA_NILS\ MUELLER-SCHEESSEL_SEPT\ 2021.xlsx")
+
+infotext <- paste ("You need a account for: Museum of London",
+                   "https://www.museumoflondon.org.uk",
+                   "Than you can download the data.", 
+                   sep="\n")
+
+YesNo <- TRUE
+YesNo <- askYesNo(infotext, default = TRUE)
+if ((YesNo) | is.na(YesNo)){
+  stop("Please download the data and edit the code.")
+}else {
+  stop("Please remove this if-statement and enter a path to the data below.")
+}
+
+# Data 
+molas_data <- # 'path/to/downloaded/excel.xls'
 my_data3 <- readxl::read_excel(molas_data, sheet = 3) [, 1:8]
 colnames(my_data3) <- c("site", "ind", "birth", "death", "known_sex", "known_age", "sex", "age")
 stbrides <- as.data.frame(my_data3)
