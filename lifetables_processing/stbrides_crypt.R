@@ -1,8 +1,7 @@
 # St. Bride's crypt
 
-infotext <- paste ("You need a account for: Museum of London",
+infotext <- paste ("Data available from the Museum of London upon request.",
                    "https://www.museumoflondon.org.uk",
-                   "Than you can download the data.", 
                    sep="\n")
 
 YesNo <- TRUE

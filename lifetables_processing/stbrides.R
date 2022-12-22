@@ -1,5 +1,16 @@
-molas_data <- c("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Wellcome_Database/ST BRIDES CRYPT_SB79_DENTAL DATA_NILS MUELLER-SCHEESSEL_SEPT 2021.xlsx")
-options(dplyr.summarise.inform = FALSE)
+# St. Brides
+
+infotext <- paste ("Data available from the Museum of London upon request.",
+                   "https://www.museumoflondon.org.uk",
+                   "Please download the data and edit the code.",
+                   sep="\n")
+
+stop(infotext)
+
+# Data 
+molas_data <- # 'path/to/downloaded/excel.xls'
+
+  options(dplyr.summarise.inform = FALSE)
 my_data1 <- readxl::read_excel(molas_data, sheet = 1)
 my_data2 <- readxl::read_excel(molas_data, sheet = 2)
 my_data3 <- readxl::read_excel(molas_data, sheet = 3) [, 1:8]
