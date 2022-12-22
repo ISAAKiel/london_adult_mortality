@@ -97,7 +97,14 @@ if (runCodeNew){
 load(file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
 load(file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
 
-stbrides_crypt_plot <- ggplot() + xlim(12, 100) + geom_density(data = stbrides, aes(x=known_age), bw=5) + 
-geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[5,9], stbrides_crypt_full[4,9]), colour = "red") +
-geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[2,9],  stbrides_crypt_full[1,9]), colour= "blue") +
-xlab("age") + ylab("density")
+stbrides_crypt_plot <- ggplot() + 
+  geom_density(data = stbrides, aes(x=known_age), bw=5) + 
+  geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[5,9], 
+                                                      stbrides_crypt_full[4,9]), 
+                colour = "red") +
+  geom_function(fun = function(x) flexsurv::dgompertz(x - 12, 
+                                                      stbrides_crypt_full[2,9],  
+                                                      stbrides_crypt_full[1,9]), 
+                colour= "blue") +
+  xlim(12, 100) + 
+  xlab("age") + ylab("density")
