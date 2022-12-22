@@ -84,7 +84,10 @@ source("./lifetables_processing/stbrides_crypt.R")
 source("./Wellcome_DB.R") # can take a while
 # St. Bride's crypt data, comparison of known age and osteological estimates
 gridExtra::grid.arrange(stbrides_crypt_plot,
-                        bottom = "black = density of actual ages (bandwidth = 5)\n blue = Gompertz distribution of actual ages\n red = Gompertz distribution of osteological estimates")
+                        bottom = paste ("black = density of actual ages (bandwidth = 5)",
+                        "blue = Gompertz distribution of actual ages",
+                        "red = Gompertz distribution of osteological estimates",
+                        sep="\n"))
 
 # show overview of Wellcome data
 wellcome_overview_all
