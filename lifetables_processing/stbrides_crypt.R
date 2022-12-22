@@ -2,15 +2,10 @@
 
 infotext <- paste ("Data available from the Museum of London upon request.",
                    "https://www.museumoflondon.org.uk",
+                   "Please download the data and edit the code.",
                    sep="\n")
 
-YesNo <- TRUE
-YesNo <- askYesNo(infotext, default = TRUE)
-if ((YesNo) | is.na(YesNo)){
-  stop("Please download the data and edit the code.")
-}else {
-  stop("Please remove this if-statement and enter a path to the data below.")
-}
+stop(infotext)
 
 # Data 
 molas_data <- # 'path/to/downloaded/excel.xls'
