@@ -4,7 +4,7 @@
 require(pacman) || install.packages("pacman")
 pacman::p_load(coda, cowplot, demogR, dplyr, fitdistrplus, flexsurv, ggplot2, 
                ggrepel, gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, 
-               MortalityLaws, nlme, osmplotr, psych, readxl, reshape2, rgdal, 
+               MortalityLaws, nlme, osmplotr, pals, psych, readxl, reshape2, rgdal, 
                rio, rjags, rnaturalearth, runjags, sf, svMisc, tibble, tidyr)
 
 options(scipen = 999)
@@ -101,7 +101,7 @@ Marylebone_ranges
 # Discussion
 
 # modal ages from historical and osteological data
-source("./english_wellcome.R")
+source("./chap_discussion/english_wellcome.R")
 grid::grid.newpage()
 grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
 
