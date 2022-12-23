@@ -39,38 +39,38 @@ if (saveFileDir %in% list.files(getwd())) {
 # Methods
 
 # Figure 1: Gompertz.
-source("./gompertz_distribution.R")
+source("./chap_methods/gompertz_distribution.R")
 
 # Minimum Gompertz beta in Coale/Demeny-Tables
-source("./lifetables_processing/coale_demeny_life_tables_gompertz.R")
+source("./chap_methods/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 
 # hazard curve (mx) to show turning point
-source("./hazard_curve.R")
+source("./chap_methods/hazard_curve.R")
 do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 
 #############
 # Data
 
 # show map of London with sites
-source("./London_places.R")
+source("./chap_data/London_places.R")
 suppressWarnings(print(London_map))
 
 ############
 # Results
 
 # London population
-source("./London_population.R")
+source("./chap_results/London_population.R")
 grid::grid.newpage()
 grid::grid.draw(rbind(london_pop1, london_pop2))
 
 # Simulation of population increase
-source("./simulations_pop_incr_run.R")
+source("./chap_results/simulations_pop_incr_run.R")
 do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
 ## Historical Data
 # Written sources, pre-processed
-source("./historical_lifetables.R")
+source("./chap_results/historical_lifetables.R")
 peers_ranges
 monks_ranges
 london_1728_1840_ranges
@@ -81,7 +81,7 @@ HMD_UK_ranges
 
 # Wellcome Data
 source("./lifetables_processing/stbrides_crypt.R")
-source("./Wellcome_DB.R") # can take a while
+source("./chap_results/Wellcome_DB.R") # can take a while
 # St. Bride's crypt data, comparison of known age and osteological estimates
 gridExtra::grid.arrange(stbrides_crypt_plot,
                         bottom = paste ("black = density of actual ages (bandwidth = 5)",
