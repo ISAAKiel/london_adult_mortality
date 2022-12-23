@@ -1,0 +1,21 @@
+Suche "\.xls" (13 Treffer in 7 Dateien von 68 gesucht)
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\bass_collection.R (4 Treffer)
+	Zeile  1: path1 <- "/Volumes/SanDisk/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Milner_Boldsen_2011/all\ methods_milner\ boldsen.xlsx"
+	Zeile  2: path2 <- "/Volumes/SanDisk/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Milner_Boldsen_2011/Sacroilliac_joint_milner\ boldsen.xlsx"
+	Zeile  3: path3 <- "/Volumes/SanDisk/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Milner_Boldsen_2011/Pubic_symphysis_milner\ boldsen.xlsx"
+	Zeile  4: path4 <- "/Volumes/SanDisk/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Milner_Boldsen_2011/cranial_sutures_milner\ boldsen.xlsx"
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\BoE_data.R (1 Treffer)
+	Zeile  2: BoE <-  rio::import("https://www.asc.ohio-state.edu/economics/osu/data/FinalData170713.xlsx")
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\lifetables_processing\blayo_france.R (1 Treffer)
+	Zeile  2: path <- ("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/data/Blayo1975.xlsx")
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\lifetables_processing\stbrides.R (1 Treffer)
+	Zeile 11: molas_data <- # 'path/to/downloaded/excel.xls'
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\lifetables_processing\stbrides_crypt.R (1 Treffer)
+	Zeile  11: molas_data <- # 'path/to/downloaded/excel.xls'
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\_nicht_verwendet\bayes_gomp_category.R (1 Treffer)
+	Zeile   2: molas_data <- c("../Wellcome_Database/ST\ BRIDES\ CRYPT_SB79_DENTAL\ DATA_NILS\ MUELLER-SCHEESSEL_SEPT\ 2021.xlsx")
+  D:\CAU_Projekte\ArchaeoInformatik\ai-git-repositories\global_history\_nicht_verwendet\Wellcome_DB_old.R (4 Treffer)
+	Zeile  9:   molas_data <- c("../Wellcome_Database/UPDATED_MERTON PRIORY_DENTAL DATA_NILS MULLER SCHEESSEL_MAY 2021.xlsx", 
+	Zeile 10:                   "../Wellcome_Database/UPDATED_ST MARY GRACES_DENTAL DATA_NILS MULLER SCHEESSEL_MAY 2021.xlsx", 
+	Zeile 11:                   "../Wellcome_Database/UPDATED_ST MARYLEBONE_MBH04_DENTAL DATA_NILS MULLER SCHEESSEL_MAY 2021_joined.xlsx",
+	Zeile 12:                   "../Wellcome_Database/UPDATED_ST BRIDES LOWER CHURCHYARD_DENTAL DATA_NILS MULLER SCHEESSEL_MAY 2021.xlsx")
