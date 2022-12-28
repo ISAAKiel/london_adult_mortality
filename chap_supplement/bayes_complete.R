@@ -1,18 +1,21 @@
-n_min = 50
-n_max = 500
-M_min = NULL
-M_max = NULL
-b_min = 0.025
-b_max = 0.1
-error_range = 15
+# Setting the parameters
 
-y <- round(runif(n = 1, min = n_min, max = n_max))
-b_ <- runif(n = 1, min = b_min, max = b_max)
-a_ <- exp(rnorm(1, (-66.77 * (b_ - 0.0718) - 7.119), sqrt(0.0823) ) )
+n_min = 50 # minimum number of individuals in a modeled population
+n_max = 500 # maximum number of individuals in a modeled population
+M_min = NULL # ?? this parameters are not needed ??
+M_max = NULL # ?? this parameters are not needed ??
+b_min = 0.025 # beta value of the Gompertz distribution
+b_max = 0.1 # beta value of the Gompertz distribution
+error_range = 15 # error range of the age at death
 
+y <- round(runif(n = 1, min = n_min, max = n_max)) # population size
+b_ <- runif(n = 1, min = b_min, max = b_max) # Gompertz beta value
+a_ <- exp(rnorm(1, (-66.77 * (b_ - 0.0718) - 7.119), sqrt(0.0823) ) ) # Gompertz alpha value
+
+# create df with modeled population mortality
 ind_df <- data.frame(ind = NA, age = NA, age_beg = NA, age_end = NA)
 for (i in 1:y) {
-  x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15
+  x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15 # modeled age at death of one person
   if(length(error_range) > 0) {
     x_used <- round(rnorm(1, x, error_range))
   } else {
