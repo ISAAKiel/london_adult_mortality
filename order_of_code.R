@@ -110,7 +110,7 @@ grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
 
 # one complete Bayesian example, with different settings
 set.seed(1312)
-source("./bayes_complete.R") # can take a few minutes
+source("./chap_supplemet/bayes_complete.R") # can take a few minutes
 bayes_complete_table
 
 source("./simulations_run.R")
