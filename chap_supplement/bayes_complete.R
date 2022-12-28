@@ -45,8 +45,7 @@ for (i in 1:y) {
 }
 ind_df <- ind_df[-1,]
 
-# Bayes model
-
+# Bayes models for defined settings
 gomp.known_age(ind_df, known_age = "age",
                thinSteps = 1,
                numSavedSteps = 10000) %>%
@@ -66,12 +65,22 @@ gomp.anthr_age(ind_df, age_beg = "age_beg", age_end = "age_end",
                numSavedSteps = 100000) %>%
   diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_thinSteps20
 
-rbind(cbind(mode = "known_age", thinning = 1, steps = 10000, parameter = row.names(gomp_known_age_MCMC_diag_thinSteps1), gomp_known_age_MCMC_diag_thinSteps1),
-      cbind(mode = "known_age", thinning = 20, steps = 100000, parameter = row.names(gomp_known_age_MCMC_diag_thinSteps20), gomp_known_age_MCMC_diag_thinSteps20),
-      cbind(mode = "estimation", thinning = 1, steps = 10000, parameter = row.names(gomp_anthr_MCMC_diag_thinSteps1[1:3,]), gomp_anthr_MCMC_diag_thinSteps1[1:3,]),
-      cbind(mode = "estimation", thinning = 20, steps = 100000, parameter = row.names(gomp_anthr_MCMC_diag_thinSteps20[1:3,]), gomp_anthr_MCMC_diag_thinSteps20[1:3,])) -> bayes_complete
-row.names(bayes_complete) = NULL
-bayes_complete_table <- knitr::kable(bayes_complete, caption = paste0("Bayesian model with simulated dataset. n = ", y, 
-                                              ", Gompertz \u03B2 = ", round(b_,4), ", 
-                                              Gompertz \u03B1 = ", round(a_,4), ".", sep = ""))  %>% 
-  kableExtra::column_spec(., 1:9, width_max = "3cm")
+# combining diagnostics into a table
+rbind(cbind(mode = "known_age", thinning = 1, steps = 10000, 
+            parameter = row.names(gomp_known_age_MCMC_diag_thinSteps1), 
+            gomp_known_age_MCMC_diag_thinSteps1),
+      cbind(mode = "known_age", thinning = 20, steps = 100000, 
+            parameter = row.names(gomp_known_age_MCMC_diag_thinSteps20), 
+            gomp_known_age_MCMC_diag_thinSteps20),
+      cbind(mode = "estimation", thinning = 1, steps = 10000, 
+            parameter = row.names(gomp_anthr_MCMC_diag_thinSteps1[1:3,]), 
+            gomp_anthr_MCMC_diag_thinSteps1[1:3,]),
+      cbind(mode = "estimation", thinning = 20, steps = 100000, 
+            parameter = row.names(gomp_anthr_MCMC_diag_thinSteps20[1:3,]), 
+            gomp_anthr_MCMC_diag_thinSteps20[1:3,])) -> bayes_complete
+row.names(bayes_complete) <- NULL
+knitr::kable(bayes_complete, 
+             caption = paste0("Bayesian model with simulated dataset. n = ", 
+              y, ", Gompertz \u03B2 = ", round(b_,4), ", Gompertz \u03B1 = ", 
+              round(a_,4), ".", sep = ""))  %>% 
+  kableExtra::column_spec(., 1:9, width_max = "3cm") -> bayes_complete_table
