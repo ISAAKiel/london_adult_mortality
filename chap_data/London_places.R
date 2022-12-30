@@ -40,11 +40,6 @@ bbox <- matrix(
 
 # Querry the osm data
 #dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
-#dat_Adm6 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "6") bbox = bbox)
-#dat_Res <- extract_osm_objects (key = "landuse", value = "residential", geom_only = TRUE, bbox = bbox)
-#dat_Hwy <- extract_osm_objects (key = "highway", value = "primary", geom_only = TRUE, bbox = bbox)
-#dat_water <-extract_osm_objects (key = "natural", "water", bbox=bbox)
-#dat_Wwy <-extract_osm_objects (key = "water", value="river", bbox=bbox)
 q_admin <- bbox %>% opq() %>% 
   add_osm_feature(key = "boundary", value = "administrative") %>%
   osmdata_sf()
