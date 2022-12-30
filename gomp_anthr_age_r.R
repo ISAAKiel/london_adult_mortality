@@ -15,8 +15,8 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
   require(coda)
   require(runjags)
   
-  age_beg = x[,age_beg]
-  age_end = x[,age_end]
+  age_beg <- x[,age_beg]
+  age_end <- x[,age_end]
   Ntotal <- length(age_beg) # number of individuals  
   ones <- rep(1,Ntotal)
   age_abs <- seq(0, (120 - minimum_age), 1) # for integral calculation in 1-year-intervals from 0-1 to 99-100
