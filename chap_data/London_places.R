@@ -1,5 +1,6 @@
 # Libraries needed
-library(osmplotr)
+#library(osmplotr)
+library(osmdata)
 library(ggplot2)
 library(sf)
 # Get the coordinates of sites to be plotted
@@ -27,28 +28,37 @@ dat_sites <- st_as_sf(sites_data,
                       crs = 4326)
 
 # Build a bounding box by the coordinates + 10% of the extent as frame
-bbox <- get_bbox(
+#bbox <- get_bbox(
+bbox <- matrix(
   c(
     min(sites_data$lon) - (0.1*(max(sites_data$lon)- min(sites_data$lon))),
     min(sites_data$lat) - (0.1*(max(sites_data$lat)- min(sites_data$lat))),
     max(sites_data$lon) + (0.1*(max(sites_data$lon)- min(sites_data$lon))),
     max(sites_data$lat) + (0.1*(max(sites_data$lat)- min(sites_data$lat)))
-  )
+  ), byrow = FALSE, nrow = 2, ncol = 2,
+  dimnames = list(c('x','y'),c('min','max'))
 )
 
 # Querry the osm data
-dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
+#dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
 #dat_Adm6 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "6") bbox = bbox)
 #dat_Res <- extract_osm_objects (key = "landuse", value = "residential", geom_only = TRUE, bbox = bbox)
 #dat_Hwy <- extract_osm_objects (key = "highway", value = "primary", geom_only = TRUE, bbox = bbox)
 #dat_water <-extract_osm_objects (key = "natural", "water", bbox=bbox)
 #dat_Wwy <-extract_osm_objects (key = "water", value="river", bbox=bbox)
+q_box <- bbox %>% opq() 
+q_admin <- q_box %>% add_osm_feature(key = "boundary", 
+                                               value = "administrative") %>%
+  osmdata_sf()
+q_admin8 <- q_admin[q_admin$osm_multipolygons$admin_level==8]
+# q_thames <- q_box %>% add_osm_feature(key = "natural", value = "water") %>%  
+#  osmdata_sf()
 
 
 # Build the map
 London_map <- ggplot() +
-  geom_sf(data = dat_Adm8, aes()) +
-  geom_sf_text(data = dat_Adm8, aes(label=sub('.*of ','',dat_Adm8$name)), size=3) +
+  geom_sf(data = q_admin8$osm_multipolygons, aes()) +
+  geom_sf_text(data = q_admin8$osm_multipolygons, aes(label=sub('.*of ','',name)), size=3) +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
   stat = "sf_coordinates", min.segment.length = 0, size=4) +
@@ -56,10 +66,10 @@ London_map <- ggplot() +
            label = paste(apply(sites_data[,1:2],1,paste,collapse = ": "), 
                          collapse = "\n")) +
   xlim (-0.28, 0.03) +
-  ylim (51.41,NA) +
+  ylim (51.41,51.58) +
   theme_light() +
   theme(panel.grid = element_blank()) +
-  theme(axis.title = element_blank())+
+  theme(axis.title = element_blank()) +
   ggspatial::annotation_scale(location = 'tl', height= unit(0.15, "cm"))
 plot(London_map)
 
