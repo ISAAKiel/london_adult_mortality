@@ -39,18 +39,14 @@ bbox <- matrix(
 )
 
 # Querry the osm data
-#dat_Adm8 <- extract_osm_objects (key = "boundary", value = "administrative", extra_pairs = c("admin_level", "8"), bbox = bbox)
-q_admin <- bbox %>% opq() %>% 
+q_admin8 <- bbox %>% opq() %>% 
   add_osm_feature(key = "boundary", value = "administrative") %>%
+  add_osm_feature(key = "admin_level", value = "8") %>%
   osmdata_sf()
-q_admin8 <- q_admin[q_admin$osm_multipolygons$admin_level==8]
-# q_thames <- bbox %>% opq() %>% add_osm_feature(key = "natural", value = "water") %>%  
-#  osmdata_sf()
-
 
 # Build the map
 London_map <- ggplot() +
-  geom_sf(data = q_admin8$osm_multipolygons, aes(group=admin_level)) +
+  geom_sf(data = q_admin8$osm_multipolygons, fill=rgb(0.9,0.9,0.9)) +
   geom_sf_text(data = q_admin8$osm_multipolygons, aes(label=sub('.*of ','',name)), size=3) +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
