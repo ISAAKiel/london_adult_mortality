@@ -55,7 +55,7 @@ lt.MC <- function(sampling,
           age_end = 46
         } else {
           age_beg = 46
-          age_end = 100
+          age_end = 120
         } 
       } else {
         if(x_used < 20) {

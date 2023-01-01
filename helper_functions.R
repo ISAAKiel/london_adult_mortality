@@ -102,46 +102,30 @@ lt.sampling <- function(sampling,
                         n_min = 50,
                         n_max = 500,
                         b_min = 0.025,
-                        b_max = 0.1,
-                        error_range = NULL) 
-{
+                        b_max = 0.1) 
+{  
   start_time <- Sys.time()
   lt_result <- data.frame()
   for (g in 1:sampling) {
     y <- round(runif(n = 1, min = n_min, max = n_max))
-    b_ <- runif(n = 1, min = b_min, max = b_max)
-    a_ <- exp(rnorm(1, (-66.77 * (b_ - 0.0718) - 7.119), sqrt(0.0823) ) )
-    ind_list <- data.frame()
-    for (i in 1:y) {
-      x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15
-      if(length(error_range) > 0) {
-        x_used <- round(rnorm(1, x, error_range))
-      } else {
-        x_used <- x
-      }      
-      if (x_used > 99) {
-        x_used = 99
-      } else if 
-      (x_used < 15) {
-        x_used = 15
-      }
-      x_diff <- x - x_used
-      x_abs <- abs(x - x_used)
-      ind_x <- cbind(i, x_diff, x_abs)
-      ind_list <- rbind(ind_list, ind_x)
-    }
-    lt_bias <- mean(ind_list$x_diff)
-    lt_bias_sd <- sd(ind_list$x_diff)
-    lt_inaccuracy <- mean(ind_list$x_abs)
-    ind_result <- cbind(y, b_, a_, error_range, lt_bias, lt_bias_sd, lt_inaccuracy)
-    lt_result <- rbind(lt_result, ind_result)
+    beta <- runif(n = 1, min = b_min, max = b_max)
+    alpha <- exp(rnorm(1, (-66.77 * (beta - 0.0718) - 7.119), sqrt(0.0823) ) )
+    ind_list <- data.frame(sampling_id = g, ind = 1:y) %>%
+      mutate(age = round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) %>% 
+      mutate(age_beg = ifelse(age < 18, 15,
+                              ifelse(age < 26, 18,
+                                     ifelse(age < 36, 26,
+                                            ifelse(age < 46, 36, 46))))) %>% 
+      mutate(age_end = ifelse(age < 18, 18,
+                              ifelse(age < 26, 26,
+                                     ifelse(age < 36, 36,
+                                            ifelse(age < 46, 46, 120)))))
     
+    lt_result <- rbind(lt_result, ind_list)
     svMisc::progress(g/sampling * 100, (sampling-1)/sampling * 100, progress.bar = TRUE)
     Sys.sleep(0.0001)
     if (g == sampling) message("Done!")
   }
-  rownames(lt_result) <- NULL
-  
   end_time <- Sys.time()
   print(end_time - start_time)
   return(lt_result)

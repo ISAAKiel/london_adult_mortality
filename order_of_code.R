@@ -113,7 +113,6 @@ source("./chap_results/London_population.R")
 razz_rate_p_a
 
 # one complete Bayesian example, with different settings
-set.seed(1312)
 source("./chap_supplemet/bayes_complete.R") # can take a few minutes
 bayes_complete_table
 
