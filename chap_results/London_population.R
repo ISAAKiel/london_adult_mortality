@@ -6,14 +6,10 @@ date <- c(1100, 1200, 1300, 1350, 1500, 1550, 1600, 1650, 1695, 1730, 1740, 1750
 pop <- c(16000, 22500, 90000, 37500, 75000, 120000, 200000, 375000, 527560, 660000, 670000, 680000, 730000, 780000, 820000, 910000, 1096784, 1303564, 1573210, 1878229, 2207653, 2651939, 3188485)
 
 date_diff <- date[-1] - date[-length(date)]
-#size_diff <- size[-1] / size[-length(size)] # 
-# rate <- 10^(log10(size_diff) / date_diff) # wrong calculation
 
 # annual rate = ((SizeEnd/SizeStart) ^ (1/years))  - 1
 rate_p_a <- ((pop[-1] / pop[-length(pop)]) ^ 
                (1 / (date[-1] - date[-length(date)])))-1
-
-# year_date <- cumsum(date_diff) + 1200 # unused var
 
 london_pop <- data.frame(date, pop, rate_p_a = c(NA, rate_p_a))
 
@@ -27,11 +23,10 @@ london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =pop/1000)) +
                                   axis.title.x = element_blank(), 
                                   axis.text.x = element_blank(), 
                                   axis.ticks.x = element_blank())) 
-                            #xlab("year AD"))
-london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = rate_p_a )) + 
+london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = 100 * rate_p_a )) + 
                             geom_bar(stat='identity') +
                             ylab("population increase (% p.a.) \n since last zensus") + 
-                            xlab("year AD") + xlim(1100, 1850) +
+                            xlab("\nyear AD") + xlim(1100, 1850) +
                             theme(axis.text = element_text(size = 12), 
                                   axis.title = element_text(size = 15)))
 
@@ -45,8 +40,5 @@ for (i in 1:(length(date)- 1)) {
 # re-calculation of rates for Razzell/Spence 2007
 razz_date <- c(1520 , 1600, 1650, 1700, 1750, 1801, 1851)
 razz_pop <- c(55000, 200000, 400000, 575000, 675000, 960000, 2685000)
-# razz_date_diff <- razz_dates[-1] - razz_dates[-length(razz_dates)]
-# razz_size_diff <- razz_pop[-1] / razz_pop[-length(razz_pop)]
-# razz_rate <- 10^(log10(razz_size_diff) / razz_date_diff)
 razz_rate_p_a <- ((razz_pop[-1] / razz_pop[-length(razz_pop)]) ^ 
                     (1 / (razz_date[-1] - razz_date[-length(razz_date)])))-1
