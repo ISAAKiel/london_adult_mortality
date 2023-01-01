@@ -104,13 +104,12 @@ lt.sampling <- function(sampling,
                         b_min = 0.025,
                         b_max = 0.1) 
 {  
-  start_time <- Sys.time()
   lt_result <- data.frame()
   for (g in 1:sampling) {
     y <- round(runif(n = 1, min = n_min, max = n_max))
     beta <- runif(n = 1, min = b_min, max = b_max)
     alpha <- exp(rnorm(1, (-66.77 * (beta - 0.0718) - 7.119), sqrt(0.0823) ) )
-    ind_list <- data.frame(sampling_id = g, ind = 1:y) %>%
+    ind_list <- data.frame(sampling_id = g, n = y, beta = beta, alpha = alpha, ind = 1:y) %>%
       mutate(age = round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) %>% 
       mutate(age_beg = ifelse(age < 18, 15,
                               ifelse(age < 26, 18,
@@ -122,12 +121,7 @@ lt.sampling <- function(sampling,
                                             ifelse(age < 46, 46, 120)))))
     
     lt_result <- rbind(lt_result, ind_list)
-    svMisc::progress(g/sampling * 100, (sampling-1)/sampling * 100, progress.bar = TRUE)
-    Sys.sleep(0.0001)
-    if (g == sampling) message("Done!")
   }
-  end_time <- Sys.time()
-  print(end_time - start_time)
   return(lt_result)
 }
 
