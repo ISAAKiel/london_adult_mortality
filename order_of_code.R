@@ -117,7 +117,7 @@ set.seed(1312)
 source("./chap_supplemet/bayes_complete.R") # can take a few minutes
 bayes_complete_table
 
-source("./simulations_run.R")
+source("./chap_supplemet/simulations_run.R")
 # plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, plot_list_shapes)
 
