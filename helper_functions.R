@@ -1,5 +1,6 @@
 # helper functions
 
+# after Pflaumer 2011, 734
 gomp_lx <- function(x, a, b) {
   lx <- exp(a/b - a/b * exp(b * x))
   return(lx)
