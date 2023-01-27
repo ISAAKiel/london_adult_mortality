@@ -6,12 +6,11 @@ beta4 <- 0.09
 
 # hgompertz(x, shape, rate): 
 #   x = age, shape = beta value, rate = derived from Sasaki & Kondo 2016 fig. 1, 2
-# rate values according Sasaki & Kondo 2016 fig. 1, line 30
+# rate values according Sasaki & Kondo 2016 fig. 1, line 6, 30
 Sab <- -2.624
 Sbb <- 0.0393
 Ma <- -7.119
-Mb < -0.0718
-b<-beta1
+Mb <- 0.0718
 M1 <- Sab * (beta1 - Mb) / Sbb + Ma
 M2 <- Sab * (beta2 - Mb) / Sbb + Ma
 M3 <- Sab * (beta3 - Mb) / Sbb + Ma
