@@ -1,5 +1,16 @@
 # helper functions
 
+# Approximate rate for hgompertz(x, shape, rate) 
+# according Sasaki & Kondo 2016 fig. 1, line 6, 30: 
+modal.age.b <- function (beta) {
+  Sab <- -2.624
+  Sbb <- 0.0393
+  Ma <- -7.119
+  Mb <- 0.0718
+  M <- Sab * (beta - Mb) / Sbb + Ma
+  return(M)
+}
+
 # after Pflaumer 2011, 734
 gomp_lx <- function(x, a, b) {
   lx <- exp(a/b - a/b * exp(b * x))
