@@ -1,5 +1,5 @@
 # data from Perrenoud 1978
-geneva <- read.table("/Users/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/global_history/data/perrenoud_geneva.txt", header=TRUE, sep = "\t")
+geneva <- read.table("./data/perrenoud_geneva.txt", header=TRUE, sep = "\t")
 
 geneva_melt <- reshape2::melt(geneva, id.vars = "age", value.name = "lx")
 
