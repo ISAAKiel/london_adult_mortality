@@ -1,7 +1,12 @@
 # St. Bride's crypt
 
-infotext <- paste ("Data available from the Museum of London upon request.",
+infotext <- paste ("Data not included but available from the",
+                   "Museum of London upon request.",
+                   "For general information:",
                    "https://www.museumoflondon.org.uk",
+                   "go for: Collections > Archaeology at the Museum of London",
+                   "> Wellcome Osteological Research Database",
+                   "> St. Bride's Church Fleet Street",
                    "Please download the data and edit the code.",
                    sep="\n")
 
