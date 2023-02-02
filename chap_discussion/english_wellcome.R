@@ -14,7 +14,8 @@ english_wellcome_plot <- ggplotGrob(
                      xmax = start, xmin = end, height = 1)) +
     geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 ) + 
     geom_point(aes(x = (start + end) / 2, y = M), size= 3) +
-    guides(size = "none",colour=guide_legend(ncol=1)) 
+    guides(size = "none",colour=guide_legend(ncol=1)) +
+    theme(legend.position="none")
   )
 
 english_wellcome_r <- rbind(english_mortality_prep_r, wellcome_prep_r)
@@ -33,8 +34,10 @@ english_wellcome_plot_r <- ggplotGrob(
                      xmax = start, xmin = end, height = 1)) +
     geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
     geom_point(aes(x = (start + end) / 2, y = M), size= 3) + 
-    guides(size = "none",colour=guide_legend(ncol=1)) 
+    guides(size = "none",colour=guide_legend(ncol=1)) +
+    theme(legend.position="none")
   )
+ewp_legend <- get_legend(english_wellcome_plot)
 
 # Gompertz beta from historical and osteological data
 english_wellcome_beta <- rbind(english_mortality_beta_prep, wellcome_prep_beta)

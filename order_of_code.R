@@ -103,7 +103,9 @@ Marylebone_ranges
 # modal ages from historical and osteological data
 source("./chap_discussion/english_wellcome.R")
 grid::grid.newpage()
-grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
+# grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
+ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
+plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
 
 ##############
 # Supplement
