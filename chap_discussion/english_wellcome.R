@@ -27,10 +27,14 @@ english_wellcome_r$data <- factor(english_wellcome_r$data, levels = unique(engli
 english_wellcome_r$start <- as.numeric(english_wellcome_r$start) 
 english_wellcome_r$end <- as.numeric(english_wellcome_r$end) 
 
+english_wellcome_r %>%
+  mutate(year = ifelse(is.na(year), (start + end)/2, substr(year, 2,5)))
+         
 english_wellcome_plot_r <- ggplot(english_wellcome_r, aes(colour = data, shape = source) ) +  
     ylab("modal age (corrected for population growth)")  + 
     xlab("year (from - to)") + ylim(2, 75) +
     scale_color_manual(values=unname(col25)) +
+    geom_smooth(aes(x = as.numeric(substr(year, 2, 5)), y = M), color = 1) +
     geom_errorbar(aes(x = (start + end) / 2, y = M, 
                     ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
     geom_errorbarh(aes(x = (start + end) / 2, y = M, 
