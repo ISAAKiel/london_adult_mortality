@@ -1,48 +1,52 @@
-# get 25 colors from palette alphabet (max n = 26), alt. glasbey (32), polychrome(36)
-col25<-palette.colors(n=25, palette = 'alphabet')
+# get colors from palette alphabet (max n = 26), alt. glasbey (32), polychrome(36)
+plotcolors<-palette.colors(palette = 'alphabet')
 
 # MOLA Welcome data without correction of population growth
 english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
-english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
-english_wellcome$start <- as.numeric(english_wellcome$start) 
-english_wellcome$end <- as.numeric(english_wellcome$end) 
 
-english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) + 
-    ylab("modal age & HDI low - HDI high")  + 
-    xlab("year (from - to)") + ylim(2, 75) +
-    scale_color_manual(values=unname(col25)) +
-    geom_errorbar(aes(x = (start + end) / 2, y = M, 
-                    ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-    geom_errorbarh(aes(x = (start + end) / 2, y = M, 
-                     xmax = start, xmin = end, height = 1)) +
-    geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 ) + 
-    geom_point(aes(x = (start + end) / 2, y = M), size= 3) +
-    guides(size = "none",colour=guide_legend(ncol=1)) +
-    scale_x_continuous (breaks = seq(1200, 1800, by = 200)) +
-    theme(legend.position="none")
+# slight modifications
+english_wellcome <- english_wellcome %>%
+  mutate(data = factor(data, levels = unique(data))) %>%
+  mutate(start = as.numeric(start)) %>%
+  mutate(end = as.numeric(end)) %>%
+  mutate(year = ifelse(is.na(year), (start + end)/2, substr(year, 2,5))) %>%
+  mutate(year = as.numeric(year))
+
+ggplot(english_wellcome, aes(x = year, y = M, colour = data, shape = source) ) + 
+  ylab("modal age & HDI low - HDI high")  + 
+  xlab("year (from - to)") + ylim(2, 75) +
+  scale_color_manual(values=unname(plotcolors)) +
+  geom_smooth(color = "dark grey") +
+  geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
+  geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
+  geom_point(size= 3 ) + 
+  geom_point(size= 3) +
+  guides(size = "none",colour=guide_legend(ncol=1)) +
+  scale_x_continuous (breaks = seq(1200, 1800, by = 200)) +
+  theme(legend.position="none") -> english_wellcome_plot
 
 # MOLA Welcome data with correction of population growth (_r)
 english_wellcome_r <- rbind(english_mortality_prep_r, wellcome_prep_r)
-english_wellcome_r$data <- factor(english_wellcome_r$data, levels = unique(english_wellcome_r$data))
-english_wellcome_r$start <- as.numeric(english_wellcome_r$start) 
-english_wellcome_r$end <- as.numeric(english_wellcome_r$end) 
 
+# slight modifications
 english_wellcome_r <- english_wellcome_r %>%
+  mutate(data = factor(data, levels = unique(data))) %>%
+  mutate(start = as.numeric(start)) %>%
+  mutate(end = as.numeric(end)) %>%
   mutate(year = ifelse(is.na(year), (start + end)/2, substr(year, 2,5))) %>%
-  mutate(year = as.integer(year))
-         
-english_wellcome_plot_r <- ggplot(english_wellcome_r, 
-                                  aes(x = year, y = M, colour = data, shape = source) ) +  
-    ylab("modal age (corrected for population growth)")  + 
-    xlab("year (from - to)") + ylim(2, 75) +
-    scale_color_manual(values=unname(col25)) +
-    geom_smooth(color = 1) +
-    geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-    geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
-    geom_point(size= 3 )+ 
-    geom_point(size= 3) + 
-    guides(size = "none",colour=guide_legend(ncol=1)) +
-    scale_x_continuous (breaks = seq(1200, 1800, by = 200))
+  mutate(year = as.numeric(year))
+
+ggplot(english_wellcome_r, aes(x = year, y = M, colour = data, shape = source) ) + 
+  ylab("modal age (corrected for population growth)")  + 
+  xlab("year (from - to)") + ylim(2, 75) +
+  scale_color_manual(values=unname(plotcolors)) +
+  geom_smooth(color = "dark grey") +
+  geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
+  geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
+  geom_point(size= 3 )+ 
+  geom_point(size= 3) + 
+  guides(size = "none",colour=guide_legend(ncol=1)) +
+  scale_x_continuous (breaks = seq(1200, 1800, by = 200)) -> english_wellcome_plot_r
 
 #get the legend and remove it afterwards 
 ewp_legend <- get_legend(english_wellcome_plot_r)
