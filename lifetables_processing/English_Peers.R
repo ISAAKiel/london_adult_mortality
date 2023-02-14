@@ -1,8 +1,7 @@
 #medieval data, Russell, from https://genus.springeropen.com/articles/10.1186/s41118-021-00122-w/tables/2
 if (runCodeNew){
   set.seed(167)
-  path <- "./data/russell.txt"
-  peers <- read.table(path, header=TRUE, sep = "\t")
+  peers <- read.table("./data/russell.txt", header=TRUE, sep = "\t", skip = 1)
   peers$heirs_cumsum <- cumsum(peers$heirs)
   peers$death_cumsum <- c(0, cumsum(peers$deaths)[-21])
   peers$risk <- peers$heirs_cumsum - peers$death_cumsum

@@ -1,3 +1,4 @@
+# Source: John Hatcher, The Economic History Review , 1986, New Series, Vol. 39, No. 1, p. 28 tab. 2 (https://www.jstor.org/stable/2596099)
 Age	1395-1505	1395-1420	1405-1430	1415-1440	1425-1450	1435-1460	1445-1470	1455-1480	1465-1490
 	395	92	82	70	69	68	72	68	71
 20	65	66	61	29	44	107	155	75	71

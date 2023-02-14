@@ -1,7 +1,7 @@
 # London data, from Landers 1997, 172 Tab. 5.5
 if (runCodeNew){
   set.seed(5712)
-  eng_mort <- read.table("./data/Landers_1997_London.txt", header=TRUE, sep = "\t")
+  eng_mort <- read.table("./data/Landers_1997_London.txt", header=TRUE, sep = "\t", skip = 1)
   eng_mort <- eng_mort[-1,]
   eng_mort_melt <- reshape2::melt(eng_mort, id.vars = "Age", value.name = "qx")
   years <- unique(eng_mort_melt$variable)

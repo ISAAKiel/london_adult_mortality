@@ -4,7 +4,7 @@ if (runCodeNew){
   set.seed(847)
   #medieval <- read.table("./data/Hatcher_monks.txt", header=TRUE, sep = "\t")
   #medieval$Tenants <- (medieval$Tenants_I + medieval$Tenants_II) / 2
-  monks <- read.table("./data/Christ_church_monks.txt", header=TRUE, sep = "\t")
+  monks <- read.table("./data/Christ_church_monks.txt", header=TRUE, sep = "\t", skip = 1)
   monks_n <- monks[1,-1]
   monks <- monks[-1,]
   #group_data <- medieval[,1:2]

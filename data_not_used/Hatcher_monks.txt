@@ -1,3 +1,4 @@
+# Source: John Hatcher, The Economic History Review , 1986, New Series, Vol. 39, No. 1, p. 38 tab. 5 (https://www.jstor.org/stable/2596099)
 Age	Monks	Peerage	Tenants_I	Tenants_II
 20	65	35	104	102
 25	75	72	92	135

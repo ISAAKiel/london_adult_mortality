@@ -2,7 +2,7 @@
 
 if (runCodeNew){
   set.seed(512)
-  eng_mort <- read.table("./data/Mortality_bills_1728_1840.txt", header=TRUE, sep = "\t")
+  eng_mort <- read.table("./data/Mortality_bills_1728_1840.txt", header=TRUE, sep = "\t", skip = 1)
   eng_mort_melt <- reshape2::melt(eng_mort[-c(1, 2, 3, 4, 5),], id.vars = "Decade", value.name = "Dx")
   years <- unique(eng_mort_melt$variable)
   

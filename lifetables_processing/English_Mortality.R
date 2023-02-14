@@ -3,7 +3,7 @@
 # eng_mort <- read.table(file.choose(), header=TRUE, sep = "\t")
 if (runCodeNew){
   set.seed(9871)
-eng_mort <- read.table("./data/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t")
+eng_mort <- read.table("./data/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t", skip = 1)
 
 eng_mort_melt <- reshape2::melt(eng_mort, id.vars = "Age", value.name = "qx")
 
