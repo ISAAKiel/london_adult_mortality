@@ -10,7 +10,7 @@ english_wellcome <- english_wellcome %>%
   mutate(data = factor(data, levels = unique(data))) %>%
   mutate(source = gsub('written','England & Wales written', source)) %>%
   mutate(source = gsub('osteological','London osteological', source)) %>%
-  mutate(source = ifelse(substr(data,1,6)=="London","London written",source)) %>%
+  mutate(source = ifelse(data=="London 1728-1840","London written",source)) %>%
   mutate(source = factor(source, levels = c('England & Wales written', 'London written', 
                          'London osteological'))) %>%
   mutate(start = as.numeric(start)) %>%
@@ -39,7 +39,7 @@ english_wellcome_r <- english_wellcome_r %>%
   mutate(data = factor(data, levels = unique(data))) %>%
   mutate(source = gsub('written','England & Wales written', source)) %>%
   mutate(source = gsub('osteological','London osteological', source)) %>%
-  mutate(source = ifelse(substr(data,1,6)=="London","London written",source)) %>%
+  mutate(source = ifelse(data=="London 1728-1840","London written",source)) %>%
   mutate(source = factor(source, levels = c('England & Wales written', 'London written', 
                          'London osteological'))) %>%
   mutate(start = as.numeric(start)) %>%
