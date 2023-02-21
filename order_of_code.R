@@ -107,6 +107,10 @@ grid::grid.newpage()
 ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
 plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
 
+# share of decrease in mortality for population growth
+source("./chap_discussion/ex15_increase.R")
+mort_explain
+
 ##############
 # Supplement
 
