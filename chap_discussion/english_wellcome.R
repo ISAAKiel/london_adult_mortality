@@ -1,5 +1,6 @@
-# get colors from palette alphabet (max n = 26), alt. glasbey (32), polychrome(36)
+# get symbols & colors from palette alphabet (max n = 26), alt. glasbey (32), polychrome(36)
 plotcolors<-palette.colors(palette = 'alphabet')
+plotsymbols<-c(15,17,18)
 
 # MOLA Welcome data without correction of population growth
 english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
@@ -7,6 +8,9 @@ english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
 # slight modifications
 english_wellcome <- english_wellcome %>%
   mutate(data = factor(data, levels = unique(data))) %>%
+  mutate(source = gsub('written','England & Wales written', source)) %>%
+  mutate(source = gsub('osteological','London osteological', source)) %>%
+  mutate_if(source = case_when(substr(data,1,6)=="London" ~ "London written")) %>%
   mutate(start = as.numeric(start)) %>%
   mutate(end = as.numeric(end)) %>%
   mutate(year = ifelse(is.na(year), (start + end)/2, substr(year, 2,5))) %>%
@@ -16,6 +20,7 @@ ggplot(english_wellcome, aes(x = year, y = M, colour = data, shape = source) ) +
   ylab("modal age & HDI low - HDI high")  + 
   xlab("year (from - to)") + ylim(2, 75) +
   scale_color_manual(values=unname(plotcolors)) +
+  scale_shape_manual(values=plotsymbols) +
   geom_smooth(color = "dark grey") +
   geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
@@ -40,6 +45,7 @@ ggplot(english_wellcome_r, aes(x = year, y = M, colour = data, shape = source) )
   ylab("modal age (corrected for population growth)")  + 
   xlab("year (from - to)") + ylim(2, 75) +
   scale_color_manual(values=unname(plotcolors)) +
+  scale_shape_manual(values=plotsymbols) +
   geom_smooth(color = "dark grey") +
   geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
