@@ -139,7 +139,7 @@ rmse_estim_result[order(rmse_estim_result$RMSE) ,]
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 # Written sources, pre-processed
-source("./historical_lifetables.R")
+source("./chap_results/historical_lifetables.R")
 peers_result
 Landers_result
 london_1728_1840_result

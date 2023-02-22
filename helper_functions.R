@@ -33,6 +33,33 @@ gomp.ex <- function(x, a, b, age_start = 15) {
   return(ex)
 }
 
+# function to calculate the realized fertility in relation to mortality
+fertility_survival_mixture <- function(age_a, age_b, lower = 0, upper = 35) {
+  
+  # fertility model by Hassan 1981, 137 table 8.7
+  fert <- data.frame(age = c(17.5, 22.5, 27.5, 32.5, 37.5, 42.5, 47.5, 50), fert = c(10.9, 23.1, 24.1, 19.5, 14.4, 6.2, 1.6, 0), fert_end = 1)
+  
+  surv_fert <- flexsurv::flexsurvreg(formula = survival::Surv(age - 15, fert_end) ~ 1, data = fert, dist="gompertz", weights = fert)
+  fert_b <- surv_fert$coefficients[1]
+  fert_a <- exp(surv_fert$coefficients[2])
+  
+  fert_f <- function(x, fert_a, fert_b, age_a, age_b) {
+    # fertility Gompertz function
+    fert_gomp <- fert_a * (exp(fert_b * x + fert_a/fert_b * (1- exp(fert_b * x))))
+    
+    # age survival
+    age_surv <- exp(age_a / age_b * (1 - exp(age_b * x)))
+    
+    # multiplication of fertility and survival functions
+    
+    fert_gomp * age_surv
+  }
+  
+  fert_sum <- integrate(fert_f, lower = lower, upper = upper, fert_a = fert_a, fert_b = fert_b, age_a = age_a, age_b = age_b)
+  return(fert_sum$value)
+}
+
+
 beta_mom <- function(x) {
   
   m_x <- mean(x, na.rm = TRUE)
