@@ -33,7 +33,7 @@ gomp.ex <- function(x, a, b, age_start = 15) {
   return(ex)
 }
 
-# function to calculate the realized fertility in relation to mortality
+# function to calculate the realized fertility in relation to mortality, from the age of 15
 fertility_survival_mixture <- function(age_a, age_b, lower = 0, upper = 35) {
   
   # fertility model by Hassan 1981, 137 table 8.7
