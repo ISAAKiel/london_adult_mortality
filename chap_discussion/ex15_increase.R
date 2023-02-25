@@ -33,5 +33,27 @@ new_churchyard_fert <- fertility_survival_mixture(age_a = new_churchyard_a15, ag
 london1841_fert <- fertility_survival_mixture(age_a = london_1841a, age_b = london1841_b, lower = 0, upper = 35)
 
 fert_rel <- (london1841_fert - new_churchyard_fert) / new_churchyard_fert
-fert_explain <- fert_rel / london_increase 
+
+# the following calculations are nice but actually unnecessary
+# "natural" child spacing according to Hassan 1981, 127: 27.3 months, 32 years reproductive period
+# child_spac <- 27.3 / 12
+# tfr <- 32 / child_spac
+# new_churchyard_trf <- new_churchyard_fert * tfr
+# london1841_trf <- london1841_fert * tfr
+# 
+# # percentage female children, Hassan 1981, 137: 0.488, then gross reproduction rate
+# new_churchyard_grr <- new_churchyard_trf * 0.488
+# london1841_grr <- london1841_trf * 0.488
+# 
+# # net reproduction rate, with 50 per cent of individuals dying before 15 (Hassan 1981, 139):
+# new_churchyard_nrr <- new_churchyard_grr * 0.5
+# london1841_nrr <- london1841_grr * 0.5
+
+# increase in net reproduction rate per year in 191 years
+nrr_increase <- fert_rel/ 191
+
+nrr_increase_exp <- (1 + nrr_increase)^191
+fert_explain <- (nrr_increase_exp - 1) / london_increase 
 fert_explain_share <- 1 / fert_explain
+
+explain_sum <- fert_explain + mort_explain
