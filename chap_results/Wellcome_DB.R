@@ -69,6 +69,17 @@ load(file.path(".", saveFileDir, "Wellcome_result_r.Rda") )
 
 wellcome_result <- rbind(wellcome_result, stbrides_crypt_full)
 
+# trying alternative way for all the subsequent steps
+
+reshape2::melt(wellcome_result, id.vars = c('cemetery', 'parameter')) %>%
+  arrange(cemetery, parameter) -> wellcome_result_melt
+
+unique(wellcome_result_melt$cemetery) -> well_cemeter
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='start') %>%
+  pull(value) -> well_start
+
 # range of Gompertz beta values
 beta_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "beta"),]$HDIlow, 4), "-",
                      round(wellcome_result[which(wellcome_result$parameter == "beta"),]$HDIhigh, 4) )
