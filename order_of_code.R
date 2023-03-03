@@ -128,13 +128,16 @@ do.call(gridExtra::grid.arrange, plot_list_shapes)
 
 # plot of difference between expected and observed value
 do.call(gridExtra::grid.arrange, plot_list_diff)
+
 # table of RMSEs
 rmse_result[order(rmse_result$RMSE) ,]
 
 # plot of results of methods with estimated age-at-death
 do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
+
 # table of RMSEs
 rmse_estim_result[order(rmse_estim_result$RMSE) ,]
+
 # plot for Bayesian model of difference
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
