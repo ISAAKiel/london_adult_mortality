@@ -103,39 +103,74 @@ plot_list_bayes_diff <- list(
     geom_smooth(method = "loess", formula = y ~ x)
 )
 
-ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = surv_Gompertz_shape)) +
-  scale_y_continuous(breaks = round(seq(min(lt_sim$surv_Gompertz_shape), max(lt_sim$surv_Gompertz_shape), by = 0.01),2))
-ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = MLE_lt_Gompertz_shape)) +
-  scale_y_continuous(breaks = round(seq(min(lt_sim$MLE_lt_Gompertz_shape), max(lt_sim$MLE_lt_Gompertz_shape), by = 0.01),2))
-ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = bayes_gomp_b)) +
-  scale_y_continuous(breaks = round(seq(min(lt_sim$bayes_gomp_b), max(lt_sim$bayes_gomp_b), by = 0.01),2))
-ggplot(lt_sim) + geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = bayes_anthr_gomp_b)) +
-  scale_y_continuous(breaks = round(seq(min(lt_sim$bayes_anthr_gomp_b), max(lt_sim$bayes_anthr_gomp_b), by = 0.01),2)) +
+ggplot(lt_sim) + 
+  geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = surv_Gompertz_shape)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$surv_Gompertz_shape), 
+                                        max(lt_sim$surv_Gompertz_shape), 
+                                        by = 0.01),2))
+ggplot(lt_sim) + 
+  geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = MLE_lt_Gompertz_shape)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$MLE_lt_Gompertz_shape), 
+                                        max(lt_sim$MLE_lt_Gompertz_shape), 
+                                        by = 0.01),2))
+ggplot(lt_sim) + 
+  geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = bayes_gomp_b)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$bayes_gomp_b), 
+                                        max(lt_sim$bayes_gomp_b), 
+                                        by = 0.01),2))
+ggplot(lt_sim) + 
+  geom_boxplot(aes(x = cut_interval(b_, length = 0.01),  y = bayes_anthr_gomp_b)) +
+  scale_y_continuous(breaks = round(seq(min(lt_sim$bayes_anthr_gomp_b), 
+                                        max(lt_sim$bayes_anthr_gomp_b), 
+                                        by = 0.01),2)) +
   ylim(0.02,0.1)
 
-ggplot(subset(lt_sim, bayes_gomp_a > 0.25)) + geom_point(aes(x = b_, y = bayes_gomp_b))
+# this one gives no result: bayes_gomp_b not found
+ggplot(subset(lt_sim, bayes_gomp_a > 0.25)) + 
+  geom_point(aes(x = b_, y = bayes_gomp_b))
 
-ggplot(lt_sim) + geom_point(aes(x = 1/b_ * log(b_/a_),  y = 1 /  bayes_gomp_b* log(bayes_gomp_b / bayes_gomp_a))) +
+ggplot(lt_sim) + 
+  geom_point(aes(x = 1/b_ * log(b_/a_),  
+                 y = 1 /  bayes_gomp_b* log(bayes_gomp_b / bayes_gomp_a))) +
   xlim(-10,80) + ylim(-10,80)
-ggplot(lt_sim) + geom_point(aes(x = 1/b_ * log(b_/a_),  y = 1/b_ * log(b_/a_) - 1 /  bayes_gomp_b* log(bayes_gomp_b / bayes_gomp_a)))
-Metrics::rmse(1/lt_sim$b_ * log(lt_sim$b_/lt_sim$a_), 1 /  lt_sim$bayes_gomp_b* log(lt_sim$bayes_gomp_b / lt_sim$bayes_gomp_a))
-ggplot(lt_sim, aes(x = 1/b_ * log(b_/a_),  y = 1 /  bayes_anthr_gomp_b* log(bayes_anthr_gomp_b / bayes_anthr_gomp_a))) + 
-  geom_point() + xlim(0,80) + 
-  ylim(0,80) + 
-  geom_smooth(method = "loess", formula = y ~ x)
+ggplot(lt_sim) + 
+  geom_point(aes(x = 1/b_ * log(b_/a_),  
+                 y = 1/b_ * log(b_/a_) - 1 /  bayes_gomp_b* log(bayes_gomp_b / bayes_gomp_a)))
 
-ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_b )) + geom_point(shape = 21) +
-  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-  geom_smooth(method = "loess", formula = y ~ x) + xlim(0.02,0.105) + ylim(0.02, 0.105)
-ggplot(lt_sim, aes(x = log(a_), y = log(bayes_anthr_gomp_a ))) + geom_point(shape = 21) +
-  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-  geom_smooth(method = "loess", formula = y ~ x) + xlim(-12,-3) + ylim(-12,-3)
-ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_10y_b )) + geom_point(shape = 21) +
-  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-  geom_smooth(method = "loess", formula = y ~ x) + xlim(0.02,0.1) + ylim(0.02, 0.1)
-ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_5y_b )) + geom_point(shape = 21) +
-  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-  geom_smooth(method = "loess", formula = y ~ x) + xlim(0.02,0.1) + ylim(0.02, 0.1)
-ggplot(lt_sim, aes(x = b_, y = bayes_gomp_b )) + geom_point(shape = 21) +
-  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-  geom_smooth(method = "loess", formula = y ~ x) + xlim(0.02,0.1) + ylim(0.02, 0.1)
+Metrics::rmse(1/lt_sim$b_ * log(lt_sim$b_/lt_sim$a_), 1 /  lt_sim$bayes_gomp_b* log(lt_sim$bayes_gomp_b / lt_sim$bayes_gomp_a))
+
+ggplot(lt_sim, aes(x = 1/b_ * log(b_/a_),  
+                   y = 1 /  bayes_anthr_gomp_b* log(bayes_anthr_gomp_b / bayes_anthr_gomp_a))) + 
+  geom_point() +
+  geom_smooth(method = "loess", formula = y ~ x) +
+  xlim(0,80) + ylim(0,80)
+
+ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_b )) + 
+  geom_point(shape = 21) +
+  geom_smooth(method = "loess", formula = y ~ x) + 
+  xlim(0.02,0.105) + ylim(0.02, 0.105) +
+  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2")
+
+ggplot(lt_sim, aes(x = log(a_), y = log(bayes_anthr_gomp_a ))) + 
+  geom_point(shape = 21) +
+  geom_smooth(method = "loess", formula = y ~ x) + 
+  xlim(-10,-3) + ylim(-11,-3) +
+  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2")
+  
+ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_10y_b )) + 
+  geom_point(shape = 21) +
+  geom_smooth(method = "loess", formula = y ~ x) + 
+  xlim(0.02,0.1) + ylim(0.02, 0.1) +
+  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2")
+
+ggplot(lt_sim, aes(x = b_, y = bayes_anthr_gomp_5y_b )) + 
+  geom_point(shape = 21) +
+  geom_smooth(method = "loess", formula = y ~ x) + 
+  xlim(0.02,0.1) + ylim(0.02, 0.1) +
+  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") 
+
+ggplot(lt_sim, aes(x = b_, y = bayes_gomp_b )) + 
+  geom_point(shape = 21) +
+  geom_smooth(method = "loess", formula = y ~ x) + 
+  xlim(0.02,0.1) + ylim(0.02, 0.1) +
+  xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2")
