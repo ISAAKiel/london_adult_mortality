@@ -54,6 +54,7 @@ if (runCodeNew){
 }
 load(file.path(".", saveFileDir, "monks_result.Rda") )
 # mode values
+# gomp.ex() s. helper_functions.R
 modes <- monks_result[2:3,]$Mode
 monks_result <-  monks_result[1:3,]
 monks_20ex <- gomp.ex(20, monks_result[1,8], monks_result[2,8], age_start = 20)

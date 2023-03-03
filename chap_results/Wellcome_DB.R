@@ -88,6 +88,7 @@ M_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "M"),
                   round(wellcome_result[which(wellcome_result$parameter == "M"),]$HDIhigh, 1) )
 
 # expectation of life
+# gomp.ex() s. helper_functions.R
 wellcome_names <- unique(wellcome_result$cemetery)
 wellcome_20ex <- NULL
 wellcome_25ex <- NULL

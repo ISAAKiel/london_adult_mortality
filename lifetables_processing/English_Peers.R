@@ -40,6 +40,7 @@ save(peers_result, file = file.path(".", saveFileDir, "peers_result.Rda") )
 }
 load(file.path(".", saveFileDir, "peers_result.Rda") )
 
+# gomp.ex() s. helper_functions.R
 modes <- peers_result[2:3,]$Mode
 Peers_20ex <- gomp.ex(20, peers_result[1,5], peers_result[2,5])
 Peers_25ex <- gomp.ex(25, peers_result[1,5], peers_result[2,5])
