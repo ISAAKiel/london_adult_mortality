@@ -154,7 +154,7 @@ monks_result
 
 # Mortality in the Wellcome dataset, pre-processed
 source("./lifetables_processing/stbrides_crypt.R")
-source("./Wellcome_DB.R")
+source("./chap_results/Wellcome_DB.R")
 wellcome_result
 wellcome_result_r
 
