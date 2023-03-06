@@ -74,85 +74,161 @@ wellcome_result <- rbind(wellcome_result, stbrides_crypt_full)
 reshape2::melt(wellcome_result, id.vars = c('cemetery', 'parameter')) %>%
   arrange(cemetery, parameter) -> wellcome_result_melt
 
-unique(wellcome_result_melt$cemetery) -> well_cemeter
+unique(wellcome_result_melt$cemetery) -> well_cemetery
+
+# start ages
 wellcome_result_melt %>% 
   group_by(cemetery) %>% 
   filter(parameter =='M',variable=='start') %>%
   pull(value) -> well_start
 
-# range of Gompertz beta values
-beta_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "beta"),]$HDIlow, 4), "-",
-                     round(wellcome_result[which(wellcome_result$parameter == "beta"),]$HDIhigh, 4) )
-# range of age modes M
-M_range <- paste0(round(wellcome_result[which(wellcome_result$parameter == "M"),]$HDIlow, 1), "-",
-                  round(wellcome_result[which(wellcome_result$parameter == "M"),]$HDIhigh, 1) )
+# end ages
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='end') %>%
+  pull(value) -> well_end
+
+# Gompertz beta start
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='HDIlow') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_HDIlow
+
+# Gompertz beta mode
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='Mode') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_mode
+
+# Gompertz beta end
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='HDIhigh') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_HDIhigh
+
+# modal age M start
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='HDIlow') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_HDIlow
+
+# modal age M mode
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='Mode') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_mode
+
+# modal age M end
+wellcome_result_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='HDIhigh') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_HDIhigh
 
 # expectation of life
 # gomp.ex() s. helper_functions.R
-wellcome_names <- unique(wellcome_result$cemetery)
 wellcome_20ex <- NULL
 wellcome_25ex <- NULL
-for (k in wellcome_names) {
-  wellcome_sub <- subset(wellcome_result, cemetery == k)
-  w20ex <- gomp.ex(20, wellcome_sub[1,9], wellcome_sub[2,9], age_start = 12)
-  w25ex <- gomp.ex(25, wellcome_sub[1,9], wellcome_sub[2,9])
+for (k in well_cemetery) {
+  wellcome_param <- subset(wellcome_result_melt, cemetery == k & 
+                           (parameter == "alpha" | parameter == "beta") & variable == "Mode") %>%
+                            pull(value) %>% as.numeric(.)
+  w20ex <- gomp.ex(20, wellcome_param[1], wellcome_param[2], age_start = 12)
+  w25ex <- gomp.ex(25, wellcome_param[1], wellcome_param[2], age_start = 12)
   wellcome_20ex <- c(wellcome_20ex, w20ex)
   wellcome_25ex <- c(wellcome_25ex, w25ex)
 }
 
-wellcome_overview <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (known age)", "St. Bride's crypt (osteological estimates)"),
-                                beta = round(wellcome_result[which(wellcome_result$parameter == "beta"),]$Mode, 4),
-                                beta_range, 
-                                M = round(wellcome_result[which(wellcome_result$parameter == "M"),]$Mode, 1), M_range, 
-                                ex20 = round(wellcome_20ex, 1), ex25 = round(wellcome_25ex, 1))
-wellcome_subset <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (estimates)"),
-                              wellcome_result[which(wellcome_result$parameter == "M" & wellcome_result$cemetery != "St. Bride's crypt (known age)"),])
-wellcome_prep <- data.frame(source = "osteological", wellcome_subset[,c(1, 10)], year = NA,
-                            wellcome_subset[,c(3, 4, 14, 15)])
-colnames(wellcome_prep) <- c("source", "data", "M", "year", "start", "end", "HDIlow", "HDIhigh")
+wellcome_overview <- data.frame(cemetery = well_cemetery,
+                                beta = well_beta_mode,
+                                beta_range = paste0(well_beta_HDIlow, "-", well_beta_HDIhigh), 
+                                M = well_M_mode,
+                                M_range = paste0(well_M_HDIlow, "-", well_M_HDIhigh), 
+                                ex20 = round(wellcome_20ex, 1), 
+                                ex25 = round(wellcome_25ex, 1))
 
-wellcome_subset_beta <- data.frame(cemetery = c(wellcome_data[1, -c(1:2)], "St. Bride's crypt (estimates)"),
-                                   wellcome_result[which(wellcome_result$parameter == "beta" & wellcome_result$cemetery != "St. Bride's crypt (known age)"),])
-wellcome_prep_beta <- data.frame(source = "osteological", wellcome_subset_beta[,c(1, 10)], year = NA,
-                                 wellcome_subset_beta[,c(3, 4, 14, 15)])
-colnames(wellcome_prep_beta) <- c("source", "data", "beta", "year", "start", "end", "HDIlow", "HDIhigh")
+wellcome_prep <- data.frame(source = "osteological",
+                            data = well_cemetery,
+                            M = well_M_mode,
+                            year = NA,
+                            start = well_start,
+                            end = well_end,
+                            HDIlow = well_M_HDIlow,
+                            HDIhigh = well_M_HDIhigh) %>% subset(., data != "St. Bride's crypt (known age)")
 
+############################
 
 ## the same measures for compensation of population growth
 wellcome_result_r <- rbind(wellcome_result_r, stbrides_crypt_full_r)
 
-# range of Gompertz beta values
-beta_range_r <- paste0(round(wellcome_result_r[which(wellcome_result_r$parameter == "beta"),]$HDIlow, 4), "-",
-                     round(wellcome_result_r[which(wellcome_result_r$parameter == "beta"),]$HDIhigh, 4) )
-# range of age modes M
-M_range_r <- paste0(round(wellcome_result_r[which(wellcome_result_r$parameter == "M"),]$HDIlow, 1), "-",
-                  round(wellcome_result_r[which(wellcome_result_r$parameter == "M"),]$HDIhigh, 1) )
-# range of rate
-rate_range <- paste0(round(wellcome_result_r[which(wellcome_result_r$parameter == "rate"),]$HDIlow, 3), "-",
-                     round(wellcome_result_r[which(wellcome_result_r$parameter == "rate"),]$HDIhigh, 3) )
+reshape2::melt(wellcome_result_r, id.vars = c('cemetery', 'parameter')) %>%
+  arrange(cemetery, parameter) -> wellcome_result_r_melt
+
+# Gompertz beta start
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='HDIlow') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_HDIlow_r
+
+# Gompertz beta mode
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='Mode') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_mode_r
+
+# Gompertz beta end
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='beta',variable=='HDIhigh') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 4) -> well_beta_HDIhigh_r
+
+# modal age M start
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='HDIlow') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_HDIlow_r
+
+# modal age M mode
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='Mode') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_mode_r
+
+# modal age M end
+wellcome_result_r_melt %>% 
+  group_by(cemetery) %>% 
+  filter(parameter =='M',variable=='HDIhigh') %>%
+  pull(value) %>% as.numeric(.)  %>% round(., 1) -> well_M_HDIhigh_r
 
 # expectation of life
-wellcome_names_r <- unique(wellcome_result_r$cemetery)
+# gomp.ex() s. helper_functions.R
 wellcome_20ex_r <- NULL
 wellcome_25ex_r <- NULL
-for (k in wellcome_names_r) {
-  wellcome_sub <- subset(wellcome_result_r, cemetery == k)
-  w20ex <- gomp.ex(20, wellcome_sub[1,9], wellcome_sub[2,9], age_start = 12)
-  w25ex <- gomp.ex(25, wellcome_sub[1,9], wellcome_sub[2,9])
+for (k in well_cemetery) {
+  wellcome_param <- subset(wellcome_result_r_melt, cemetery == k & 
+                             (parameter == "alpha" | parameter == "beta") & variable == "Mode") %>%
+    pull(value) %>% as.numeric(.)
+  w20ex <- gomp.ex(20, wellcome_param[1], wellcome_param[2], age_start = 12)
+  w25ex <- gomp.ex(25, wellcome_param[1], wellcome_param[2], age_start = 12)
   wellcome_20ex_r <- c(wellcome_20ex_r, w20ex)
   wellcome_25ex_r <- c(wellcome_25ex_r, w25ex)
 }
 
-wellcome_overview_r <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (known age)", "St. Bride's crypt (osteological estimates)"),
-                                beta_r = round(wellcome_result_r[which(wellcome_result_r$parameter == "beta"),]$Mode, 4),
-                                beta_range_r, 
-                                M_r = round(wellcome_result_r[which(wellcome_result_r$parameter == "M"),]$Mode, 1), M_range_r, 
-                                rate = round(wellcome_result_r[which(wellcome_result_r$parameter == "rate"),]$Mode, 3), rate_range,
-                                ex20_r = round(wellcome_20ex_r, 1), ex25_r = round(wellcome_25ex_r, 1))
-wellcome_subset_r <- data.frame(cemetery = c(as.character(wellcome_data[1, -c(1:2)]), "St. Bride's crypt (estimates)"),
-                              wellcome_result_r[which(wellcome_result_r$parameter == "M" & wellcome_result_r$cemetery != "St. Bride's crypt (known age)"),])
-wellcome_prep_r <- data.frame(source = "osteological", wellcome_subset_r[,c(1, 10)], year = NA,
-                            wellcome_subset_r[,c(3, 4, 14, 15)])
-colnames(wellcome_prep_r) <- c("source", "data", "M", "year", "start", "end", "HDIlow", "HDIhigh")
+wellcome_overview_r <- data.frame(cemetery = well_cemetery,
+                                  beta = well_beta_mode_r,
+                                  beta_range = paste0(well_beta_HDIlow_r, "-", well_beta_HDIhigh_r), 
+                                  M = well_M_mode_r,
+                                  M_range = paste0(well_M_HDIlow_r, "-", well_M_HDIhigh_r), 
+                                  ex20 = round(wellcome_20ex_r, 1), 
+                                  ex25 = round(wellcome_25ex_r, 1))
+
+wellcome_prep_r <- data.frame(source = "osteological",
+                              data = well_cemetery,
+                              M = well_M_mode_r,
+                              year = NA,
+                              start = well_start,
+                              end = well_end,
+                              HDIlow = well_M_HDIlow_r,
+                              HDIhigh = well_M_HDIhigh_r) %>% subset(., data != "St. Bride's crypt (known age)")
+
 
 wellcome_overview_all <- cbind(wellcome_overview, wellcome_overview_r[,-1])
