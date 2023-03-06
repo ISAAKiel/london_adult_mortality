@@ -109,7 +109,7 @@ plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
 
 # share of decrease in mortality for population growth
 source("./chap_discussion/ex15_increase.R")
-mort_explain
+explain_sum
 
 ##############
 # Supplement
