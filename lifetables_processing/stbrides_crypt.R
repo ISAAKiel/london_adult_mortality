@@ -98,8 +98,16 @@ if (runCodeNew){
   save(stbrides_crypt_full, file = file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
   save(stbrides_crypt_full_r, file = file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
   
+} 
+# End of runCodeNew
+
+# Load prepocessed files
+
+load(file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
+load(file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
+
   stbrides_crypt_plot <- ggplot() + 
-    geom_density(data = stbrides, aes(x=known_age), bw=5) + 
+    #geom_density(data = stbrides, aes(x=known_age), bw=5) + 
     geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[5,9], 
                                                         stbrides_crypt_full[4,9]), 
                   colour = "red") +
@@ -112,8 +120,6 @@ if (runCodeNew){
   
   # saves plot in Rda-object
   save(stbrides_crypt_plot, file = file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
-}
 
-load(file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
-load(file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
+
 load(file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
