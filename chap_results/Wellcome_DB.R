@@ -71,10 +71,10 @@ wellcome_result <- rbind(wellcome_result, stbrides_crypt_full)
 
 # trying alternative way for all the subsequent steps
 
-#reshape2::melt(wellcome_result, id.vars = c('cemetery', 'parameter')) %>%
-#  arrange(cemetery, parameter) -> wellcome_result_melt
+reshape2::melt(wellcome_result, id.vars = c('cemetery', 'parameter')) %>%
+  arrange(cemetery, parameter) -> wellcome_result_melt
 
-#unique(wellcome_result_melt$cemetery) -> well_cemetery
+unique(wellcome_result_melt$cemetery) -> well_cemetery
 
 # start ages
 wellcome_result_melt %>% 
