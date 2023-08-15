@@ -1,4 +1,4 @@
-# Source: J. C. Russell, British Medieval Population  (Albuquerque 1948), 202. https://genus.springeropen.com/articles/10.1186/s41118-021-00122-w/tables/2
+# Source: Hugo J. P. La Poutré & Fanny Janssen, A two-parameter hazard function to describe age patterns of mortality in ancient Northwestern Europe. Genus 77, 12 (2021), Tab. 2. https://genus.springeropen.com/articles/10.1186/s41118-021-00122-w/tables/2
 age	age2	heirs	deaths
 0	0	2	0
 1	4	10	0
