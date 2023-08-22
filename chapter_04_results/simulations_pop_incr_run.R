@@ -22,9 +22,9 @@ for (i in 1:4) {
 lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], aes(y = surv_Gompertz_shape, x = as.factor(pop_inc))) + 
   geom_boxplot()  + 
   ylab("Gompertz \u03B2 (MLE)") + ggtitle(paste0("Original Gompertz \u03B2: ", (i + 2)/100) ) +
-  xlab("population increase")
+  xlab("population increase") + theme(plot.margin = unit(c(0,0.5,0.5,0), "cm")) 
 lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x = as.factor(pop_inc)) ) + 
   geom_boxplot()  + 
   ylab("Gompertz \u03B2 (Bayes)") + ggtitle(paste0("Original Gompertz \u03B2: ", (i + 2)/100) ) +
-  xlab("population increase")
+  xlab("population increase") + theme(plot.margin = unit(c(0,0.5,0.5,0), "cm")) 
 }

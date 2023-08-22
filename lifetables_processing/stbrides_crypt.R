@@ -13,12 +13,10 @@ if (runCodeNew){
   warning(infotext)
   
   # Data 
-  my_data3 <- readxl::read_excel(file.choose()) 
-  colnames(my_data3) <- c("site", "ind", "birth", "death", "known_sex", "known_age", "sex", "age")
+  my_data3 <- readxl::read_excel(file.choose(), sheet = 3)[,c(2,6,8)] 
+  colnames(my_data3) <- c("ind", "known_age", "age")
   stbrides <- as.data.frame(my_data3)
   stbrides$known_age <- as.integer(stbrides$known_age)
-  stbrides$birth <- as.integer(stbrides$birth)
-  stbrides$death <- as.integer(stbrides$death)
   stbrides <- na.omit(stbrides)
   stbrides <- subset(stbrides, known_age >= 12 & ind != 105)
   
@@ -58,7 +56,7 @@ if (runCodeNew){
                  numSavedSteps = 300000) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
   
-  # Bayesian model with known age and compensation for population growth
+  # Bayesian model with known age
   gomp.known_age(stbrides, known_age = "known_age",
                  thinSteps = 1,
                  numSavedSteps = 200000, minimum_age = 12) %>%
@@ -98,16 +96,21 @@ if (runCodeNew){
   save(stbrides_crypt_full_r, file = file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
   
   stbrides_crypt_plot <- ggplot() + 
-    geom_density(data = stbrides, aes(x=known_age), bw=5) + 
+    #geom_density(data = stbrides, aes(x=known_age, col = "density of actual ages\n(bw = 5)\n"), bw=5) + 
+    stat_density(data = stbrides, aes(x=known_age, col = "density of actual ages\n(bw = 5)\n"), 
+                 geom="line",position="identity") +
     geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[5,9], 
                                                         stbrides_crypt_full[4,9]), 
-                  colour = "red") +
+                  aes(col = "Gompertz parameters\nfrom osteological estimates\n")) +
     geom_function(fun = function(x) flexsurv::dgompertz(x - 12, 
                                                         stbrides_crypt_full[2,9],  
                                                         stbrides_crypt_full[1,9]), 
-                  colour= "blue") +
-    xlim(12, 100) + 
-    xlab("age") + ylab("density")
+                  aes(col = "Gompertz parameters\nfrom actual ages\n")) +
+    xlim(12, 100) +  xlab("age") + ylab("density") + theme_light() +
+    scale_colour_manual(values = c("red","blue","green")) +
+    theme( legend.title = element_blank(),
+      legend.spacing.y = unit(1.0, 'cm')) +
+    guides(fill = guide_legend(byrow = F))
   
   save(stbrides_crypt_plot, file = file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
   

@@ -40,5 +40,6 @@ for (i in 1:(length(date)- 1)) {
 # re-calculation of rates for Razzell/Spence 2007
 razz_date <- c(1520 , 1600, 1650, 1700, 1750, 1801, 1851)
 razz_pop <- c(55000, 200000, 400000, 575000, 675000, 960000, 2685000)
-razz_rate_p_a <- ((razz_pop[-1] / razz_pop[-length(razz_pop)]) ^ 
-                    (1 / (razz_date[-1] - razz_date[-length(razz_date)])))-1
+razz_rate_p_a <- round(((razz_pop[-1] / razz_pop[-length(razz_pop)]) ^ 
+                    (1 / (razz_date[-1] - razz_date[-length(razz_date)])))-1, 3)
+razz_df <- data.frame(date = razz_date, population = razz_pop,"rate per year" = c(NA, razz_rate_p_a) )

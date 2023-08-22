@@ -5,7 +5,7 @@ require(pacman) || install.packages("pacman")
 pacman::p_load(coda, cowplot, demogR, dplyr, fitdistrplus, flexsurv, ggplot2, 
                ggrepel, gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, 
                MortalityLaws, nlme, osmdata, pals, psych, readxl, reshape2, rgdal, 
-               rio, rjags, rnaturalearth, runjags, sf, svMisc, tibble, tidyr)
+               rio, rjags, rnaturalearth, runjags, sf, svMisc, tibble, tidyr, flexsurv)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
@@ -62,8 +62,43 @@ source("./chapter_03_data/London_population.R")
 grid::grid.newpage()
 grid::grid.draw(rbind(london_pop1, london_pop2))
 
+# footnote 6: Re-calculation of rates for Razzell/Spence 2007
+source("./chapter_03_data/London_population.R")
+razz_df
+
 ############
 # Results
+
+# Written sources, pre-processed
+source("./chapter_04_results/historical_lifetables.R")
+peers_ranges
+monks_ranges
+london_1728_1840_ranges
+london_1728_1840_ranges_r
+London_1841_ranges
+eng_mort_ranges
+HMD_UK_ranges
+
+# Ranges for St. Marylebone with correction for population increase
+source("./lifetables_processing/Marylebone.R")
+Marylebone_ranges
+
+# Extended results for written sources, pre-processed
+source("./chapter_04_results/historical_lifetables.R")
+peers_result
+Landers_result
+london_1728_1840_result
+london_1728_1840_result_r
+London_1841_result
+eng_mort_result
+HMD_UK_result
+monks_result
+
+# Extended results for London cemeteries, pre-processed
+source("./lifetables_processing/stbrides_crypt.R")
+source("./chapter_04_results/Wellcome_DB.R")
+wellcome_result
+wellcome_result_r
 
 # figure 6: Modal ages from historical and osteological data
 source("./chapter_04_results/english_wellcome.R")
@@ -80,11 +115,7 @@ write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep
 source("./lifetables_processing/stbrides_crypt.R")
 source("./chapter_04_results/Wellcome_DB.R") # can take a while
 # St. Bride's crypt data, comparison of known age and osteological estimates
-gridExtra::grid.arrange(stbrides_crypt_plot,
-                        bottom = paste ("black = density of actual ages (bandwidth = 5)",
-                                        "blue = Gompertz distribution of actual ages",
-                                        "red = Gompertz distribution of osteological estimates",
-                                        sep="\n"))
+stbrides_crypt_plot
 
 # figure 8: Simulation of population increase
 source("./chapter_04_results/simulations_pop_incr_run.R")
@@ -92,41 +123,14 @@ do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
 
 ############
-# Supplements  ########################  HIER WETER ###################
-
-# Written sources, pre-processed
-source("./chap_results/historical_lifetables.R")
-peers_ranges
-monks_ranges
-london_1728_1840_ranges
-london_1728_1840_ranges_r
-London_1841_ranges
-eng_mort_ranges
-HMD_UK_ranges
-
-# show ranges for St. Marylebone
-source("./lifetables_processing/Marylebone.R")
-Marylebone_ranges
-
-
-# share of decrease in mortality for population growth
-source("./chap_discussion/ex15_increase.R")
-explain_sum
-
+# Supplements
 
 # Minimum Gompertz beta in Coale/Demeny-Tables
-source("./chap_methods/coale_demeny_life_tables_gompertz.R")
+source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 
-# re-calculation of rates for Razzell/Spence 2007
-source("./chap_results/London_population.R")
-razz_rate_p_a
-
-# one complete Bayesian example, with different settings
-source("./chap_supplemet/bayes_complete.R") # can take a few minutes
-bayes_complete_table
-
-source("./chap_supplemet/simulations_run.R")
+# Simulations for evaluation of algorithms for retrieving Gompertz parameters
+source("./chapter_supplement/simulations_run.R")
 # plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, plot_list_shapes)
 
@@ -145,25 +149,15 @@ rmse_estim_result[order(rmse_estim_result$RMSE) ,]
 # plot for Bayesian model of difference
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
-# Written sources, pre-processed
-source("./chap_results/historical_lifetables.R")
-peers_result
-Landers_result
-london_1728_1840_result
-london_1728_1840_result_r
-London_1841_result
-eng_mort_result
-HMD_UK_result
-monks_result
-
-# Mortality in the Wellcome dataset, pre-processed
-source("./lifetables_processing/stbrides_crypt.R")
-source("./chap_results/Wellcome_DB.R")
-wellcome_result
-wellcome_result_r
-
+# Show that means are stable in Bayesian modelling
+source("./chapter_supplement/bayes_complete.R") # can take a few minutes
+bayes_complete_table
 
 ##### out-dated code
+
+# share of decrease in mortality for population growth
+#source("./chap_discussion/ex15_increase.R")
+#explain_sum
 
 # # computing the inaccuracy of resampled "age estimations"
 # if (runCodeNew) {
