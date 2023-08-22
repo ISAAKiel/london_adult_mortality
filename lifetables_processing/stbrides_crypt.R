@@ -10,11 +10,10 @@ if (runCodeNew){
                      "> St. Bride's Church Fleet Street.",
                      sep="\n")
   
-  stop(infotext)
+  warning(infotext)
   
   # Data 
-  molas_data <- "/Volumes/SanDisk/Nils/Documents/Aktuelle_Dokumente/global_history_of_health/Wellcome_Database/ST\ BRIDES\ CRYPT_SB79_DENTAL\ DATA_NILS\ MUELLER-SCHEESSEL_SEPT\ 2021.xlsx"# 'path/to/downloaded/excel.xls'
-  my_data3 <- readxl::read_excel(molas_data, sheet = 3) [, 1:8]
+  my_data3 <- readxl::read_excel(file.choose()) 
   colnames(my_data3) <- c("site", "ind", "birth", "death", "known_sex", "known_age", "sex", "age")
   stbrides <- as.data.frame(my_data3)
   stbrides$known_age <- as.integer(stbrides$known_age)

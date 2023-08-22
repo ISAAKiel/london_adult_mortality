@@ -55,14 +55,17 @@ pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
 
-source("../helper_functions.R")
-source("../lt_MC.R")
-source("../gomp_bayes_known_age.R")
-source("../gomp_anthr_age.R")
-source("../Gomp_MLE.R")
-source("../Gomp_MLE_adapted.R")
-source("../Gomp_MLE_interval.R")
-source("../lt_MC_Gomp.R")
+source("./functions/bayes_cat_poisson.R")
+source("./functions/gomp_MLE.R")
+source("./functions/gomp_MLE_adapted.R")
+source("./functions/gomp_MLE_interval.R")
+source("./functions/gomp_anthr_age.R")
+source("./functions/gomp_anthr_age_r.R")
+source("./functions/gomp_bayes_known_age.R")
+source("./functions/gomp_known_age_r.R")
+source("./functions/helper_functions.R")
+source("./functions/lt_MC.R")
+source("./functions/lt_MC_Gomp.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 ```
 Important for saving time:  Decide to run extensive code anew (app. 6 h +). In addition you can set the folder for preprocessed files

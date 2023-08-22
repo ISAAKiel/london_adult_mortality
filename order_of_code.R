@@ -10,17 +10,18 @@ pacman::p_load(coda, cowplot, demogR, dplyr, fitdistrplus, flexsurv, ggplot2,
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
 
-source("./helper_functions.R")
-source("./lt_MC.R")
-source("./gomp_bayes_known_age.R")
-source("./gomp_anthr_age.R")
-source("./gomp_known_age_r.R")
-source("./gomp_anthr_age_r.R")
-source("./Gomp_MLE.R")
-source("./Gomp_MLE_adapted.R")
-source("./Gomp_MLE_interval.R")
-source("./lt_MC_Gomp.R")
-source("./bayes_cat_poisson.R")
+source("./functions/bayes_cat_poisson.R")
+source("./functions/gomp_MLE.R")
+source("./functions/gomp_MLE_adapted.R")
+source("./functions/gomp_MLE_interval.R")
+source("./functions/gomp_anthr_age.R")
+source("./functions/gomp_anthr_age_r.R")
+source("./functions/gomp_bayes_known_age.R")
+source("./functions/gomp_known_age_r.R")
+source("./functions/helper_functions.R")
+source("./functions/lt_MC.R")
+source("./functions/lt_MC_Gomp.R")
+
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 
 # run extensive code anew. Set TRUE to run extensive code (6 h +)
@@ -36,39 +37,63 @@ if (saveFileDir %in% list.files(getwd())) {
 }
 
 #############
-# Methods
+# Introduction
 
 # Figure 1: Gompertz.
-source("./chap_methods/gompertz_distribution.R")
+source("./chapter_01_introduction/gompertz_distribution.R")
 
-# Minimum Gompertz beta in Coale/Demeny-Tables
-source("./chap_methods/coale_demeny_life_tables_gompertz.R")
-min(gompertz_df$Gompertz_shape)
 
-# hazard curve (mx) to show turning point
-source("./chap_methods/hazard_curve.R")
+#############
+# Methods
+
+# figure 3: Hazard curve (mx) to show turning point
+source("./chapter_02_methods/hazard_curve.R")
 do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 
 #############
 # Data
 
-# show map of London with sites
-source("./chap_data/London_places.R")
+# figure 4: Map of London with sites
+source("./chapter_03_data/London_places.R")
 suppressWarnings(print(London_map))
+
+# figure 5 London population
+source("./chapter_03_data/London_population.R")
+grid::grid.newpage()
+grid::grid.draw(rbind(london_pop1, london_pop2))
 
 ############
 # Results
 
-# London population
-source("./chap_results/London_population.R")
+# figure 6: Modal ages from historical and osteological data
+source("./chapter_04_results/english_wellcome.R")
 grid::grid.newpage()
-grid::grid.draw(rbind(london_pop1, london_pop2))
+# grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
+ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
+plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
 
-# Simulation of population increase
-source("./chap_results/simulations_pop_incr_run.R")
+# table 2: Overview of modelled osteological data from London cemeteries
+wellcome_overview_all
+write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep="\t", quote = FALSE)
+
+# figure 7: St. Bride's Crypt 
+source("./lifetables_processing/stbrides_crypt.R")
+source("./chapter_04_results/Wellcome_DB.R") # can take a while
+# St. Bride's crypt data, comparison of known age and osteological estimates
+gridExtra::grid.arrange(stbrides_crypt_plot,
+                        bottom = paste ("black = density of actual ages (bandwidth = 5)",
+                                        "blue = Gompertz distribution of actual ages",
+                                        "red = Gompertz distribution of osteological estimates",
+                                        sep="\n"))
+
+# figure 8: Simulation of population increase
+source("./chapter_04_results/simulations_pop_incr_run.R")
 do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
-## Historical Data
+
+############
+# Supplements  ########################  HIER WETER ###################
+
 # Written sources, pre-processed
 source("./chap_results/historical_lifetables.R")
 peers_ranges
@@ -79,40 +104,19 @@ London_1841_ranges
 eng_mort_ranges
 HMD_UK_ranges
 
-# Wellcome Data
-source("./lifetables_processing/stbrides_crypt.R")
-source("./chap_results/Wellcome_DB.R") # can take a while
-# St. Bride's crypt data, comparison of known age and osteological estimates
-gridExtra::grid.arrange(stbrides_crypt_plot,
-                        bottom = paste ("black = density of actual ages (bandwidth = 5)",
-                        "blue = Gompertz distribution of actual ages",
-                        "red = Gompertz distribution of osteological estimates",
-                        sep="\n"))
-
-# show overview of Wellcome data
-wellcome_overview_all
-write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep="\t", quote = FALSE)
-
 # show ranges for St. Marylebone
 source("./lifetables_processing/Marylebone.R")
 Marylebone_ranges
 
-############
-# Discussion
-
-# modal ages from historical and osteological data
-source("./chap_discussion/english_wellcome.R")
-grid::grid.newpage()
-# grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
-ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
-plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
 
 # share of decrease in mortality for population growth
 source("./chap_discussion/ex15_increase.R")
 explain_sum
 
-##############
-# Supplement
+
+# Minimum Gompertz beta in Coale/Demeny-Tables
+source("./chap_methods/coale_demeny_life_tables_gompertz.R")
+min(gompertz_df$Gompertz_shape)
 
 # re-calculation of rates for Razzell/Spence 2007
 source("./chap_results/London_population.R")
