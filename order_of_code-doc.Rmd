@@ -89,7 +89,7 @@ Remark: The base path for rmd-files is the folder where it is located, so '../' 
 
 Figure 1: Gompertz.
 
-```{r }
+```{r warning=FALSE}
 source("./chapter_01_introduction/gompertz_distribution.R")
 ```
 
@@ -97,28 +97,17 @@ source("./chapter_01_introduction/gompertz_distribution.R")
 
 Figure 3 Hazard
 
-```{r }
+```{r warning=FALSE}
 source("./chapter_02_materials_and_methods/hazard_curve.R")
 ```
 
-# Chapter Data
+# Chapter 03 Data
 
-## computing the inaccuracy of resampled "age estimations"
+Figure 4 Major cemeteries in Greater London 1100–1850 used in the present study. 
 
-```{r }
-if (runCodeNew) {
-lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
-save(lt_bias, file = file.path("..", saveFileDir, "lt_bias.Rdata"))  
-} else {
-  load(file = file.path("..", saveFileDir, "lt_bias.Rdata")) 
-}
-mean(lt_bias$lt_inaccuracy)
-```
-
-## show map of London with sites
-
-```{r }
-source("./London_places.R") # not working yet
+```{r echo=TRUE, warning=FALSE}
+source("./chapter_03_data/London_places.R") 
+print(London_map)
 ```
 
 # Chapter Results
