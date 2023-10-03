@@ -44,11 +44,11 @@ source("./chapter_01_introduction/gompertz_distribution.R")
 
 
 #############
-# Methods
+# Materials and methods
 
 # figure 3: Hazard curve (mx) to show turning point
-source("./chapter_02_methods/hazard_curve.R")
-do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
+source("./chapter_02_materials_and_methods/hazard_curve.R")
+#do.call(gridExtra::grid.arrange, HMD_UK_result_1_year_list)
 
 #############
 # Data

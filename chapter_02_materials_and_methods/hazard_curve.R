@@ -17,7 +17,8 @@ if (runCodeNew){
 }
 load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
 
-HMD_UK_result_1_year_list <- list(
+# HMD_UK_result_1_year_list <- list(
+gridExtra::grid.arrange(
   ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),]) + 
     geom_line(aes(x = Age, y = mx)) +
     scale_y_continuous(trans='log10') + ylab("mx (log scale)") +
@@ -32,5 +33,6 @@ HMD_UK_result_1_year_list <- list(
     ylab("mx") +
     annotate (geom = "text", x = 10, y = 0.009, label = "zoomed in") +
     geom_segment(aes(x = 12, y = 0.007, xend = 12, yend = 0.0055),
-                 arrow = arrow(length = unit(0.25, "cm")), colour = "red")
+                 arrow = arrow(length = unit(0.25, "cm")), colour = "red"),
+  ncol = 1
 )

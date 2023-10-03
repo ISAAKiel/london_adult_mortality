@@ -55,17 +55,17 @@ pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
 
-source("../functions/bayes_cat_poisson.R")
-source("../functions/gomp_MLE.R")
-source("../functions/gomp_MLE_adapted.R")
-source("../functions/gomp_MLE_interval.R")
-source("../functions/gomp_anthr_age.R")
-source("../functions/gomp_anthr_age_r.R")
-source("../functions/gomp_bayes_known_age.R")
-source("../functions/gomp_known_age_r.R")
-source("../functions/helper_functions.R")
-source("../functions/lt_MC.R")
-source("../functions/lt_MC_Gomp.R")
+source("./functions/bayes_cat_poisson.R")
+source("./functions/gomp_MLE.R")
+source("./functions/gomp_MLE_adapted.R")
+source("./functions/gomp_MLE_interval.R")
+source("./functions/gomp_anthr_age.R")
+source("./functions/gomp_anthr_age_r.R")
+source("./functions/gomp_bayes_known_age.R")
+source("./functions/gomp_known_age_r.R")
+source("./functions/helper_functions.R")
+source("./functions/lt_MC.R")
+source("./functions/lt_MC_Gomp.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 ```
 Important for saving time:  Decide to run extensive code anew (app. 6 h +). In addition you can set the folder for preprocessed files
@@ -77,26 +77,28 @@ runCodeNew <- FALSE
 saveFileDir = "preprocessed_files"
 if (saveFileDir %in% list.files(getwd())) 
  {}else{
-	dir.create(file.path("..", saveFileDir), showWarnings = FALSE )
-	}
+	dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
+ }
+
 ```
 
 The code makes extensive use of the function source to call external code. Thus the main part of the code remains slim, well structured and readable. 
 Remark: The base path for rmd-files is the folder where it is located, so '../' changes to the project folder.
 
-# Chapter Methods
+# Chapter 01 Introduction
 
-## Figure 1: Gompertz.
+Figure 1: Gompertz.
 
 ```{r }
-source("../gompertz_distribution.R")
+source("./chapter_01_introduction/gompertz_distribution.R")
 ```
 
-## Minimum Gompertz beta in Coale/Demeny-Tables
+# Chapter 02 Materials and methods
 
-```{r warning=FALSE}
-source("../lifetables_processing/coale_demeny_life_tables_gompertz.R")
-min(gompertz_df$Gompertz_shape)
+Figure 3 Hazard
+
+```{r }
+source("./chapter_02_materials_and_methods/hazard_curve.R")
 ```
 
 # Chapter Data
@@ -257,4 +259,13 @@ source("./lifetables_processing/stbrides_crypt.R")
 source("./lifetables_processing/Merton_Priory.R")
 source("./Wellcome_DB.R")
 wellcome_result
+```
+
+# Supplements
+
+## Minimum Gompertz beta in Coale/Demeny-Tables
+
+```{r warning=FALSE}
+source("../chapter_supplement/coale_demeny_life_tables_gompertz.R")
+min(gompertz_df$Gompertz_shape)
 ```

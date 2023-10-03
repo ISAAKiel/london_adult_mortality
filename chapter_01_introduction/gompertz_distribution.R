@@ -16,8 +16,6 @@ M2 <- Sab * (beta2 - Mb) / Sbb + Ma
 M3 <- Sab * (beta3 - Mb) / Sbb + Ma
 M4 <- Sab * (beta4 - Mb) / Sbb + Ma
 
-# Due to the axis limitations in the first ggplot a warning for 4 rows with missing values will be suppressed 
-suppressWarnings(
 gridExtra::grid.arrange (
   
   ggplot()  + xlim(15, 100) + ylim(0, 0.4) +
@@ -56,5 +54,4 @@ gridExtra::grid.arrange (
     ylab("survival") + xlab("age in years"),
   
   ncol = 2
-)
 )

@@ -39,10 +39,16 @@ bbox <- matrix(
 )
 
 # Querry the osm data
-q_admin8 <- bbox %>% opq() %>% 
-  add_osm_feature(key = "boundary", value = "administrative") %>%
-  add_osm_feature(key = "admin_level", value = "8") %>%
-  osmdata_sf()
+# If the bbox has been changed please run the else statement.
+if (file.exists(file.path(".", saveFileDir, "q_admin8.Rda"))) {
+  load(file.path(".", saveFileDir, "q_admin8.Rda"))
+  } else {
+    q_admin8 <- bbox %>% opq() %>% 
+      add_osm_feature(key = "boundary", value = "administrative") %>%
+      add_osm_feature(key = "admin_level", value = "8") %>%
+      osmdata_sf()
+  save(q_admin8, file = file.path(".", saveFileDir, "q_admin8.Rda") )
+  }    
 
 # Build the map
 London_map <- ggplot() +
@@ -51,11 +57,14 @@ London_map <- ggplot() +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
   stat = "sf_coordinates", min.segment.length = 0, size=4) +
-  annotate("label", x = -0.06, y = 51.450, hjust = 0, size = 3,
-           label = paste(apply(sites_data[,1:2],1,paste,collapse = ": "), 
+  annotate("label", x = -0.27, y = 51.38, hjust = 0, vjust = 0, size = 3,
+                    label = paste(apply(sites_data[1:6,1:2],1,paste,collapse = ": "), 
+                         collapse = "\n")) +
+  annotate("label", x = -0.12, y = 51.38, hjust = 0, vjust = 0, size = 3,
+           label = paste(apply(sites_data[7:13,1:2],1,paste,collapse = ": "), 
                          collapse = "\n")) +
   xlim (-0.28, 0.03) +
-  ylim (51.41,51.58) +
+  ylim (51.38,51.58) +
   theme_light() +
   theme(panel.grid = element_blank()) +
   theme(axis.title = element_blank()) +
