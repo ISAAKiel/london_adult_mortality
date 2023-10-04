@@ -7,7 +7,6 @@ pop <- c(16000, 22500, 90000, 37500, 75000, 120000, 200000, 375000, 527560, 6600
 
 date_diff <- date[-1] - date[-length(date)]
 
-# annual rate = ((SizeEnd/SizeStart) ^ (1/years))  - 1
 rate_p_a <- ((pop[-1] / pop[-length(pop)]) ^ 
                (1 / (date[-1] - date[-length(date)])))-1
 
