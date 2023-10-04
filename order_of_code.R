@@ -63,7 +63,7 @@ grid::grid.newpage()
 grid::grid.draw(rbind(london_pop1, london_pop2))
 
 # footnote 6: Re-calculation of rates for Razzell/Spence 2007
-source("./chapter_03_data/London_population.R")
+# Calculated in ./chapter_03_data/London_population.R
 razz_df
 
 ############
