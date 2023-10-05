@@ -133,7 +133,7 @@ knitr::kable(razz_df, caption = "Re-calculation of rates for Razzell/Spence 2007
 ```
 
 \newpage
-# Chapter 03 Data
+# Chapter 04 Results
 
 ## Historical life tables
 
@@ -141,12 +141,18 @@ knitr::kable(razz_df, caption = "Re-calculation of rates for Razzell/Spence 2007
 
 Preprocessing of data used in figure 6: Estimated modal ages.
 
-The data is referenced and aggregated in "./chapter_04_results/historical_lifetables.R". In this file, all records from individual preprocessing files located in "./liftables_preprocessed/" are ```sourced```.  The corresponding file names are given in brackets (note: due to LaTeX problems, underscores are replaced by spaces).
+The data is referenced and aggregated in "./chapter_04_results/historical_lifetables.R". In this file, all records from individual preprocessing files located in "./liftables_preprocessed/" are ```sourced```.  The corresponding data files are stored in "./data/".
+
+English_Peers.R, russell.txt \newline
+```r read.delim("./data/russell.txt", sep = "|", header = F, nrows = 1)[1,1]```
+
 
 ```{r Tables with basic statistics of the preprocessed data, warning=FALSE}
 source("./chapter_04_results/historical_lifetables.R")
 kable(peers_ranges, 
-      caption = "English Peers (English Peers.R)")
+      caption = "English Peers")
+```
+
 kable(monks_ranges, 
       caption = "Christ Church monks (Medieval England.R)")
 kable(london_1728_1840_ranges, 
@@ -159,125 +165,6 @@ kable(eng_mort_ranges,
       caption = "English data (Wrigley et al. 1997) (English Mortality.R)")
 kable(HMD_UK_ranges, 
       caption = "Human Mortality Database UK (HMD UK.R)")
-```
 
-## Wellcome Data
 
-```{r }
-source("./lifetables_processing/stbrides_crypt.R")
-source("./lifetables_processing/Merton_Priory.R")
-source("./Wellcome_DB.R") # can take a while
-```
-
-## St. Bride's crypt data, comparison of known age and osteological estimates
-
-```{r }
-gridExtra::grid.arrange(stbrides_crypt_plot,
-                        bottom = "black = density of actual ages (bandwidth = 5)\n blue = Gompertz distribution of actual ages\n red = Gompertz distribution of osteological estimates")
-```
-
-## show overview of Wellcome data
-
-```{r }
-wellcome_overview 
-# to do: sample size
-```
-
-# Chapter Discussion
-
-## modal ages from historical and osteological data
-
-```{r }
-english_wellcome <- rbind(english_mortality_prep, wellcome_prep)
-english_wellcome$data <- factor(english_wellcome$data, levels = unique(english_wellcome$data))
-
-english_wellcome_plot <- ggplot(english_wellcome, aes(colour = data, shape = source) ) +  
-    ylab("modal age")  + xlab("year") + ylim(10, 70) +
-  geom_errorbar(aes(x = (start + end) / 2, y = M, ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
-  geom_errorbarh(aes(x = (start + end) / 2, y = M, xmax = start, xmin = end, height = 0), colour = "dark grey") +
-  geom_point(aes(x = as.numeric(substr(year, 2, 5)), y = M), size= 3 )+ 
-  geom_point(aes(x = (start + end) / 2, y = M), size= 3) + guides(size = "none")
-suppressWarnings(print(english_wellcome_plot))
-```
-
-# Chapter Supplement
-
-## one complete Bayesian example, with different settings
-
-```{r }
-set.seed(1312)
-source("./bayes_complete.R") # can take a few minutes
-```
-```{r }
-bayes_complete_table
-
-source("./simulations_run.R")
-```
-
-## plot of results of methods with known age-at-death
-
-```{r }
-do.call(gridExtra::grid.arrange, plot_list_shapes)
-```
-
-## plot of difference between expected and observed value
-
-```{r }
-do.call(gridExtra::grid.arrange, plot_list_diff)
-```
-
-## table of RMSEs
-
-```{r }
-rmse_result[order(rmse_result$RMSE) ,]
-```
-
-## plot of results of methods with estimated age-at-death
-
-```{r }
-do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
-```
-
-## table of RMSEs
-
-```{r }
-rmse_estim_result[order(rmse_estim_result$RMSE) ,]
-```
-
-## plot for Bayesian model of difference
-
-```{r }
-do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
-```
-
-## Written sources, pre-processed
-
-```{r }
-source("./historical_lifetables.R")
-Peers_result
-Landers_result
-London_1758_result
-London_1841_result
-eng_mort_result
-HMD_UK_result
-monks_result
-```
-
-## Mortality in the Wellcome dataset, pre-processed
-
-```{r }
-source("./lifetables_processing/stbrides_crypt.R")
-source("./lifetables_processing/Merton_Priory.R")
-source("./Wellcome_DB.R")
-wellcome_result
-```
-
-# Supplements
-
-## Minimum Gompertz beta in Coale/Demeny-Tables
-
-```{r warning=FALSE}
-source("../chapter_supplement/coale_demeny_life_tables_gompertz.R")
-min(gompertz_df$Gompertz_shape)
-```
 
