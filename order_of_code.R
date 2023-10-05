@@ -86,7 +86,6 @@ Marylebone_ranges
 # Extended results for written sources, pre-processed
 source("./chapter_04_results/historical_lifetables.R")
 peers_result
-Landers_result
 london_1728_1840_result
 london_1728_1840_result_r
 London_1841_result
