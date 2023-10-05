@@ -13,17 +13,18 @@ header-includes:
   #\renewcommand{\tablename}{Tab.}
 papersize: a4
 output:
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+    df_print: kable
+    extra_dependencies: ["flafter"]
   html_document:
     code_folding: hide
     toc: true
     toc_depth: 2
     toc_float: true
     number_sections: true
-  pdf_document:
-    number_sections: true
-    toc: true
-    toc_depth: 2
-    df_print: kable
 #  html_notebook:
 #        code_folding: hide
 knit rmdfig_caption: true
@@ -37,14 +38,14 @@ linkcolor: blue
 knitr::opts_chunk$set(echo=TRUE, fig.align="center")
 ```
 
-# Prerequisites
+# Prerequisites {-}
 
 Install required packages, set some options and link the sources for the helper functions. 
 
 **Please note**: Relative paths in the original code, not for documentation purposes, references the workspace, e.g. "./helper_functions.R". Where as in Rmd-files the file location is the root for relative paths, e.g. "../helper_functions.R".  
 
 
-```{r echo=FALSE}
+```{r Packages and sources, echo=TRUE}
 require(pacman) || install.packages("pacman")
 pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
                mortAAR, nlme, osmplotr, reshape2, rgdal, HMDHFDplus, Metrics,
@@ -68,9 +69,9 @@ source("./functions/lt_MC.R")
 source("./functions/lt_MC_Gomp.R")
 RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodicity
 ```
-Important for saving time:  Decide to run extensive code anew (app. 6 h +). In addition you can set the folder for preprocessed files
+Important for saving time:  Decide to run extensive code anew (app. 6 h +). In addition, you can set the folder for preprocessed files.
 
-```{r echo=TRUE}
+```{r rund code anew, echo=TRUE}
 runCodeNew <- FALSE
 #runCodeNew <- TRUE
 
@@ -82,37 +83,43 @@ if (saveFileDir %in% list.files(getwd()))
 
 ```
 
-The code makes extensive use of the function source to call external code. Thus the main part of the code remains slim, well structured and readable. 
-Remark: The base path for rmd-files is the folder where it is located, so '../' changes to the project folder.
+The code makes extensive use of the function ```source``` to call external code. Thus the main part of the code remains slim, well structured and readable. 
 
+Note: The base path for rmd files is the folder in which they are located. Consequently, order_of_code.R (code with comments) and order_of_code.RMD (information with code) are synchronous and are located in the base folder.
+
+\newpage
 # Chapter 01 Introduction
 
 Figure 1: Gompertz.
 
-```{r echo=TRUE, warning=FALSE}
+```{r Fig. 1: Gompertz distribution, echo=TRUE, warning=FALSE}
 source("./chapter_01_introduction/gompertz_distribution.R")
+gridExtra::grid.arrange(gompertz_plot)
 ```
 
+\newpage
 # Chapter 02 Materials and methods
 
-Figure 3 Hazard
+Figure 3 Hazard curve for HMD UK data of the year 1841.
 
-```{r echo=TRUE, warning=FALSE}
+```{r Fig. 3: Hazard curve, echo=TRUE, warning=FALSE}
 source("./chapter_02_materials_and_methods/hazard_curve.R")
+gridExtra::grid.arrange(HMD_UK_hazard_plot)
 ```
 
+\newpage
 # Chapter 03 Data
 
 Figure 4 Major cemeteries in Greater London 1100–1850 used in the present study. 
 
-```{r echo=TRUE, warning=FALSE}
+```{r Fig. 4: Map of London, echo=TRUE, warning=FALSE}
 source("./chapter_03_data/London_places.R") 
-print(London_map)
 ```
 
+\newpage
 Figure 5 Population development of London
 
-```{r }
+```{r Fif. 5: Population development, echo=TRUE, warning=FALSE}
 source("./chapter_03_data/London_population.R")
 grid::grid.newpage()
 grid::grid.draw(rbind(london_pop1, london_pop2))
@@ -121,10 +128,11 @@ grid::grid.draw(rbind(london_pop1, london_pop2))
 Footnote 6  Re-calculation of rates for Razzell/Spence 2007
 Calculated in ./chapter_03_data/London_population.R
 
-```{r}
+```{r Footnote 6: Razzell/Spence 2007, warning=FALSE}
 knitr::kable(razz_df, caption = "Re-calculation of rates for Razzell/Spence 2007")
 ```
 
+\newpage
 # Chapter 03 Data
 
 ## Historical life tables
@@ -132,18 +140,25 @@ knitr::kable(razz_df, caption = "Re-calculation of rates for Razzell/Spence 2007
 ### Written sources, pre-processed
 
 Preprocessing of data used in figure 6: Estimated modal ages.
-Datasets are individualy preprocessed, s. ./liftables_preprocessed/ .
-All data are refernced and aggregated in ./chapter_04_results/historical_lifetables.R
 
-```{r }
+The data is referenced and aggregated in "./chapter_04_results/historical_lifetables.R". In this file, all records from individual preprocessing files located in "./liftables_preprocessed/" are ```sourced```.  The corresponding file names are given in brackets (note: due to LaTeX problems, underscores are replaced by spaces).
+
+```{r Tables with basic statistics of the preprocessed data, warning=FALSE}
 source("./chapter_04_results/historical_lifetables.R")
-kable(peers_ranges, caption = "English Peers (English_Peers.R")
-kable(monks_ranges, caption = "Christ Church monks (Medieval_England.R")
-kable(london_1728_1840_ranges, caption = "London population, range of age modes M (London_1728_1840.R)")
-kable(london_1728_1840_ranges_r, caption = "London population, range of rate (London_1728_1840.R)")
-kable(London_1841_ranges, caption = "London population (London_1841_raw_all.R)")
-kable(eng_mort_ranges, caption = "English data (Wrigley et al. 1997) (English_Mortality.R)")
-kable(HMD_UK_ranges, caption = "Human Mortality Database UK (HMD_UK.R)")
+kable(peers_ranges, 
+      caption = "English Peers (English Peers.R)")
+kable(monks_ranges, 
+      caption = "Christ Church monks (Medieval England.R)")
+kable(london_1728_1840_ranges, 
+      caption = "London population, range of age modes M (London 1728 1840.R)")
+kable(london_1728_1840_ranges_r, 
+      caption = "London population, range of rate (London 1728 1840.R)")
+kable(London_1841_ranges, 
+      caption = "London population (London 1841 raw all.R)")
+kable(eng_mort_ranges, 
+      caption = "English data (Wrigley et al. 1997) (English Mortality.R)")
+kable(HMD_UK_ranges, 
+      caption = "Human Mortality Database UK (HMD UK.R)")
 ```
 
 ## Wellcome Data
@@ -265,3 +280,4 @@ wellcome_result
 source("../chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 ```
+

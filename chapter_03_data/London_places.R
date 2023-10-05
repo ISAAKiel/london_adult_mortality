@@ -39,15 +39,13 @@ bbox <- matrix(
 )
 
 # Querry the osm data
-# If the bbox has been changed please run the else statement.
-if (file.exists(file.path(".", saveFileDir, "q_admin8.Rda"))) {
-  load(file.path(".", saveFileDir, "q_admin8.Rda"))
-  } else {
-    q_admin8 <- bbox %>% opq() %>% 
-      add_osm_feature(key = "boundary", value = "administrative") %>%
-      add_osm_feature(key = "admin_level", value = "8") %>%
-      osmdata_sf()
-  save(q_admin8, file = file.path(".", saveFileDir, "q_admin8.Rda") )
+# If the bbox has been changed please run the statement to get the new osm data.
+
+if (!exists ("q_admin8") | (runCodeNew == TRUE)) {
+  q_admin8 <- bbox %>% opq() %>% 
+    add_osm_feature(key = "boundary", value = "administrative") %>%
+    add_osm_feature(key = "admin_level", value = "8") %>%
+    osmdata_sf()
   }    
 
 # Build the map
@@ -57,7 +55,7 @@ London_map <- ggplot() +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
   stat = "sf_coordinates", min.segment.length = 0, size=4) +
-  annotate("label", x = -0.27, y = 51.38, hjust = 0, vjust = 0, size = 3,
+  annotate("label", x = -0.28, y = 51.38, hjust = 0, vjust = 0, size = 3,
                     label = paste(apply(sites_data[1:6,1:2],1,paste,collapse = ": "), 
                          collapse = "\n")) +
   annotate("label", x = -0.12, y = 51.38, hjust = 0, vjust = 0, size = 3,
@@ -73,15 +71,15 @@ plot(London_map)
 
 # Save the finished map object
 ggsave(
-  filename = "london_map.pdf",
+  filename = "fig04_london_map.pdf",
   plot = London_map, 
   device = "pdf",
   path = "documented"
 )
 
-ggsave(
-  filename = "london_map.png",
-  plot = London_map, 
-  device = "png",
-  path = "documented"
-)
+# ggsave(
+#   filename = "fig04_london_map.png",
+#   plot = London_map, 
+#   device = "png",
+#   path = "documented"
+# )

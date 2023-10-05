@@ -54,4 +54,18 @@ gridExtra::grid.arrange (
     ylab("survival") + xlab("age in years"),
   
   ncol = 2
+) -> gompertz_plot
+
+# Save the finished map object
+ggsave(
+  filename = "fig01_gompertz_plot.pdf",
+  plot = gompertz_plot, 
+  device = "pdf",
+  path = "documented"
 )
+# ggsave(
+#   filename = "fig01_gompertz_plot.png",
+#   plot = gompertz_plot, 
+#   device = "png",
+#   path = "documented"
+# )

@@ -17,8 +17,8 @@ london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =pop/1000)) +
                             scale_y_continuous(trans='log10') + 
                             ylab("population in thousand\n(log scale)") + 
                             xlim(1100, 1850) +
-                            theme(axis.text = element_text(size = 12), 
-                                  axis.title = element_text(size = 15),
+                            theme(axis.text = element_text(size = 8), 
+                                  axis.title = element_text(size = 8),
                                   axis.title.x = element_blank(), 
                                   axis.text.x = element_blank(), 
                                   axis.ticks.x = element_blank())) 
@@ -26,8 +26,13 @@ london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = 100 * rate_p_a ))
                             geom_bar(stat='identity') +
                             ylab("population increase (% p.a.) \n since last zensus") + 
                             xlab("\nyear AD") + xlim(1100, 1850) +
-                            theme(axis.text = element_text(size = 12), 
-                                  axis.title = element_text(size = 15)))
+                            theme(axis.text = element_text(size = 8), 
+                                  axis.title = element_text(size = 8)))
+# write graph into a pdf
+pdf("./documented/fig05_london_population.pdf")
+ grid::grid.newpage()
+ grid::grid.draw(rbind(london_pop1, london_pop2))
+dev.off()
 
 # yearly rates of population increase for averaging
 london_df <- data.frame()
