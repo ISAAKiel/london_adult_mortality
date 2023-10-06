@@ -141,9 +141,11 @@ Preprocessing of data used in figure 6: Estimated modal ages.
 
 ### Written sources and pre-processing
 
+**Basic statistics**
+
 The data is referenced and aggregated in "./chapter_04_results/historical_lifetables.R". In this file, all records from individual preprocessing files located in "./liftables_preprocessed/" are ```sourced```.  The corresponding data files are stored in "./data/".
 
-English_Peers.R, russell.txt, ```r read.delim("./data/russell.txt", sep = "|", header = F, nrows = 1)[1,1]```
+English_Peers.R, russell.txt, \newline ```r read.delim("./data/russell.txt", sep = "|", header = F, nrows = 1)[1,1]```
 
 ```{r Basic statistics English Peers, warning=FALSE}
 source("./chapter_04_results/historical_lifetables.R")
@@ -151,14 +153,14 @@ kable(peers_ranges, caption = "English Peers") %>%
   kable_styling(latex_options = "HOLD_position")
 ```
 
-Medieval_England.R, Christ_church_monks.txt, ```r read.delim("./data/Christ_church_monks.txt", sep = "|", header = F, nrows = 1)[1,1]```
+Medieval_England.R, Christ_church_monks.txt, \newline ```r read.delim("./data/Christ_church_monks.txt", sep = "|", header = F, nrows = 1)[1,1]```
 
 ```{r Basic statistics Christ Church monks, warning=FALSE}
 kable(monks_ranges, caption = "Christ Church monks") %>%
   kable_styling(latex_options = "HOLD_position")
 ```
 
-London_1728_1840.R, Mortality_bills_1728_1840.txt, ```r read.delim("./data/Mortality_bills_1728_1840.txt", sep = "|", header = F, nrows = 1)[1,1]```
+London_1728_1840.R, Mortality_bills_1728_1840.txt, \newline ```r read.delim("./data/Mortality_bills_1728_1840.txt", sep = "|", header = F, nrows = 1)[1,1]```
 
 ```{r Basic statistics Mortality bills 1728-1840 age modes, warning=FALSE}
 kable(london_1728_1840_ranges, 
@@ -172,15 +174,15 @@ kable(london_1728_1840_ranges_r,
   kable_styling(latex_options = "HOLD_position")
 ```
 
-London_1841_raw_all.R, London_1841_raw.txt, ```r read.delim("./data/London_1841_raw.txt", sep = "|", header = F, nrows = 1)[1,1]```
+London_1841_raw_all.R, London_1841_raw.txt, \newline ```r read.delim("./data/London_1841_raw.txt", sep = "|", header = F, nrows = 1)[1,1]```
 
 ```{r Basic statistics census data for London from 1841, warning=FALSE}
 kable(London_1841_ranges, 
-      caption = "census data for London from 1841, range of rate") %>%
+      caption = "census data for London from 1841") %>%
   kable_styling(latex_options = "HOLD_position")
 ```
 
-English_Mortality.R, wrigley_et_al_1997_england_1640-1809.txt, ```r read.delim("./data/wrigley_et_al_1997_england_1640-1809.txt", sep = "|", header = F, nrows = 1)[1,1]```
+English_Mortality.R, wrigley_et_al_1997_england_1640-1809.txt, \newline ```r read.delim("./data/wrigley_et_al_1997_england_1640-1809.txt", sep = "|", header = F, nrows = 1)[1,1]```
 
 ```{r Basic statistics English mortality, warning=FALSE}
 kable(eng_mort_ranges, 
@@ -189,6 +191,7 @@ kable(eng_mort_ranges,
 ```
 
 HMD_UK_ranges.R
+
 The data from the Human Mortality Database (https://mortality.org/) were retrieved with a personal account using the R package HMDHFDplus. Therefore, we only provide the processed data here.  
 
 ```{r Basic statistics HMD UK, warning=FALSE}
@@ -196,5 +199,40 @@ kable(HMD_UK_ranges, caption = "Human Mortality Database UK") %>%
   kable_styling(latex_options = "HOLD_position")
 ```
 
+Marylebone.R
 
+Data are hard coded in the code. Source? \@Nils: Welche Quelle?
+
+```{r Basic statistics Marylebone, warning=FALSE}
+source("./lifetables_processing/Marylebone.R")
+kable(Marylebone_ranges, caption = "Marylebone") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+**Extended statistics**
+
+```{r Etended statistics written sources, warning=FALSE}
+kable(peers_result, caption = "English Peers") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(monks_result, caption = "Christ Church monks") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(london_1728_1840_result, 
+      caption = "London Mortality bills 1728-1840, age modes M") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(london_1728_1840_result_r, 
+      caption = "London Mortality bills 1728-1840, rate") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(London_1841_result, 
+      caption = "census data for London from 1841") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(eng_mort_result, 
+      caption = "English mortality data") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(HMD_UK_result, caption = "Human Mortality Database UK") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+```
+
+## London cemeteries
+
+### Pre-processing and extended results
 
