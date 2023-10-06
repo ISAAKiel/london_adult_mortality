@@ -101,10 +101,7 @@ wellcome_result_r
 
 # figure 6: Modal ages from historical and osteological data
 source("./chapter_04_results/english_wellcome.R")
-grid::grid.newpage()
-# grid::grid.draw(rbind(english_wellcome_plot, english_wellcome_plot_r))
-ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
-plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
+plot(modal_ages_plot)
 
 # table 2: Overview of modelled osteological data from London cemeteries
 wellcome_overview_all

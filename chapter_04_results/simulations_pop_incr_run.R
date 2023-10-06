@@ -28,3 +28,13 @@ lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x 
   ylab("Gompertz \u03B2 (Bayes)") + ggtitle(paste0("Original Gompertz \u03B2: ", (i + 2)/100) ) +
   xlab("population increase") + theme(plot.margin = unit(c(0,0.5,0.5,0), "cm")) 
 }
+lt_sim_plots <- do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4))
+
+# Save the finished map object
+ggsave(
+  filename = "fig08_lt_sim_plots.pdf",
+  width = 11.5, height = 8,
+  plot = lt_sim_plots, 
+  device = "pdf",
+  path = "documented"
+)

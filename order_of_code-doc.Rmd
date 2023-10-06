@@ -225,8 +225,7 @@ kable(london_1728_1840_result_r,
 kable(London_1841_result, 
       caption = "census data for London from 1841") %>%
   kable_styling(latex_options = c("HOLD_position","scale_down"))
-kable(eng_mort_result, 
-      caption = "English mortality data") %>%
+kable(eng_mort_result, caption = "English mortality data") %>%
   kable_styling(latex_options = c("HOLD_position","scale_down"))
 kable(HMD_UK_result, caption = "Human Mortality Database UK") %>%
   kable_styling(latex_options = c("HOLD_position","scale_down"))
@@ -234,5 +233,60 @@ kable(HMD_UK_result, caption = "Human Mortality Database UK") %>%
 
 ## London cemeteries
 
+The data is manly hard coded in the file ./chapter_04_results/Wellcome_DB.R. 
+
+Only St. Bride's crypt is excluded but available from the Museum of London upon request.For general information: [https://www.museumoflondon.org.uk](https://www.museumoflondon.org.uk) go for: Collections > Archaeology at the Museum of London > Wellcome Osteological Research Database > St. Bride's Church Fleet Street. 
+If runCodeNew == TRUE  the file ./lifetables_processing/stbrides_crypt.R will ask for the location of the retrieved dataset (Excel sheet) and process the data. In any other case preprocessed data will be loaded. 
+
+```{r cemeteries data pre-processed, warning=FALSE}
+source("./lifetables_processing/stbrides_crypt.R")
+source("./chapter_04_results/Wellcome_DB.R")
+```
+
 ### Pre-processing and extended results
+
+```{r wellcome results, warning=FALSE}
+kable(wellcome_result, caption = "London cemeteries data") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+kable(wellcome_result_r, caption = "London cemeteries data, rate") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+```
+
+
+## Modal ages from historical and osteological data
+
+Figure 6: Modal ages from historical and osteological data
+
+```{r figure 6 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE}
+source("./chapter_04_results/english_wellcome.R")
+plot(modal_ages_plot)
+```
+
+Table 2: Overview of modelled osteological data from London cemeteries
+
+The data overview is build during pre-processig in ./chapter_04_results/Wellcome_DB.R and saved to a textfile (sep = \\t).
+
+wellcome_overview_all
+```{r wellcome_overview_all, warning=FALSE}
+kable(wellcome_overview_all, caption = "London cemeteries overview") %>%
+  kable_styling(latex_options = c("HOLD_position","scale_down"))
+```
+
+Figure 7: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
+
+The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on runCodeNew (s. data limitations above).
+
+```{r figure 7 St. Bride Crypt, fig.height=3, fig.width=5.5, warning=FALSE}
+plot(stbrides_crypt_plot)
+```
+
+Figure 8: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
+
+```{r Simulation of population increase, warning=FALSE}
+source("./chapter_04_results/simulations_pop_incr_run.R")
+```
+
+\newpage
+# Supplements
+
 

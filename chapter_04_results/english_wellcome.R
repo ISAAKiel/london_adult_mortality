@@ -59,6 +59,22 @@ ggplot(english_wellcome_r, aes(x = year, y = M, colour = data, shape = source) )
   guides(size = "none",colour=guide_legend(ncol=1)) +
   scale_x_continuous (breaks = seq(1200, 1800, by = 200)) -> english_wellcome_plot_r
 
-#get the legend and remove it afterwards 
+# get the legend and remove it afterwards 
 ewp_legend <- get_legend(english_wellcome_plot_r)
 english_wellcome_plot_r <- english_wellcome_plot_r + theme(legend.position="none")
+
+# build the image
+grid::grid.newpage()
+ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
+modal_ages_plot <- plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
+#plot(modal_ages_plot)
+
+# Save the finished map object
+ggsave(
+  filename = "fig06_modal_ages_plot.pdf",
+  width = 11, height = 8.5,
+  plot = modal_ages_plot, 
+  device = "pdf",
+  path = "documented"
+)
+
