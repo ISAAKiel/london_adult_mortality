@@ -2,7 +2,6 @@ source("./lifetables_processing/English_Mortality.R")
 source("./lifetables_processing/Medieval_England.R")
 source("./lifetables_processing/London_1841_raw_all.R")
 source("./lifetables_processing/HMD_UK.R")
-source("./lifetables_processing/Landers_1993_London.R")
 source("./lifetables_processing/English_Peers.R")
 source("./lifetables_processing/London_1728_1840.R")
 

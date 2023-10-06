@@ -70,7 +70,7 @@ beta_range_r <- paste0(round(min(london_1728_1840_result_r[which(london_1728_184
 M_range_r <- paste0(round(min(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "M"),]$Mode), 1), "-",
                   round(max(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "M"),]$Mode), 1) )
 # range of rate
-rate_range <- paste0(round(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "rate"),]$HDIlow, 3), "-",
-                     round(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "rate"),]$HDIhigh, 3) )
+rate_range <- paste0(round(min(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "rate"),]$Mode), 3), "-",
+                     round(max(london_1728_1840_result_r[which(london_1728_1840_result_r$parameter == "rate"),]$Mode), 3) )
 
 london_1728_1840_ranges_r <- data.frame(parameter = c("beta_r", "M_r", "r"), ranges = c(beta_range_r, M_range_r, rate_range))
