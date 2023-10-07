@@ -180,7 +180,7 @@ London_1841_raw_all.R, London_1841_raw.txt, Source: @ref_94043, 19 table q.
 
 ```{r Basic statistics census data for London from 1841, warning=FALSE}
 kable(London_1841_ranges, 
-      caption = "census data for London from 1841.") %>%
+      caption = "Census data for London from 1841.") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
