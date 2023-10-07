@@ -1,3 +1,8 @@
+# this function produces a certain number of random sample populations with
+# random Gompertz parameters and then fits these populations with different formulas
+# to estimate the original parameters. Fitted are "known ages", life table data
+# with 5- and 10-year age ranges as well as osteological age categories as used
+# by Museum of London Archaeology
 lt.MC <- function(sampling,
                   n_min = 50,
                   n_max = 500,
@@ -107,7 +112,7 @@ lt.MC <- function(sampling,
       MLE_adapted_Gompertz_rate <- MLE_adapted_Gomp[1]
     }, error=function(e){})
     
-    # compute life table, we cannot use mortAAR as it truncates ages above 99 years
+    # compute life table with 5-year-classes, we cannot use mortAAR as it truncates ages above 99 years
     ind_df$x_vec <- floor((ind_df$age) / 5 ) * 5 - 15
     age_vec <- data.frame(x_vec = seq(0,floor(max(ind_df$age -15)), 5))
     mort_x <- ind_df %>% group_by (x_vec) %>% summarize(Dx_vec = n())
@@ -207,7 +212,7 @@ lt.MC <- function(sampling,
     bayes_anthr_gomp_5y_a <- gomp_anthr_MCMC_diag[1,5]
     
     
-    # create life table with broader age ranges
+    # create life table with 10-year age ranges
     ind_df$x_vec <- floor((ind_df$age + 5) / 10 ) * 10 - 20
     age_vec <- data.frame(x_vec = seq(0,floor(max(ind_df$age -15)), 10))
     mort_x <- ind_df %>% group_by (x_vec) %>% summarize(Dx_vec = n())
