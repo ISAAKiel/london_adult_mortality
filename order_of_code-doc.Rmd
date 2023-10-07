@@ -42,11 +42,11 @@ knitr::opts_chunk$set(echo=TRUE, fig.align="center")
 
 # Prerequisites {-}
 
-The calculations were made in R using R-Studio. The structure of the code is essentially based on the structure of the text. The raw code is in the file ```order_of_code.R```. The file extended with Markdown is ```order_of_code.RMD``` and the file ```order_of_code.pdf``` is generated from it.
+The calculations were made in R using R-Studio. The structure of the code is essentially based on the structure of the text. The raw code is in the file ```order_of_code.R```. The file extended with Markdown is ```order_of_code-doc.RMD``` and the file ```order_of_code-doc.pdf``` is generated from it.
 
 The code makes extensive use of the function ```source``` to call external code. Thus, the main part of the code remains slim, well structured and readable. 
 
-Note: The base path for rmd files is the folder in which they are located, not the r-project. Consequently, ```order_of_code.R``` and ```order_of_code.RMD``` are both located in the root folder of the project.
+Note: The base path for rmd files is the folder in which they are located, not the r-project. Consequently, ```order_of_code.R``` and ```order_of_code-doc.RMD``` are both located in the root folder of the project.
 
 Install required packages, set some options and link the sources for the helper functions. 
 
@@ -290,6 +290,30 @@ source("./chapter_04_results/simulations_pop_incr_run.R")
 
 \newpage
 # Supplements
+
+The chapter 'Supporting informations' provides details about the London cemeteries included in the study. 
+
+## The Coale & Demeny life tables
+
+Calculation of the lowest $\beta$-value for any of their life tables is 0.0391 (the female table "West", level 1).
+
+```{r Coale and Demeny life tables beta-value, warning=FALSE}
+source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
+min(gompertz_df$Gompertz_shape)
+```
+## Gompertz parameters
+
+Simulations for evaluation of algorithms for retrieving Gompertz parameters. 
+The file simulations_run.R provides various tests and plots from the evaluation process.
+Plot the results of methods with known age-at-death.
+
+```{r Simulations retrieving Gompertz parameters, warning=FALSE}
+source("./chapter_supplement/simulations_run.R")
+gridExtra::grid.arrange(grobs = plot_list_shapes, ncol = 3)
+```
+
+
+
 
 \newpage
 # References
