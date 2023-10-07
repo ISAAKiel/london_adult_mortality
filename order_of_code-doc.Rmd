@@ -141,7 +141,7 @@ Preprocessing of data used in figure 6: Estimated modal ages.
 
 ## Historical life tables
 
-### Written sources and pre-processing
+### Written sources
 
 **Basic statistics**
 
@@ -201,16 +201,6 @@ kable(HMD_UK_ranges, caption = "Human Mortality Database UK.") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
-Marylebone.R
-
-Data are hard coded in the code. Sources: @ref_221997, 97--103 table 32 (St Marylebone); @ref_242052, 81 (St Marylebone north of Paddington street)
-
-```{r Basic statistics Marylebone, warning=FALSE}
-source("./lifetables_processing/Marylebone.R")
-kable(Marylebone_ranges, caption = "St Marylebone.") %>%
-  kableExtra::kable_styling(latex_options = "HOLD_position")
-```
-
 **Extended statistics**
 
 ```{r Etended statistics written sources, warning=FALSE}
@@ -245,12 +235,11 @@ source("./lifetables_processing/stbrides_crypt.R")
 source("./chapter_04_results/Wellcome_DB.R")
 ```
 
-### Pre-processing and extended results
 
 ```{r wellcome results, warning=FALSE}
-kable(wellcome_result, caption = "London cemeteries data") %>%
+kable(wellcome_result, caption = "London cemeteries data.") %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
-kable(wellcome_result_r, caption = "London cemeteries data, rate") %>%
+kable(wellcome_result_r, caption = "London cemeteries data, corrected for population growth.") %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
@@ -270,13 +259,25 @@ The data overview is build during pre-processing in ./chapter_04_results/Wellcom
 
 wellcome_overview_all
 ```{r wellcome_overview_all, warning=FALSE}
-kable(wellcome_overview_all, caption = "London cemeteries overview") %>%
+kable(wellcome_overview_all, caption = "London cemeteries overview.") %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
+
+Marylebone.R
+
+Data are hard coded in the code. Sources: @ref_221997, 97--103 table 32 (St Marylebone); @ref_242052, 81 (St Marylebone north of Paddington street)
+
+```{r Basic statistics Marylebone, warning=FALSE}
+source("./lifetables_processing/Marylebone.R")
+kable(Marylebone_ranges, caption = "St Marylebone, corrected with population growth rate of 2.75 per-cent.") %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+
 Figure 7: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
 
-The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on runCodeNew (s. data limitations above).
+The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
 ```{r figure 7 St. Bride Crypt, fig.height=3, fig.width=5.5, warning=FALSE}
 plot(stbrides_crypt_plot)
@@ -295,7 +296,7 @@ The chapter 'Supporting informations' provides details about the London cemeteri
 
 ## The Coale & Demeny life tables
 
-Calculation of the lowest $\beta$-value for any of their life tables is 0.0391 (the female table "West", level 1).
+Calculation of the lowest $\beta$-value for any of their life tables which is 0.0391 (the female table "West", level 1).
 
 ```{r Coale and Demeny life tables beta-value, warning=FALSE}
 source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
