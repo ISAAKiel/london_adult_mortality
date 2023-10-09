@@ -225,7 +225,7 @@ kable(HMD_UK_result, caption = "Human Mortality Database UK.") %>%
 
 ## London cemeteries
 
-The data is manly hard coded in the file ./chapter_04_results/Wellcome_DB.R. 
+The data is mainly hard coded in the file ./chapter_04_results/Wellcome_DB.R. 
 
 Only St. Bride's crypt is excluded but available from the Museum of London upon request. For general information: [https://www.museumoflondon.org.uk](https://www.museumoflondon.org.uk) go for: Collections > Archaeology at the Museum of London > Wellcome Osteological Research Database > St. Bride's Church Fleet Street. 
 If runCodeNew == TRUE  the file ./lifetables_processing/stbrides_crypt.R will ask for the location of the retrieved dataset (Excel sheet) and process the data. In any other case pre-processed data will be loaded. 
@@ -296,7 +296,7 @@ The chapter 'Supporting informations' provides details about the London cemeteri
 
 ## The Coale & Demeny life tables
 
-Calculation of the lowest $\beta$-value for any of their life tables which is 0.0391 (the female table "West", level 1).
+Calculation of the lowest $\beta$-value for any of the Coale & Demeny life tables (@ref_22426) which is 0.0391 (the female table "West", level 1).
 
 ```{r Coale and Demeny life tables beta-value, warning=FALSE}
 source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
