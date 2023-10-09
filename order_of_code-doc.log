@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.12.14)  9 OCT 2023 10:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.12.14)  9 OCT 2023 17:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -816,30 +816,53 @@ meters-1.pdf Graphic file (type pdf)
 <use order_of_code-doc_files/figure-latex/Simulations retrieving Gompertz param
 eters-1.pdf>
 Package pdftex.def Info: order_of_code-doc_files/figure-latex/Simulations retri
-eving Gompertz parameters-1.pdf  used on input line 1657.
+eving Gompertz parameters-1.pdf  used on input line 1663.
 (pdftex.def)             Requested size: 428.6002pt x 604.25603pt.
 [18] [19 <./order_of_code-doc_files/figure-latex/Simulations retrieving Gompert
 z parameters-1.pdf>]
-<order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf, id=256, 352.31
+<order_of_code-doc_files/figure-latex/Simulations with difference between expec
+ted and estimated Gompertz parameters-1.pdf, id=258, 428.60126pt x 604.2575pt>
+File: order_of_code-doc_files/figure-latex/Simulations with difference between 
+expected and estimated Gompertz parameters-1.pdf Graphic file (type pdf)
+<use order_of_code-doc_files/figure-latex/Simulations with difference between e
+xpected and estimated Gompertz parameters-1.pdf>
+Package pdftex.def Info: order_of_code-doc_files/figure-latex/Simulations with 
+difference between expected and estimated Gompertz parameters-1.pdf  used on in
+put line 1688.
+(pdftex.def)             Requested size: 428.6002pt x 604.25603pt.
+[20] [21 <./order_of_code-doc_files/figure-latex/Simulations with difference be
+tween expected and estimated Gompertz parameters-1.pdf>] [22]
+<order_of_code-doc_files/figure-latex/Simulations retrieving Gompertz parameter
+s with age estimations-1.pdf, id=279, 423.5825pt x 604.2575pt>
+File: order_of_code-doc_files/figure-latex/Simulations retrieving Gompertz para
+meters with age estimations-1.pdf Graphic file (type pdf)
+<use order_of_code-doc_files/figure-latex/Simulations retrieving Gompertz param
+eters with age estimations-1.pdf>
+Package pdftex.def Info: order_of_code-doc_files/figure-latex/Simulations retri
+eving Gompertz parameters with age estimations-1.pdf  used on input line 1762.
+(pdftex.def)             Requested size: 423.58147pt x 604.25603pt.
+[23] [24 <./order_of_code-doc_files/figure-latex/Simulations retrieving Gompert
+z parameters with age estimations-1.pdf>]
+<order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf, id=296, 352.31
 625pt x 170.6375pt>
 File: order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf Graphic fi
 le (type pdf)
 <use order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf>
 Package pdftex.def Info: order_of_code-doc_files/figure-latex/plot Bayesian mod
-el-1.pdf  used on input line 1711.
+el-1.pdf  used on input line 1815.
 (pdftex.def)             Requested size: 352.31538pt x 170.63707pt.
-[20 <./order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf>] [21] (.
-/order_of_code-doc.aux)
+[25 <./order_of_code-doc_files/figure-latex/plot Bayesian model-1.pdf>] [26] [2
+7] (./order_of_code-doc.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16369 strings out of 478268
- 266231 string characters out of 5846346
- 761875 words of memory out of 5000000
- 34049 multiletter control sequences out of 15000+600000
- 531126 words of font info for 135 fonts, out of 8000000 for 9000
+ 16402 strings out of 478268
+ 268549 string characters out of 5846346
+ 763059 words of memory out of 5000000
+ 34067 multiletter control sequences out of 15000+600000
+ 531292 words of font info for 137 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  74i,12n,77p,1014b,454s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
@@ -855,10 +878,10 @@ mf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2022/texmf-dist/font
 s/type1/public/lm/lmr8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/publ
 ic/lm/lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt
 10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on order_of_code-doc.pdf (21 pages, 1462106 bytes).
+Output written on order_of_code-doc.pdf (27 pages, 2534633 bytes).
 PDF statistics:
- 401 PDF objects out of 1000 (max. 8388607)
- 321 compressed objects within 4 object streams
- 85 named destinations out of 1000 (max. 500000)
- 37006 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 446 PDF objects out of 1000 (max. 8388607)
+ 354 compressed objects within 4 object streams
+ 94 named destinations out of 1000 (max. 500000)
+ 37016 words of extra memory for PDF output out of 42996 (max. 10000000)
 
