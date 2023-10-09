@@ -117,6 +117,14 @@ Figure 4: Major cemeteries in Greater London 1100–1850 used in the present stu
 source("./chapter_03_data/London_places.R") 
 ```
 
+Table 1: Overview of included cemeteries with osteoarchaeological data.
+
+```{r Table 1: Overview of included cemeteries, echo=TRUE, warning=FALSE, results="asis"}
+read.table("chapter_03_data/london_cemeteries.txt", header = T, sep = "\t") %>%
+  knitr::kable(., caption = "Overview of included cemeteries with osteoarchaeological data.") %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position","scale_down") %>% unclass() %>% cat()
+```
+
 \newpage
 Figure 5: Population development of London, compiled from @ref_268519, 39 table 1; @ref_90775, 41; 179 table 5.7; @ref_115940, 655--657.
 
