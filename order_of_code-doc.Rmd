@@ -279,7 +279,7 @@ Figure 7: St. Bride's Crypt. Density of actual ages and Bayesian model of Gomper
 
 The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-```{r figure 7 St. Bride Crypt, fig.height=3, fig.width=5.5, warning=FALSE}
+```{r figure 7 St. Bride Crypt, fig.height=2, fig.width=4, warning=FALSE}
 plot(stbrides_crypt_plot)
 ```
 
@@ -302,17 +302,44 @@ Calculation of the lowest $\beta$-value for any of their life tables which is 0.
 source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 ```
+
 ## Gompertz parameters
 
 Simulations for evaluation of algorithms for retrieving Gompertz parameters. 
-The file simulations_run.R provides various tests and plots from the evaluation process.
-Plot the results of methods with known age-at-death.
+The file "./chapter_supplement/simulations_run.R" provides various tests and plots from the evaluation process.
 
-```{r Simulations retrieving Gompertz parameters, warning=FALSE}
+Plot the results of methods with known age-at-death. 
+
+```{r Simulations retrieving Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
 gridExtra::grid.arrange(grobs = plot_list_shapes, ncol = 3)
 ```
+\newpage
+### Set-up 
 
+Testing the paramters $\beta$ and \$alpha$ of the Gompertz distribution of the simulated data sets, e.g. root mean square error (RMSE).
+
+```{r Simulation evaluation RMSE}
+# table of RMSEs
+kable(rmse_estim_result[order(rmse_estim_result$RMSE) ,], caption = "Simulation evaluation.") %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position") 
+```
+
+A plot for the Bayesian model of difference.
+
+```{r plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
+#source("./chapter_supplement/simulations_run.R")
+gridExtra::grid.arrange(grobs = plot_list_bayes_diff, ncol = 2)
+```
+
+Show that means are stable in Bayesian modelling.
+
+```{r Bayesian modeling stable means}
+source("./chapter_supplement/bayes_complete.R") # can take a few minutes
+kable (bayes_complete, caption = paste0("Bayesian model with simulated dataset. n = ", 
+                              n, ", Gompertz $beta$ = ", round(beta, 4), ".", sep = "")) %>%
+  kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
+```
 
 
 
