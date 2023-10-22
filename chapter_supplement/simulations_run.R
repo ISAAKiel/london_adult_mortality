@@ -1,6 +1,6 @@
 if (runCodeNew){
   set.seed(6833)
-  lt_sim <- lt.MC(sampling = 200,
+  lt_sim <- lt.MC(sampling = 1000,
                   n_min = 50,
                   n_max = 500,
                   #M_min = 25,
@@ -40,14 +40,16 @@ plot_list_shapes <- list()
 for (i in 1:length(lt_sim_shapes)) {
   plot_df <- data.frame(beta_original = lt_sim$b_, beta = lt_sim[,lt_sim_shapes[i]])
   plot_list_shapes[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta)) + geom_point(shape = 21) + 
-    xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + xlim(0.01, 0.105) + ylim(0.01, 0.105)
+    xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + 
+    xlim(0.01, 0.105) + ylim(0.01, 0.105) + theme_light()
 }
 
 plot_list_diff <- list()
 for (i in 1:length(lt_sim_shapes)) {
   plot_df <- data.frame(beta_original = lt_sim$b_, beta = lt_sim[,lt_sim_shapes[i]])
   plot_list_diff[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta_original - beta)) + geom_point(shape = 21) + 
-    xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + xlim(0.01, 0.105) + ylim(0.02, -0.04)
+    xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + 
+    xlim(0.01, 0.105) + ylim(0.02, -0.04) + theme_light()
 }
 
 rmse_result <- NULL

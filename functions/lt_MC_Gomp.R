@@ -27,7 +27,7 @@ lt.MC.Gomp <- function(
       setTxtProgressBar(pb1,t)
       ind_df <- data.frame(t = t, ind = 1:pop_actu) %>%
         mutate(age = (round(flexsurv::rgompertz(n(), beta, alpha) ) + 15) ) %>% 
-        mutate(death_t = t + age - 15) %>% # 15 is deliberately not subtracted so that population count starts from 0 for t
+        mutate(death_t = t + age) %>% 
         mutate(age_beg = ifelse(age < 18, 15,
                                 ifelse(age < 26, 18,
                                        ifelse(age < 36, 26,
@@ -69,6 +69,7 @@ lt.MC.Gomp <- function(
                        thinSteps = 1,
                        numSavedSteps = 10000,
                        minimum_age = 15,
+                       maximum_age = 120,
                        r = pop_inc[g]) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
         bayes_gomp_b <- gomp_anthr_MCMC_diag[2,5]

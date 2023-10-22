@@ -190,7 +190,7 @@ lt.MC <- function(sampling,
                        silent.runjags = TRUE,
                        thinSteps = 1,
                        numSavedSteps = 10000,
-                       minimum_age = 15,
+                       minimum_age = 0,
                        r = 0.0) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_poisson_b <- gomp_anthr_MCMC_diag[2,5]
@@ -278,7 +278,8 @@ lt.MC <- function(sampling,
     # compute life table from "archaeological" data
     if(age_categories == "Wellcome") {
       mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
-                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 2, 6, 8, 10, 10, 55))
+                                                  #ageend = "age_end", 
+                                                  agerange = "exclude", method = c(1, 4, 5, 5, 3, 8, 10, 10, 75))
     } else {
       mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
                                                   ageend = "age_end", agerange = "include", method = c(1, 4, 5, 5, 5, 5, 5, 5, 5, 60))
@@ -287,9 +288,9 @@ lt.MC <- function(sampling,
     x_length <- length(mort_life_estim$x)
     x_a <- cumsum(mort_life_estim$a)
     nax <- mort_life_estim$a[5:x_length]
-    #x_vec <- x_a[4:(x_length - 1)] - 15
-    x_vec <- x_a[4:(x_length - 1)] - 12
-    x_vec2 <- c(x_vec[-1], 90)
+    x_vec <- x_a[4:(x_length - 1)] - 15
+    #x_vec <- x_a[4:(x_length - 1)] - 12
+    x_vec2 <- c(x_vec[-1], 115)
     x_mid <- ( x_vec + x_vec2 ) / 2
     Dx_vec <- mort_life_estim$Dx[5:x_length]
     qx_vec <- mort_life_estim$qx[5:x_length]
@@ -356,7 +357,7 @@ lt.MC <- function(sampling,
                        silent.runjags = TRUE,
                        thinSteps = 1,
                        numSavedSteps = 10000,
-                       minimum_age = 15,
+                       minimum_age = 0,
                        r = 0.0) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_estim_poisson_b <- gomp_anthr_MCMC_diag[2,5]

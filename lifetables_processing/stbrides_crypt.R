@@ -36,7 +36,7 @@ if (runCodeNew){
       stbrides$age_end[i] <-  46
     } else if(stbrides$age[i] == 10) {
       stbrides$age_beg[i] <-  46
-      stbrides$age_end[i] <-  100
+      stbrides$age_end[i] <-  120
     } else if(stbrides$age[i] == 11) {
       stbrides$age_beg[i] <-  18
       stbrides$age_end[i] <-  120
@@ -48,7 +48,7 @@ if (runCodeNew){
   stbrides_crypt_result_r <- NA
   cem_dates <- c(1740, 1853)
   london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
-  pop_rate <- psych::geometric.mean(london_sub$rate) - 1
+  pop_rate <- psych::geometric.mean(london_sub$rate)
   
   #Bayesian model with anthropological age estimate
   gomp.anthr_age(stbrides, age_beg = "age_beg", age_end = "age_end",

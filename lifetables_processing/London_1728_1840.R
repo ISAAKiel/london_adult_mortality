@@ -19,12 +19,15 @@ if (runCodeNew){
     cem_dates <- c(as.numeric(substr(i,2,5)), as.numeric(substr(i,2,5)) + 10)
     }
     london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
-    pop_rate <- psych::geometric.mean(london_sub$rate) - 1
+    pop_rate <- psych::geometric.mean(london_sub$rate)
     
     # including population growth
     gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
                      thinSteps = 1,
-                     numSavedSteps = 200000, minimum_age = 20, r = pop_rate) %>%
+                     numSavedSteps = 200000, 
+                     minimum_age = 20, 
+                     maximum_age = 100,
+                     r = pop_rate) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
 
     # without population growth

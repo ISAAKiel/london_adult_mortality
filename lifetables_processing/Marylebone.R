@@ -1,5 +1,5 @@
 age_beg <- c(12, 18, 26, 36, 46, 18)
-age_end <- c(18, 26, 36, 46, 100, 100)
+age_end <- c(18, 26, 36, 46, 120, 120)
 st_marylebone <- c(3, 20, 42, 69, 52, 40)
 st_marylebone_north <-  c(2, 9, 33, 86, 50, 52)
 marylebone_data <- data.frame(age_beg, age_end,  st_marylebone, st_marylebone_north)

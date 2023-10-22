@@ -59,6 +59,7 @@ gridExtra::grid.arrange (
 # Save the finished map object
 ggsave(
   filename = "fig01_gompertz_plot.pdf",
+  width = 8, height = 6,
   plot = gompertz_plot, 
   device = "pdf",
   path = "documented"

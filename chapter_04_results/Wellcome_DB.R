@@ -1,6 +1,6 @@
 wellcome_data <- cbind.data.frame(
   age_beg = c(NA, NA, NA, 12, 18, 26, 36, 46, 18),
-  age_end = c(NA, NA, NA, 18, 26, 36, 46, 100, 100),
+  age_end = c(NA, NA, NA, 18, 26, 36, 46, 120, 120),
   bermondsey_abbey = c("Bermondsey Abbey", 1089, 1538, 1, 15, 28, 51, 37, 69),
   st_mary = c("St. Mary Graces", 1350, 1540, 24, 30, 58, 69, 40, 77),
   st_mary_hospital_p14 = c("St. Mary Hospital, 1120-1200", 1120, 1200, 34, 51, 104, 97, 32, 11),
@@ -28,7 +28,7 @@ if (runCodeNew){
     
     cem_dates <- c(wellcome_data[2,t], wellcome_data[3, t])
     london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
-    pop_rate <- psych::geometric.mean(london_sub$rate) - 1
+    pop_rate <- psych::geometric.mean(london_sub$rate)
     
     #Bayesian modell with anthropological age estimate
     gomp.anthr_age(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
@@ -47,6 +47,7 @@ if (runCodeNew){
     #Bayesian modell with anthropological age estimate and population growth
     gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
                      thinSteps = 1, minimum_age = 12,
+                     maximum_age = 120,
                      numSavedSteps = 400000, r = pop_rate) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
     

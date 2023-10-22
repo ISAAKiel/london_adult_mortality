@@ -122,7 +122,7 @@ Table 1: Overview of included cemeteries with osteoarchaeological data.
 ```{r Table 1: Overview of included cemeteries, echo=TRUE, warning=FALSE, results="asis"}
 read.table("chapter_03_data/london_cemeteries.txt", header = T, sep = "\t") %>%
   knitr::kable(., caption = "Overview of included cemeteries with osteoarchaeological data.") %>%
-  kableExtra::kable_styling(latex_options = "HOLD_position","scale_down") %>% unclass() %>% cat()
+  kableExtra::kable_styling(latex_options = "HOLD_position") %>% unclass() %>% cat()
 ```
 
 \newpage

@@ -128,10 +128,10 @@ min(gompertz_df$Gompertz_shape)
 # Simulations for evaluation of algorithms for retrieving Gompertz parameters
 source("./chapter_supplement/simulations_run.R")
 # plot of results of methods with known age-at-death
-do.call(gridExtra::grid.arrange, plot_list_shapes)
+do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
 
 # plot of difference between expected and observed value
-do.call(gridExtra::grid.arrange, plot_list_diff)
+do.call(gridExtra::grid.arrange, c(plot_list_diff, ncol = 3))
 
 # table of RMSEs
 rmse_result[order(rmse_result$RMSE) ,]
