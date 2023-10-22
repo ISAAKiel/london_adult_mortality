@@ -44,7 +44,7 @@ if (runCodeNew){
     rownames(ind_result) <- NULL
     wellcome_result <- rbind(wellcome_result, ind_result )
     
-    #Bayesian modell with anthropological age estimate and population growth
+    #Bayesian model with anthropological age estimate and population growth
     gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
                      thinSteps = 1, minimum_age = 12,
                      maximum_age = 120,
@@ -69,8 +69,6 @@ load(file.path(".", saveFileDir, "Wellcome_result.Rda") )
 load(file.path(".", saveFileDir, "Wellcome_result_r.Rda") )
 
 wellcome_result <- rbind(wellcome_result, stbrides_crypt_full)
-
-# trying alternative way for all the subsequent steps
 
 reshape2::melt(wellcome_result, id.vars = c('cemetery', 'parameter')) %>%
   arrange(cemetery, parameter) -> wellcome_result_melt

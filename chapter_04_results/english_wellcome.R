@@ -77,4 +77,3 @@ ggsave(
   device = "pdf",
   path = "documented"
 )
-

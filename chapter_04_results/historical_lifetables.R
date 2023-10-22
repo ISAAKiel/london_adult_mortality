@@ -64,6 +64,5 @@ english_mortality_beta_prep <- data.frame(source = "written",
                                           year = english_mortality_beta$year,
                                           start = NA, end = NA, HDIlow = NA, HDIhigh = NA)
 english_mortality_beta_prep <- rbind(peers_beta_prep, 
-                                     monks_beta_prep, 
-                                     #London_1758_beta_prep, 
+                                     monks_beta_prep,
                                      english_mortality_beta_prep)
