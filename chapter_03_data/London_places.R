@@ -1,7 +1,3 @@
-# Libraries needed
-library(osmdata)
-library(ggplot2)
-library(sf)
 # Get the coordinates of sites to be plotted
 sites_data <- rbind.data.frame(
     c("1","St. Marylebone", 51.5225,-0.152222),
@@ -76,10 +72,3 @@ ggsave(
   device = "pdf",
   path = "documented"
 )
-
-# ggsave(
-#   filename = "fig04_london_map.png",
-#   plot = London_map, 
-#   device = "png",
-#   path = "documented"
-# )

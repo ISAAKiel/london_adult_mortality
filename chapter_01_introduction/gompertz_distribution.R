@@ -64,9 +64,3 @@ ggsave(
   device = "pdf",
   path = "documented"
 )
-# ggsave(
-#   filename = "fig01_gompertz_plot.png",
-#   plot = gompertz_plot, 
-#   device = "png",
-#   path = "documented"
-# )

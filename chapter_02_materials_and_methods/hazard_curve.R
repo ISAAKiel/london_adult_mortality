@@ -1,4 +1,4 @@
-# Login needed to retreave data from the Human Mortality Database
+# Login needed to retrieve data from the Human Mortality Database
 # https://mortality.org/
 
 if (runCodeNew){
