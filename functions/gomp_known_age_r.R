@@ -18,7 +18,7 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
   Ntotal <- length(y) # number of individuals
   ones <- rep(1,Ntotal)
   C <- 100000
-  age_abs <- seq(0, (120 - minimum_age), 1) # for integral calculation in 1-year-intervals from 0-1 to 99-100
+  age_abs <- seq(0, (120 - minimum_age), 1) # for integral calculation in 1-year-intervals
   
   # Generate values for Gompertz alpha if minimum age is not 15
   gomp_a0 <- gomp.a0(minimum_age = minimum_age)

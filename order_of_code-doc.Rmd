@@ -55,7 +55,7 @@ Remark: The current version of osmplotr has to be installed from github using ``
 ```{r Packages and sources, echo=TRUE}
 require(pacman) || install.packages("pacman")
 pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
-               mortAAR, nlme, osmplotr, reshape2, rgdal, HMDHFDplus, Metrics,
+               mortAAR, nlme, osmplotr, osmdata, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
                coda, rjags, runjags, demogR, sf, rnaturalearth, readxl,
                ggrepel)
@@ -69,7 +69,7 @@ source("./functions/gomp_MLE_adapted.R")
 source("./functions/gomp_MLE_interval.R")
 source("./functions/gomp_anthr_age.R")
 source("./functions/gomp_anthr_age_r.R")
-source("./functions/gomp_bayes_known_age.R")
+source("./functions/gomp_known_age.R")
 source("./functions/gomp_known_age_r.R")
 source("./functions/helper_functions.R")
 source("./functions/lt_MC.R")

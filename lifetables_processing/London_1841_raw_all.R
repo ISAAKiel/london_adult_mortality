@@ -2,7 +2,6 @@
 if (runCodeNew){
   set.seed(7355)
   year_data <- read.table("./data/London_1841_raw.txt", header=TRUE, sep = "\t", skip = 1)
-  # year_data <- read.table("./data/Lonond_1841_raw_full.txt", header=TRUE, sep = "\t")
   year_data$pop <- year_data$pop_male + year_data$pop_female
   year_data$deaths <- year_data$death_male + year_data$death_female
   year_data_red <- year_data %>% group_by(group) %>% summarize(age = min(age), 

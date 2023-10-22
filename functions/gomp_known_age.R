@@ -1,14 +1,8 @@
-gomp.anthr_age.error(stbrides, age_beg = "age_beg", age_end = "age_end",
-                     thinSteps = 1, minimum_age = 12,
-                     numSavedSteps = 300000) %>%
-  diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
-
-gomp.anthr_age.error <- function(x, # data.frame with needed columns
-                           age_beg, # column name: documented age of the individual,
-                           age_end,
+gomp.known_age <- function(x, # data.frame with needed columns
+                           known_age, # column name: documented age of the individual,
                            minimum_age = 15,
-                           numSavedSteps = numSavedSteps,
-                           thinSteps = thinSteps,
+                           numSavedSteps = 10000,
+                           thinSteps=1,
                            runjagsMethod="rjags",
                            nChains=3,
                            adaptSteps = 1000,
@@ -19,9 +13,8 @@ gomp.anthr_age.error <- function(x, # data.frame with needed columns
   require(coda)
   require(runjags)
   
-  age_beg = x[,age_beg]
-  age_end = x[,age_end]
-  Ntotal <- length(age_beg) # number of individuals  
+  y <- x[,known_age]
+  Ntotal <- length(y) # number of individuals
   ones <- rep(1,Ntotal)
   C <- 100000
   
@@ -43,42 +36,31 @@ gomp.anthr_age.error <- function(x, # data.frame with needed columns
     return(init_list)
   }
   
-  
   # Specify the data in a list, for later shipment to JAGS:
-  # Be careful to specify only parameters which are actually used, otherwise you may confuse JAGS
   dataList = list(
-    Ntotal = Ntotal ,
-    C = C, # JAGS does not warn if too small!
-    ones = ones,
+    y = y,
+    Ntotal = Ntotal,
+      C = C, # JAGS does not warn if too small!
+      ones = ones,
     minimum_age = minimum_age,
-    age_end = age_end,
-    age_beg = age_beg,
-    gomp_a0_m = gomp_a0[1],
-    gomp_a0_ic = gomp_a0[2],
-    gomp_a0_var = gomp_a0[3]
+   gomp_a0_m = gomp_a0[1],
+  gomp_a0_ic = gomp_a0[2],
+   gomp_a0_var = gomp_a0[3]
   )
-  #-----------------------------------------------------------------------------
+  
   # THE MODEL.
   modelString = "
   model {
     for ( i in 1:Ntotal ) {
-      age_we[i] ~ dunif(age_beg[i] - minimum_age, age_end[i] - minimum_age)
-      age_error[i]  ~ dnorm(age_we[i], 1/15^2) T(0, 85)
-      age_beg_[i] <- ifelse(age_error[i] < age_beg[i], age_error[i], age_beg[i])
-      age_end_[i] <- ifelse(age_error[i] > age_end[i], age_error[i], age_end[i])
-      age[i] ~ dunif(age_beg_[i] - minimum_age, age_end_[i] - minimum_age)
-      age.s[i] <- age[i] + minimum_age
       spy[i] <- a * exp(b * age[i]) * exp(-a/b * (exp(b * age[i]) - 1)) / C # implementing Gompertz probability density
       ones[i] ~ dbern( spy[i]  )
-      }
+      age[i] <- y[i] - minimum_age
+    }
     b  ~ dgamma(0.01, 0.01) # a must not be null
-    #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
-    #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
     log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
     log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
     a <- exp(log_a * (-1))
     M <- 1 / b * log (b/a) + minimum_age
-
   }
   " # close quote for modelString
   
@@ -86,10 +68,7 @@ gomp.anthr_age.error <- function(x, # data.frame with needed columns
                   silent.runjags = silent.runjags)
   
   # RUN THE CHAINS
-  parameters = c( "a", "b", 
-                  "M"  
-                  #,"age.s"
-  )
+  parameters = c( "a", "b", "M")
   runJagsOut <- run.jags( method = runjagsMethod ,
                           model = modelString ,
                           monitor = parameters ,

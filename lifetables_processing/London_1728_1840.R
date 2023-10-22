@@ -26,7 +26,7 @@ if (runCodeNew){
                      thinSteps = 1,
                      numSavedSteps = 200000, 
                      minimum_age = 20, 
-                     maximum_age = 100,
+                     maximum_age = 120,
                      r = pop_rate) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
 

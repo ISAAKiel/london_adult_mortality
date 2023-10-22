@@ -6,13 +6,8 @@
 lt.MC <- function(sampling,
                   n_min = 50,
                   n_max = 500,
-                  M_min = NULL,
-                  M_max = NULL,
                   b_min = 0.025,
                   b_max = 0.1,
-                  error_range = NULL,
-                  age_categories = "Wellcome", # either Museum of London Wellcome database or of the Backbone of Europe project
-                  bayes = FALSE,
                   thinSteps = 1,
                   numSavedSteps = 10000 )
 {
@@ -20,73 +15,7 @@ lt.MC <- function(sampling,
   lt_result <- data.frame()
   for (g in 1:sampling) {
     # sampling with Gompertz distribution
-    y <- round(runif(n = 1, min = n_min, max = n_max))
-    if(is.null(M_min) | is.null(M_max)) {
-      b_ <- runif(n = 1, min = b_min, max = b_max)
-      a_ <- exp(rnorm(1, (-66.77 * (b_ - 0.0718) - 7.119), sqrt(0.0823) ) )
-    } else {
-      M <- round(runif(n = 1, min = M_min, max = M_max))
-      M_1 <- 0
-      M_2 <- 0
-      while ( (M < M_1 | M > M_2 )) {
-        b_ <- runif(n = 1, min = b_min, max = b_max)
-        a_ <- exp(rnorm(1, (-66.77 * (b_ - 0.0718) - 7.119), sqrt(0.0823) ) )
-        M_ <- 1 / b_ * log (b_/a_) + 15
-        M_1 <- M_ - 1
-        M_2 <- M_ + 1
-      }
-    }
-
-    ind_df <- data.frame(ind = NA, age = NA, age_beg = NA, age_end = NA)
-    for (i in 1:y) {
-      x <- round(flexsurv::rgompertz(1, b_, a_) ) + 15
-      if(length(error_range) > 0) {
-        x_used <- round(rnorm(1, x, error_range))
-      } else {
-        x_used <- x
-      }
-      if(age_categories == "Wellcome") {
-        if(x_used < 18) {
-          age_beg = 15
-          age_end = 18
-        } else if(x_used < 26) {
-          age_beg = 18
-          age_end = 26
-        } else if(x_used < 36) {
-          age_beg = 26
-          age_end = 36
-        } else if(x_used < 46) {
-          age_beg = 36
-          age_end = 46
-        } else {
-          age_beg = 46
-          age_end = 120
-        } 
-      } else {
-        if(x_used < 20) {
-          age_beg = 15
-          age_end = 20
-        } else if(x_used < 25) {
-          age_beg = 20
-          age_end = 25
-        } else if(x_used < 30) {
-          age_beg = 25
-          age_end = 30
-        } else if(x_used < 35) {
-          age_beg = 30
-          age_end = 35
-        } else if(x_used < 40) {
-          age_beg = 35
-          age_end = 40
-        } else {
-          age_beg = 40
-          age_end = 120
-        } 
-      }
-      
-      ind_df <- rbind(ind_df, c(i, x, age_beg, age_end))
-    }
-    ind_df <- ind_df[-1,]
+    ind_df <- lt.sampling(sampling = 1, n_min = n_min, n_max = n_max, b_min = b_min, b_max = b_max)
     
     # fit Gompertz distribution to known age with Survival package + individual age
     ind_df$death <- 1
@@ -151,7 +80,7 @@ lt.MC <- function(sampling,
     }, error=function(e){})
     
     #fit WOLS to life table mx
-    mort_fit_WOLS <- lm(log(mx_vec)  ~ x_vec, data = mort_df_x, weights  = Dx_vec) # experimenting with midpoints
+    mort_fit_WOLS <- lm(log(mx_vec)  ~ x_vec, data = mort_df_x, weights  = Dx_vec)
     WOLS_Gompertz_shape <- mort_fit_WOLS$coefficients[2]
     WOLS_Gompertz_rate <- exp(mort_fit_WOLS$coefficients[1])
     
@@ -160,7 +89,7 @@ lt.MC <- function(sampling,
     NLS_Gompertz_rate <- NA
     tryCatch({
       nls_fit <- nls(lx_vec ~ exp(a/b - a/b * exp(b * x_vec ) ) , 
-                     data = mort_df_x, start=list(a = 0.001, b = 0.075), weights = Dx_vec)#, method="Nelder-Mead")
+                     data = mort_df_x, start=list(a = 0.001, b = 0.075), weights = Dx_vec)
       NLS_Gompertz_shape <- summary(nls_fit)$coefficients[2]
       NLS_Gompertz_rate <- summary(nls_fit)$coefficients[1]
     }, error=function(e){})    
@@ -185,17 +114,18 @@ lt.MC <- function(sampling,
     }, error=function(e){})
     
     # fit bayesian poisson model to lifetable data
-    poisson.interval.r(mort_df_x, age_beg = "x_vec", age_end = "x_vec2", Dx = "Dx_vec",
+    # we have to add 15, otherwise the minimum age setting will not work properly
+    mort_df_x$x_vec_15 <- mort_df_x$x_vec + 15
+    mort_df_x$x_vec2_15 <- mort_df_x$x_vec2 + 15
+    poisson.interval(mort_df_x, age_beg = "x_vec_15", age_end = "x_vec2_15", Dx = "Dx_vec",
                        silent.jags = TRUE,
                        silent.runjags = TRUE,
                        thinSteps = 1,
                        numSavedSteps = 10000,
-                       minimum_age = 0,
-                       r = 0.0) %>%
+                       minimum_age = 15) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_poisson_b <- gomp_anthr_MCMC_diag[2,5]
     bayes_poisson_a <- gomp_anthr_MCMC_diag[1,5]
-    
     
     #Bayes model from life table data, 5-year-interval
     mort_df_x_uncount <- mort_df_x %>% uncount(as.integer(Dx_vec))
@@ -248,7 +178,6 @@ lt.MC <- function(sampling,
     mort_df_x_uncount$x_vec2_15 <-  mort_df_x_uncount$x_vec2 + 15
     bayes_anthr_gomp_10y_b <- NA
     bayes_anthr_gomp_10y_a <- NA
-    if (bayes == TRUE) {
     gomp.anthr_age(mort_df_x_uncount, age_beg = "x_vec_15", age_end = "x_vec2_15",
                    silent.jags = TRUE,
                    silent.runjags = TRUE,
@@ -258,13 +187,10 @@ lt.MC <- function(sampling,
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_anthr_gomp_10y_b <- gomp_anthr_MCMC_diag[2,5]
     bayes_anthr_gomp_10y_a <- gomp_anthr_MCMC_diag[1,5]
-    }
-    
     
     # Bayes model from individual data
     bayes_gomp_b <- NA
     bayes_gomp_a <- NA
-    if (bayes == TRUE) {
       gomp.known_age(ind_df, known_age = "age",
                      silent.jags = TRUE,
                      silent.runjags = TRUE,
@@ -273,23 +199,15 @@ lt.MC <- function(sampling,
         diagnostic.summary(., HDImass = 0.95) -> gomp_known_age_MCMC_diag
       bayes_gomp_b <- gomp_known_age_MCMC_diag[2,5]
       bayes_gomp_a <- gomp_known_age_MCMC_diag[1,5]
-    }
     
     # compute life table from "archaeological" data
-    if(age_categories == "Wellcome") {
       mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
-                                                  #ageend = "age_end", 
                                                   agerange = "exclude", method = c(1, 4, 5, 5, 3, 8, 10, 10, 75))
-    } else {
-      mort_prep_estim <- mortAAR::prep.life.table(ind_df, agebeg = "age_beg",
-                                                  ageend = "age_end", agerange = "include", method = c(1, 4, 5, 5, 5, 5, 5, 5, 5, 60))
-    }
     mort_life_estim <- mortAAR::life.table(mort_prep_estim)
     x_length <- length(mort_life_estim$x)
     x_a <- cumsum(mort_life_estim$a)
     nax <- mort_life_estim$a[5:x_length]
     x_vec <- x_a[4:(x_length - 1)] - 15
-    #x_vec <- x_a[4:(x_length - 1)] - 12
     x_vec2 <- c(x_vec[-1], 115)
     x_mid <- ( x_vec + x_vec2 ) / 2
     Dx_vec <- mort_life_estim$Dx[5:x_length]
@@ -345,20 +263,13 @@ lt.MC <- function(sampling,
       MLE_estim_lt_Gompertz_rate <- MLE_estim_lt[1]
     }, error=function(e){})
     
-    # # fit Gompertz distribution to age estimations with Survival package
-    # ind_df_estim_Gomp <- flexsurv::flexsurvreg(formula = survival::Surv(age_beg, age_end, 
-    #   type = "interval2") ~ 1, data = ind_df, dist="gompertz", method="Nelder-Mead") # default method throws error
-    # surv_ind_estim_Gompertz_shape <- ind_df_estim_Gomp$coefficients[1]
-    # surv_ind_estim_Gompertz_rate <- exp(ind_df_estim_Gomp$coefficients[2])
-    
     # fit bayesian poisson model to estimated data
-    poisson.interval.r(mort_df_estim, age_beg = "x_vec", age_end = "x_vec2", Dx = "Dx_vec",
+    poisson.interval(mort_df_estim, age_beg = "x_vec", age_end = "x_vec2", Dx = "Dx_vec",
                        silent.jags = TRUE,
                        silent.runjags = TRUE,
                        thinSteps = 1,
                        numSavedSteps = 10000,
-                       minimum_age = 0,
-                       r = 0.0) %>%
+                       minimum_age = 0) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     bayes_estim_poisson_b <- gomp_anthr_MCMC_diag[2,5]
     bayes_estim_poisson_a <- gomp_anthr_MCMC_diag[1,5]
@@ -366,7 +277,6 @@ lt.MC <- function(sampling,
     #Bayesian model with anthropological age estimate
     bayes_anthr_gomp_b <- NA
     bayes_anthr_gomp_a <- NA
-    if (bayes == TRUE) {
       gomp.anthr_age(ind_df, age_beg = "age_beg", age_end = "age_end",
                      silent.jags = TRUE,
                      silent.runjags = TRUE,
@@ -376,10 +286,10 @@ lt.MC <- function(sampling,
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
       bayes_anthr_gomp_b <- gomp_anthr_MCMC_diag[2,5]
       bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]
-    }
     
-    ind_result <- cbind(y, #M, 
-                        a_, b_, surv_Gompertz_shape, surv_Gompertz_rate,
+    ind_result <- cbind(y = ind_df$n[1],
+                        beta = ind_df$beta, alpha = ind_df$alpha,
+                        surv_Gompertz_shape, surv_Gompertz_rate,
                         OLS_Gompertz_shape, OLS_Gompertz_rate,
                         WOLS_Gompertz_shape, WOLS_Gompertz_rate,
                         surv_lt_Gompertz_shape, surv_lt_Gompertz_rate,

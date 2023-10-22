@@ -113,7 +113,6 @@ if (runCodeNew){
     guides(fill = guide_legend(byrow = F))
   
   save(stbrides_crypt_plot, file = file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
-  
 } 
 # End of runCodeNew
 

@@ -4,8 +4,6 @@ if (runCodeNew){
   HMD_password <- readline(prompt="Enter password: ")
   credentials <- c(HMD_username, HMD_password)
   
-  # HMDHFDplus::getHMDitemavail("GBRTENW", credentials[1], credentials[2])
-  
   # get dx
   uk_dx <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_5x5", credentials[1], credentials[2])
   
@@ -15,18 +13,6 @@ if (runCodeNew){
   for(i in years) {
     year_data <- uk_dx[ which(uk_dx$Year == i), ]
     year_data <- subset(year_data, Age >= 15)
-    # year_data$death <- 1 
-    # surv_lt <- flexsurv::flexsurvreg(formula = survival::Surv(Age - 15, death) ~ 1, data = year_data, dist="gompertz", weights = dx)
-    # surv_lt_Gompertz_shape <- surv_lt$coefficients[1]
-    # surv_lt_Gompertz_rate <- exp(surv_lt$coefficients[2])
-    # ind_result <- cbind(year = i, beta = surv_lt_Gompertz_shape, alpha = surv_lt_Gompertz_rate)
-    
-    # year_data$Age_mod <- year_data$Age - 15
-    # year_data$Age_end <- year_data$Age_mod + 5
-    # MLE_lt <- Gomp.MLE.interval(year_data, agebegin = "Age_mod", ageend = "Age_end", Dx = "dx")
-    # MLE_lt_Gompertz_shape <- MLE_lt[2]
-    # MLE_lt_Gompertz_rate <- MLE_lt[1]
-    # ind_result <- cbind(year = i, beta = MLE_lt_Gompertz_shape, alpha = MLE_lt_Gompertz_rate)
     
     mort_df_x_uncount <- year_data %>% uncount(round(dx / 100))
     mort_df_x_uncount$Age_end <-  mort_df_x_uncount$Age + 5

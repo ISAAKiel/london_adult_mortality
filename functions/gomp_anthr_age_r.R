@@ -1,5 +1,5 @@
 gomp.anthr_age.r <- function(x, # data.frame with needed columns
-                           age_beg, # column name: documented age of the individual,
+                           age_beg, 
                            age_end,
                            minimum_age = 15,
                            maximum_age = 120,
@@ -20,7 +20,7 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
   age_end <- x[,age_end]
   Ntotal <- length(age_beg) # number of individuals  
   ones <- rep(1,Ntotal)
-  age_abs <- seq(0, (maximum_age - minimum_age), 1) # for integral calculation in 1-year-intervals from 0-1 to 99-100
+  age_abs <- seq(0, (maximum_age - minimum_age), 1) # for integral calculation in 1-year-intervals
   
   # Generate values for Gompertz alpha if minimum age is not 15
   gomp_a0 <- gomp.a0(minimum_age = minimum_age)
@@ -40,9 +40,6 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
     return(init_list)
   }
   
-  
-  # Specify the data in a list, for later shipment to JAGS:
-  # Be careful to specify only parameters which are actually used, otherwise you may confuse JAGS
   dataList = list(
     Ntotal = Ntotal,
     ones = ones,
@@ -64,20 +61,16 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
       age[i] ~ dunif(age_beg[i] - minimum_age, age_end[i] - minimum_age)
       age.s[i] <- age[i] + minimum_age
       spy[i] <- rate_exp[i] * a * exp(b * age[i]) * exp(-a/b * (exp(b * age[i]) - 1)) / unity
-      #rate_exp[i] <- exp(-r_ * age.s[i] )
       rate_exp[i] <- exp(-r_ * age[i] )
       ones[i] ~ dbern( spy[i]  )
     }
   unity <- sum(gomp_sum[1:(1 + maximum_age - minimum_age)])
   for (j in 1:(1 + maximum_age - minimum_age)) {
-      #gomp_sum[j] <- exp(-r_ * (age_abs[j] + minimum_age)) * a * exp(b * age_abs[j]) * exp(-a/b * (exp(b * age_abs[j]) - 1))
       gomp_sum[j] <- exp(-r_ * (age_abs[j])) * a * exp(b * age_abs[j]) * exp(-a/b * (exp(b * age_abs[j]) - 1))
 
   }
     r_  ~ dnorm(r, 1/0.0025^2) 
     b  ~ dgamma(0.01, 0.01) # a must not be null
-    #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
-    #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
     log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
     log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
     a <- exp(log_a * (-1))

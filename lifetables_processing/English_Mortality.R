@@ -1,6 +1,5 @@
 # English data, from Wrigley et al. 1997, 290 Tab. 6.19 
 # Adult mortality, sexes combined (1000qx), 1640-1809, for age groups 25-84 years
-# eng_mort <- read.table(file.choose(), header=TRUE, sep = "\t")
 if (runCodeNew){
   set.seed(9871)
 eng_mort <- read.table("./data/wrigley_et_al_1997_england_1640-1809.txt", header=TRUE, sep = "\t", skip = 1)
@@ -27,14 +26,6 @@ for(i in years) {
     lx_ <- c(lx_, lx)
   }
   year_data$dx <- dx
-
- # year_data$death <- 1
-  #sample_data_lt <- flexsurv::flexsurvreg(formula = survival::Surv(age_mod, death) ~ 1, 
-  #                                        data = year_data, dist="gompertz", weights = dx)
-  #sample_data_lt_Gompertz_shape <- sample_data_lt$coefficients[1]
-  #sample_data_lt_Gompertz_rate <- exp(sample_data_lt$coefficients[2])
-  
-  #ind_result <- cbind(year = substring(i, 2), beta = sample_data_lt_Gompertz_shape, alpha = sample_data_lt_Gompertz_rate)
   
   year_data_uncount <- year_data %>% uncount(round(dx * 1000))
   year_data_uncount$age_end <- ifelse(year_data_uncount$Age < 80, year_data_uncount$Age + 5, year_data_uncount$Age + 20)

@@ -12,7 +12,7 @@ if (runCodeNew){
     year_data_uncount <- molas_ind %>% uncount(as.numeric(dx))
     
     gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
-                     thinSteps = 1, minimum_age = 12,
+                     thinSteps = 1, minimum_age = 12, maximum_age = 120,
                      numSavedSteps = 200000, r = 0.0275) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     

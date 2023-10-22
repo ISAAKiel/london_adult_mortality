@@ -1,5 +1,5 @@
 gomp.anthr_age <- function(x, # data.frame with needed columns
-                           age_beg, # column name: documented age of the individual,
+                           age_beg,
                            age_end,
                            minimum_age = 15,
                            numSavedSteps = numSavedSteps,
@@ -38,9 +38,6 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
     return(init_list)
   }
   
-  
-  # Specify the data in a list, for later shipment to JAGS:
-  # Be careful to specify only parameters which are actually used, otherwise you may confuse JAGS
   dataList = list(
     Ntotal = Ntotal ,
     C = C, # JAGS does not warn if too small!
@@ -63,13 +60,10 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
       ones[i] ~ dbern( spy[i]  )
       }
     b  ~ dgamma(0.01, 0.01) # a must not be null
-    #log_a_M <- (-66.77 * (b - 0.0718) - 7.119) * (-1) # log_a_M must be positive to be used with dgamma
-    #log_a  ~ dgamma(log_a_M^2 / 0.0823, log_a_M / 0.0823)
     log_a_M <- (gomp_a0_m * b + gomp_a0_ic) * (-1) # log_a_M must be positive to be used with dgamma
     log_a  ~ dgamma(log_a_M^2 / gomp_a0_var, log_a_M / gomp_a0_var)
     a <- exp(log_a * (-1))
     M <- 1 / b * log (b/a) + minimum_age
-
   }
   " # close quote for modelString
   
@@ -77,10 +71,7 @@ gomp.anthr_age <- function(x, # data.frame with needed columns
                   silent.runjags = silent.runjags)
   
   # RUN THE CHAINS
-  parameters = c( "a", "b", 
-                  "M"  
-                  #,"age.s"
-                  )
+  parameters = c( "a", "b", "M")
   runJagsOut <- run.jags( method = runjagsMethod ,
                           model = modelString ,
                           monitor = parameters ,

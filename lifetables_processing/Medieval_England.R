@@ -2,13 +2,9 @@
 # only on Christ Church monks: 28 Table 2
 if (runCodeNew){
   set.seed(847)
-  #medieval <- read.table("./data/Hatcher_monks.txt", header=TRUE, sep = "\t")
-  #medieval$Tenants <- (medieval$Tenants_I + medieval$Tenants_II) / 2
   monks <- read.table("./data/Christ_church_monks.txt", header=TRUE, sep = "\t", skip = 1)
   monks_n <- monks[1,-1]
   monks <- monks[-1,]
-  #group_data <- medieval[,1:2]
-  #colnames(group_data) <- c("Age", "qx")
   monks_melt <- na.omit(reshape2::melt(monks, id.vars = "Age", value.name = "qx"))
   
   group <- unique(monks_melt$variable)
@@ -53,6 +49,7 @@ if (runCodeNew){
   save(monks_result, file = file.path(".", saveFileDir, "monks_result.Rda") )
 }
 load(file.path(".", saveFileDir, "monks_result.Rda") )
+
 # mode values
 # gomp.ex() s. helper_functions.R
 modes <- monks_result[2:3,]$Mode

@@ -5,9 +5,6 @@ if (runCodeNew){
                   n_max = 500,
                   b_min = 0.02,
                   b_max = 0.1,
-                  error_range = NULL,
-                  age_categories = "Wellcome",
-                  bayes = TRUE,
                   thinSteps = 1,
                   numSavedSteps = 10000
   )
@@ -34,7 +31,7 @@ lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (ca
 
 plot_list_shapes <- list()
 for (i in 1:length(lt_sim_shapes)) {
-  plot_df <- data.frame(beta_original = lt_sim$b_, beta = lt_sim[,lt_sim_shapes[i]])
+  plot_df <- data.frame(beta_original = lt_sim$beta, beta = lt_sim[,lt_sim_shapes[i]])
   plot_list_shapes[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta)) + geom_point(shape = 21) + 
     xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + 
     xlim(0.01, 0.105) + ylim(0.01, 0.105) + theme_light()
@@ -42,7 +39,7 @@ for (i in 1:length(lt_sim_shapes)) {
 
 plot_list_diff <- list()
 for (i in 1:length(lt_sim_shapes)) {
-  plot_df <- data.frame(beta_original = lt_sim$b_, beta = lt_sim[,lt_sim_shapes[i]])
+  plot_df <- data.frame(beta_original = lt_sim$beta, beta = lt_sim[,lt_sim_shapes[i]])
   plot_list_diff[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta_original - beta)) + geom_point(shape = 21) + 
     xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + 
     xlim(0.01, 0.105) + ylim(0.02, -0.04) + theme_light()
@@ -51,7 +48,7 @@ for (i in 1:length(lt_sim_shapes)) {
 rmse_result <- NULL
 NAs <- NULL
 for (t in lt_sim_shapes) {
-  beta_exp <- lt_sim$b_
+  beta_exp <- lt_sim$beta
   beta_obs <- lt_sim[t]
   betas_comb <- na.omit(data.frame(beta_exp, beta_obs))
   NAs[t] <- 1000 - nrow(betas_comb)
@@ -63,7 +60,7 @@ rownames(rmse_result) <- NULL
 
 plot_list_estim_shapes <- list()
 for (i in 1:length(lt_sim_estim_shapes)) {
-  plot_df <- data.frame(beta_original = lt_sim$b_, beta = lt_sim[,lt_sim_estim_shapes[i]])
+  plot_df <- data.frame(beta_original = lt_sim$beta, beta = lt_sim[,lt_sim_estim_shapes[i]])
   plot_list_estim_shapes[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta)) + 
     geom_point(shape = 21) + xlab("original \u03B2") + ylab("estimated \u03B2") + 
     ggtitle(lt_sim_estim_shapes_names[i]) + xlim(0.01, 0.105) + ylim(0.01, 0.105)
@@ -72,7 +69,7 @@ for (i in 1:length(lt_sim_estim_shapes)) {
 rmse_estim_result <- NULL
 NAs <- NULL
 for (t in lt_sim_estim_shapes) {
-  beta_exp <- lt_sim$b_
+  beta_exp <- lt_sim$beta
   beta_obs <- lt_sim[t]
   betas_comb <- na.omit(data.frame(beta_exp, beta_obs))
   NAs[t] <- 1000 - nrow(betas_comb)
@@ -85,17 +82,17 @@ colnames(rmse_estim_result) <- c("method", "RMSE", "NAs")
 
 # computing RMSE by hand for extreme outliers of MLE
 lt_sim_sub <- subset(lt_sim, MLE_estim_lt_Gompertz_shape < 0.15)
-MLE_wo_OL <- Metrics::rmse(lt_sim_sub$b_, lt_sim_sub$MLE_estim_lt_Gompertz_shape)
+MLE_wo_OL <- Metrics::rmse(lt_sim_sub$beta, lt_sim_sub$MLE_estim_lt_Gompertz_shape)
 MLE_wo_OL_count <- 1000 - count(lt_sim_sub)
 MLE_wo_OL_df <- data.frame("MLE_wo_OL", MLE_wo_OL, MLE_wo_OL_count)
 colnames(MLE_wo_OL_df) <- c("method", "RMSE", "NAs")
 rmse_estim_result <- rbind(rmse_estim_result,MLE_wo_OL_df)
 
 plot_list_bayes_diff <- list(
-  ggplot(lt_sim, aes(x = b_, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
+  ggplot(lt_sim, aes(x = beta, y = beta - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
     geom_smooth(method = "loess", formula = y ~ x),
-  ggplot(lt_sim, aes(x = y, y = b_ - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
+  ggplot(lt_sim, aes(x = y, y = beta - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("sample size") + ylab("original \u03B2 - estimated \u03B2") + 
     geom_smooth(method = "loess", formula = y ~ x)
 )
