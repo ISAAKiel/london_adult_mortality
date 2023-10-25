@@ -28,6 +28,13 @@ RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodi
 runCodeNew <- FALSE
 #runCodeNew <- TRUE
 
+# ask for credentials of the Human Mortality Database if the code runs anew
+if (runCodeNew){
+  HMD_username <- readline(prompt = "Enter username: ")
+  HMD_password <- readline(prompt="Enter password: ")
+  credentials <- c(HMD_username, HMD_password)
+}
+
 # Specify filename prefix for saved files and create a folder if needed:
 saveFileDir = "preprocessed_files"
 if (saveFileDir %in% list.files(getwd())) {

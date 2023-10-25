@@ -1,8 +1,6 @@
 if (runCodeNew){
   set.seed(689)
-  HMD_username <- readline(prompt = "Enter username: ")
-  HMD_password <- readline(prompt="Enter password: ")
-  credentials <- c(HMD_username, HMD_password)
+  if (length(credentials) > 0) {
   
   # get dx
   uk_dx <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_5x5", credentials[1], credentials[2])
@@ -31,6 +29,12 @@ if (runCodeNew){
   }
   # saves results in Rda-object
   save(HMD_UK_result, file = file.path(".", saveFileDir, "HMD_UK_result.Rda") )
+  }
+} else {
+  infotext <- paste ("Please enter valid credentials",
+                     "for the Human Mortality Database.",
+                     sep=" ")
+  warning(infotext)
 }
 load(file.path(".", saveFileDir, "HMD_UK_result.Rda") )
 
