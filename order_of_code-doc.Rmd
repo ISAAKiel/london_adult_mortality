@@ -58,7 +58,7 @@ pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
                mortAAR, nlme, osmplotr, osmdata, reshape2, rgdal, HMDHFDplus, Metrics,
                svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
                coda, rjags, runjags, demogR, sf, rnaturalearth, readxl,
-               ggrepel)
+               ggrepel, ggspatial)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)

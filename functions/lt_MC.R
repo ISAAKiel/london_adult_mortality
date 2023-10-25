@@ -288,7 +288,7 @@ lt.MC <- function(sampling,
       bayes_anthr_gomp_a <- gomp_anthr_MCMC_diag[1,5]
     
     ind_result <- cbind(y = ind_df$n[1],
-                        beta = ind_df$beta, alpha = ind_df$alpha,
+                        beta = ind_df$beta[1], alpha = ind_df$alpha[1],
                         surv_Gompertz_shape, surv_Gompertz_rate,
                         OLS_Gompertz_shape, OLS_Gompertz_rate,
                         WOLS_Gompertz_shape, WOLS_Gompertz_rate,

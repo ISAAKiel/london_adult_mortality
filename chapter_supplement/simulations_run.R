@@ -1,5 +1,5 @@
 if (runCodeNew){
-  set.seed(6833)
+  set.seed(8353)
   lt_sim <- lt.MC(sampling = 1000,
                   n_min = 50,
                   n_max = 500,
