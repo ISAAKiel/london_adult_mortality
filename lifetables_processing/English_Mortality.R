@@ -33,8 +33,8 @@ for(i in years) {
   bayes_anthr_gomp_a <- NA
   tryCatch({
     gomp.anthr_age(year_data_uncount, age_beg = "Age", age_end = "age_end",
-                   silent.jags = TRUE,
-                   silent.runjags = TRUE,
+                   silent.jags = FALSE,
+                   silent.runjags = FALSE,
                    thinSteps = 1,
                    numSavedSteps = 300000,
                    minimum_age = 25) %>%

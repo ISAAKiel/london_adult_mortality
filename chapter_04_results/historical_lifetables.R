@@ -1,9 +1,15 @@
-source("./lifetables_processing/English_Mortality.R")
-source("./lifetables_processing/Medieval_England.R")
-source("./lifetables_processing/London_1841_raw_all.R")
-source("./lifetables_processing/HMD_UK.R")
-source("./lifetables_processing/English_Peers.R")
-source("./lifetables_processing/London_1728_1840.R")
+source("./lifetables_processing/English_Mortality.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./lifetables_processing/Medieval_England.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./lifetables_processing/London_1841_raw_all.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./lifetables_processing/HMD_UK.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./lifetables_processing/English_Peers.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./lifetables_processing/London_1728_1840.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
 
 # modal age M
 england <- data.frame(source = "Family Reconstitution", 
