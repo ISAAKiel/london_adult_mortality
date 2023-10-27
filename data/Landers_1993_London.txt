@@ -1,7 +1,0 @@
-# Source: J. Landers, Death and the Metropolis: Studies in the Demographic History of London, 1670–1830. Cambridge Studies in Population, Economy and Society in Past Time  (Cambridge 1993). DOI: https://doi.org/10.1017/CBO9780511895494.
-Age	1740	1841
-1	0.442	0.242
-15	0.227	0.108
-30	0.316	0.183
-45	0.455	0.355
-60	0.823	0.648
