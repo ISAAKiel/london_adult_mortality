@@ -29,15 +29,10 @@ runCodeNew <- FALSE
 #runCodeNew <- TRUE
 
 # ask for credentials of the Human Mortality Database if the code runs anew
-# data written directly into .credentials.rda excluded by .gitignore
 if (runCodeNew){
   HMD_username <- readline(prompt = "Enter username: ")
   tstHMD_password <- readline(prompt="Enter password: ")
   credentials <- c(HMD_username, HMD_password)
-  save(credentials, file = ".credentials.rda" )
-  HMD_username <- NULL
-  HMD_password <- NULL
-  credentials <- NULL
 }
 
 # Specify filename prefix for saved files and create a folder if needed:
