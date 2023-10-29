@@ -91,6 +91,7 @@ source("./lifetables_processing/Marylebone.R")
 Marylebone_ranges
 
 # Extended results for written sources, pre-processed
+# Subsequent Bayes calculations can take a while
 warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
 source("./chapter_04_results/historical_lifetables.R")
 peers_result
@@ -102,27 +103,36 @@ HMD_UK_result
 monks_result
 
 # Extended results for London cemeteries, pre-processed
-source("./lifetables_processing/stbrides_crypt.R")
-source("./chapter_04_results/Wellcome_DB.R")
+# Subsequent Bayes calculations can take a while
+source("./lifetables_processing/stbrides_crypt.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./chapter_04_results/Wellcome_DB.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
 wellcome_result
 wellcome_result_r
 
 # figure 6: Modal ages from historical and osteological data
-source("./chapter_04_results/english_wellcome.R")
+source("./chapter_04_results/english_wellcome.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
 plot(modal_ages_plot)
 
 # table 2: Overview of modelled osteological data from London cemeteries
 wellcome_overview_all
 write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep="\t", quote = FALSE)
 
-# figure 7: St. Bride's Crypt 
-source("./lifetables_processing/stbrides_crypt.R")
-source("./chapter_04_results/Wellcome_DB.R") # can take a while
+# figure 7: St. Bride's Crypt
+# The following calculations have already been sourced before.
+# Only run again if necessary or continue with 'stbrides_crypt_plot'.
+source("./lifetables_processing/stbrides_crypt.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+source("./chapter_04_results/Wellcome_DB.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue")) 
 # St. Bride's crypt data, comparison of known age and osteological estimates
 stbrides_crypt_plot
 
 # figure 8: Simulation of population increase
-source("./chapter_04_results/simulations_pop_incr_run.R")
+source("./chapter_04_results/simulations_pop_incr_run.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
 do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
 
