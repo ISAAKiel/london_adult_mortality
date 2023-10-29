@@ -91,6 +91,7 @@ source("./lifetables_processing/Marylebone.R")
 Marylebone_ranges
 
 # Extended results for written sources, pre-processed
+warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
 source("./chapter_04_results/historical_lifetables.R")
 peers_result
 london_1728_1840_result
