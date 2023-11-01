@@ -1,7 +1,7 @@
 # St. Bride's crypt
 
 if (runCodeNew){
-  infotext <- paste ("Data not included but available from the",
+  infotext <- paste ("ST. BRIDE'S CRYPT Data not included but available from the",
                      "Museum of London upon request.",
                      "For general information:",
                      "https://www.museumoflondon.org.uk",
@@ -10,7 +10,7 @@ if (runCodeNew){
                      "> St. Bride's Church Fleet Street.",
                      sep="\n")
   
-  warning(infotext)
+  warning(infotext, immediate=TRUE)
   
   # Data 
   my_data3 <- readxl::read_excel(file.choose(), sheet = 3)[,c(2,6,8)] 

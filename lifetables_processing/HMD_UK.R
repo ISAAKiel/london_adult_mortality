@@ -1,7 +1,6 @@
 if (runCodeNew){
   set.seed(689)
-  if (length(credentials) > 0) {
-  
+  if (exists("credentials")) {
   # get dx
   uk_dx <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_5x5", credentials[1], credentials[2])
   
@@ -26,17 +25,18 @@ if (runCodeNew){
     rownames(ind_result) <- NULL
     
     HMD_UK_result <- rbind(HMD_UK_result, ind_result )
-  }
+  } # end for in years
   # saves results in Rda-object
   save(HMD_UK_result, file = file.path(".", saveFileDir, "HMD_UK_result.Rda") )
-  }
-} else {
-  infotext <- paste ("Please enter valid credentials",
-                     "for the Human Mortality Database.",
+  } else {
+  infotext <- paste ("Please provide valid credentials",
+                     "for the Human Mortality Database",
+                     "(s. order_of_code.R).",
                      sep=" ")
   warning(infotext)
-}
-load(file.path(".", saveFileDir, "HMD_UK_result.Rda") )
+  } # end for credentials
+  load(file.path(".", saveFileDir, "HMD_UK_result.Rda") )
+} # end for runCodeNew
 
 # range of Gompertz beta values
 beta_range <- paste0(round(min(HMD_UK_result[which(HMD_UK_result$parameter == "beta"),]$Mode), 4), "-",
