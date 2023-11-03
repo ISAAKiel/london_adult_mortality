@@ -13,6 +13,7 @@ if (runCodeNew){
   warning(infotext, immediate=TRUE)
   
   # Data 
+  # The columns to read are: Context (2), Known age (6), Age code (8)
   my_data3 <- readxl::read_excel(file.choose(), sheet = 3)[,c(2,6,8)] 
   colnames(my_data3) <- c("ind", "known_age", "age")
   stbrides <- as.data.frame(my_data3)
@@ -20,6 +21,7 @@ if (runCodeNew){
   stbrides <- na.omit(stbrides)
   stbrides <- subset(stbrides, known_age >= 12 & ind != 105)
   
+  # setting age class
   length_stbrides <- nrow(stbrides)
   for (i in 1:length_stbrides) {
     if(stbrides$age[i] == 6) {

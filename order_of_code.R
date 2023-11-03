@@ -104,6 +104,12 @@ monks_result
 
 # Extended results for London cemeteries, pre-processed
 # Subsequent Bayes calculations can take a while
+
+# Subsequent code will ask for the file ST.BRIDE'S_CRYPT_Data 
+# from the Museum of London.
+
+# file.chose() doesn't open to the foreground!
+
 source("./lifetables_processing/stbrides_crypt.R", echo=TRUE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
 source("./chapter_04_results/Wellcome_DB.R", echo=TRUE,
