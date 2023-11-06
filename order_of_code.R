@@ -150,7 +150,9 @@ source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 
 # Simulations for evaluation of algorithms for retrieving Gompertz parameters
-source("./chapter_supplement/simulations_run.R")
+# Subsequent Bayes calculations can take a while
+source("./chapter_supplement/simulations_run.R", echo=TRUE,
+max.deparse.length=10000, continue.echo = getOption("continue"))
 # plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
 
