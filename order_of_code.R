@@ -1,4 +1,9 @@
 #######################################################
+#
+# Depending on the hardware, the subsequent code 
+# can run for several hours or even a few days.
+#
+#######################################################
 # Prerequisites
 # Install required packages
 require(pacman) || install.packages("pacman")
@@ -172,7 +177,9 @@ rmse_estim_result[order(rmse_estim_result$RMSE) ,]
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
 # Show that means are stable in Bayesian modelling
-source("./chapter_supplement/bayes_complete.R") # can take a few minutes
+# can take a few minutes
+source("./chapter_supplement/bayes_complete.R",
+       max.deparse.length=10000, continue.echo = getOption("continue"))
 bayes_complete_table
 
 ##### out-dated code
