@@ -82,6 +82,8 @@ razz_df
 # Results
 
 # Written sources, pre-processed
+# Subsequent Bayes calculations can take a while
+warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
 source("./chapter_04_results/historical_lifetables.R")
 peers_ranges
 monks_ranges
@@ -96,8 +98,6 @@ source("./lifetables_processing/Marylebone.R")
 Marylebone_ranges
 
 # Extended results for written sources, pre-processed
-# Subsequent Bayes calculations can take a while
-warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
 source("./chapter_04_results/historical_lifetables.R")
 peers_result
 london_1728_1840_result
