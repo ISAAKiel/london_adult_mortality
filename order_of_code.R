@@ -10,7 +10,7 @@ require(pacman) || install.packages("pacman")
 pacman::p_load(coda, cowplot, demogR, dplyr, fitdistrplus, flexsurv, ggplot2, 
                ggrepel, gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, 
                MortalityLaws, nlme, osmdata, pals, psych, readxl, reshape2, rgdal, 
-               rio, rjags, rnaturalearth, runjags, sf, svMisc, tibble, tidyr, flexsurv, ggspatial)
+               rio, rjags, rnaturalearth, runjags, sf, svMisc, tibble, tidyr, ggspatial)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
