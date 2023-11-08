@@ -8,8 +8,8 @@ if (runCodeNew){
   # get dx
   if (login){
     HMD_UK_result_1_year <- HMDHFDplus::readHMDweb("GBRTENW", "bltper_1x1", 
-                                                   readline(prompt = "Enter username: "), 
-                                                   readline(prompt="Enter password: "))
+                                                   credentials[1], 
+                                                   credentials[2])
     
     # saves results in Rda-object
     save(HMD_UK_result_1_year, file = file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
