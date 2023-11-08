@@ -14,8 +14,8 @@ if (runCodeNew){
     # saves results in Rda-object
     save(HMD_UK_result_1_year, file = file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
   }
-}
-load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
+} else {load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
+  }
 
 
 gridExtra::grid.arrange(
