@@ -5,6 +5,11 @@
 #
 #######################################################
 # Prerequisites
+# Install "Just Another Gibbs Sampler" (JAGS) if you want to run the Bayesian analyses anew.
+# Version 4.3 - as used here - can be downloaded in pre-compiled form for a number of OS here:
+# https://sourceforge.net/projects/mcmc-jags/
+# The manual can be found here: https://people.stat.sc.edu/hansont/stat740/jags_user_manual.pdf
+
 # Install required packages
 require(pacman) || install.packages("pacman")
 pacman::p_load(coda, cowplot, demogR, dplyr, fitdistrplus, flexsurv, ggplot2, 
