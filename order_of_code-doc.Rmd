@@ -14,7 +14,7 @@ header-includes:
 papersize: a4
 output:
   html_document:
-    code_folding: hide
+    code_folding: Show
     toc: true
     toc_depth: 2
     toc_float: true
