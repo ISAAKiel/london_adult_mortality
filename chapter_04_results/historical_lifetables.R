@@ -1,14 +1,14 @@
-source("./lifetables_processing/English_Mortality.R", echo=TRUE,
+source("./lifetables_processing/English_Mortality.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-source("./lifetables_processing/Medieval_England.R", echo=TRUE,
+source("./lifetables_processing/Medieval_England.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-source("./lifetables_processing/London_1841_raw_all.R", echo=TRUE,
+source("./lifetables_processing/London_1841_raw_all.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-source("./lifetables_processing/HMD_UK.R", echo=TRUE,
+source("./lifetables_processing/HMD_UK.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-source("./lifetables_processing/English_Peers.R", echo=TRUE,
+source("./lifetables_processing/English_Peers.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-source("./lifetables_processing/London_1728_1840.R", echo=TRUE,
+source("./lifetables_processing/London_1728_1840.R", echo=FALSE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
 
 # modal age M
