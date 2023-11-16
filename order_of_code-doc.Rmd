@@ -60,7 +60,7 @@ Remark: Depending on your R version the package osmplotr may be installed from g
 
 ```{r Packages and sources, echo=TRUE}
 require(pacman) || install.packages("pacman")
-pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, 
+pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, grid, 
                gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, osmdata, 
                psych, readxl, reshape2, rjags, runjags, sf, tidyr, ggspatial)
 
@@ -299,13 +299,13 @@ Figure 7: St. Bride's Crypt. Density of actual ages and Bayesian model of Gomper
 
 The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-```{r figure 7 St. Bride Crypt, fig.height=4, fig.width=8, warning=FALSE}
+```{r figure 7 St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
 plot(stbrides_crypt_plot)
 ```
 
 Figure 8: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
 
-```{r Simulation of population increase, warning=FALSE}
+```{r Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE}
 source("./chapter_04_results/simulations_pop_incr_run.R")
 ```
 

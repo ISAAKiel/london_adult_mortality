@@ -21,15 +21,27 @@ lt_sim_plot_list <- list()
 for (i in 1:4) {
 lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], aes(y = surv_Gompertz_shape, x = as.factor(pop_inc))) + 
   geom_boxplot()  + 
-  ylab("Gompertz \u03B2 (MLE)") + ggtitle(paste0("Original Gompertz \u03B2: ", (i + 2)/100) ) +
-  xlab("population increase") + theme(plot.margin = unit(c(0,0.5,0.5,0), "cm")) + theme_light()
+  ggtitle(paste0("\u03B2: ", (i + 2)/100) ) +
+  ylab("Gompertz \u03B2 (MLE)") + xlab("population increase") + 
+  theme(plot.margin = unit(c(0,0.5,0.5,0), "cm"),
+        plot.title = element_text(size = 12),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
 lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x = as.factor(pop_inc)) ) + 
   geom_boxplot()  + 
-  ylab("Gompertz \u03B2 (Bayes)") + ggtitle(paste0("Original Gompertz \u03B2: ", (i + 2)/100) ) +
-  xlab("population increase") + theme(plot.margin = unit(c(0,0.5,0.5,0), "cm")) + theme_light()
+  ggtitle(paste0("\u03B2: ", (i + 2)/100) ) +
+  ylab("Gompertz \u03B2 (Bayes)") + xlab("population increase") + 
+  theme(plot.margin = unit(c(0,0.5,0.5,0), "cm"),
+              plot.title = element_text(size = 12),
+              axis.title = element_text(size = 10),
+              axis.text = element_text(size = 8))
 }
-lt_sim_plots <- do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4))
 
+#lt_sim_plots <- do.call(gridExtra::grid.arrange,c(lt_sim_plot_list, ncol = 4))
+
+lt_sim_plots <- gridExtra::grid.arrange (grobs = lt_sim_plot_list, ncol = 4,
+                                         top = textGrob("Original Gompertz", 
+                                                        gp=gpar(fonsize = 14)))
 # Save the finished map object
 ggsave(
   filename = "fig08_lt_sim_plots.pdf",

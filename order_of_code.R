@@ -12,7 +12,7 @@
 
 # Install required packages
 require(pacman) || install.packages("pacman")
-pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, 
+pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, grid,
                gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, osmdata, 
                psych, readxl, reshape2, rjags, runjags, sf, tidyr, ggspatial)
 
