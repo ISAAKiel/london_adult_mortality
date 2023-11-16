@@ -35,8 +35,9 @@ if (runCodeNew){
                      sep=" ")
   warning(infotext)
   } # end for credentials
-  load(file.path(".", saveFileDir, "HMD_UK_result.Rda") )
 } # end for runCodeNew
+
+load(file.path(".", saveFileDir, "HMD_UK_result.Rda") )
 
 # range of Gompertz beta values
 beta_range <- paste0(round(min(HMD_UK_result[which(HMD_UK_result$parameter == "beta"),]$Mode), 4), "-",

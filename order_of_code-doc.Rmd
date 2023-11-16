@@ -13,18 +13,18 @@ header-includes:
   #\renewcommand{\tablename}{Tab.}
 papersize: a4
 output:
-  pdf_document:
-    number_sections: true
-    toc: true
-    toc_depth: 2
-    df_print: kable
-    extra_dependencies: ["flafter"]
   html_document:
     code_folding: hide
     toc: true
     toc_depth: 2
     toc_float: true
     number_sections: true
+#  pdf_document:
+#    number_sections: true
+#    toc: true
+#    toc_depth: 2
+#    df_print: kable
+#    extra_dependencies: ["flafter"]
 #  html_notebook:
 #        code_folding: hide
 knit rmdfig_caption: true
@@ -42,23 +42,27 @@ knitr::opts_chunk$set(echo=TRUE, fig.align="center")
 
 # Prerequisites {-}
 
-The calculations were made in R using R-Studio. The structure of the code is essentially based on the structure of the text. The raw code is in the file ```order_of_code.R```. The file extended with Markdown is ```order_of_code-doc.RMD``` and the file ```order_of_code-doc.pdf``` is generated from it.
-
-The code makes extensive use of the function ```source``` to call external code. Thus, the main part of the code remains slim, well structured and readable. 
+The calculations were made in R using R-Studio. The structure of the code is essentially based on the structure of the text. The raw code is in the file ```order_of_code.R```. The file extended with Markdown is ```order_of_code-doc.RMD``` and the file ```order_of_code-doc.html``` is generated from it.
 
 Note: The base path for rmd files is the folder in which they are located, not the r-project. Consequently, ```order_of_code.R``` and ```order_of_code-doc.RMD``` are both located in the root folder of the project.
 
+> Depending on the hardware, the subsequent code can run for several hours or even a few days.
+
+> Install "Just Another Gibbs Sampler" (JAGS) if you want to run the Bayesian analyses anew.
+> Version 4.3 - as used here - can be downloaded in pre-compiled form for a number of OS here: https://sourceforge.net/projects/mcmc-jags/ . 
+> The manual can be found here: https://people.stat.sc.edu/hansont/stat740/jags_user_manual.pdf
+
+The code makes extensive use of the function ```source``` to call external code. Thus, the main part of the code remains slim, well structured and readable. 
+
 Install required packages, set some options and link the sources for the helper functions. 
 
-Remark: The current version of osmplotr has to be installed from github using ```devtools::install_github ("ropensci/osmplotr")```. 
+Remark: Depending on your R version the package osmplotr may be installed from github using ```devtools::install_github ("ropensci/osmplotr")```. 
 
 ```{r Packages and sources, echo=TRUE}
 require(pacman) || install.packages("pacman")
-pacman::p_load(dplyr, fitdistrplus, flexsurv, ggplot2, gridExtra, kableExtra,
-               mortAAR, nlme, osmplotr, osmdata, reshape2, rgdal, HMDHFDplus, Metrics,
-               svMisc, tibble, tidyr, cowplot, MortalityLaws, rio,
-               coda, rjags, runjags, demogR, sf, rnaturalearth, readxl,
-               ggrepel, ggspatial)
+pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, 
+               gridExtra, HMDHFDplus, kableExtra, Metrics, mortAAR, osmdata, 
+               psych, readxl, reshape2, rjags, runjags, sf, tidyr, ggspatial)
 
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
@@ -82,12 +86,20 @@ Important for saving time:  Decide to run extensive code anew (app. 6 h +). In a
 runCodeNew <- FALSE
 #runCodeNew <- TRUE
 
-saveFileDir = "preprocessed_files"
-if (saveFileDir %in% list.files(getwd())) 
- {}else{
-	dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
- }
+# Ask for credentials of the Human Mortality Database if the code runs anew
+if (runCodeNew){
+  HMD_username <- readline(prompt = "Enter username: ")
+  tstHMD_password <- readline(prompt="Enter password: ")
+  credentials <- c(HMD_username, HMD_password)
+}
 
+# Specify filename prefix for saved files and create a folder if needed:
+saveFileDir = "preprocessed_files"
+if (saveFileDir %in% list.files(getwd())) {
+  # Dir exists
+}else{
+  dir.create(file.path(".", saveFileDir), showWarnings = FALSE )
+}
 ```
 
 \newpage
@@ -102,7 +114,7 @@ source("./chapter_01_introduction/gompertz_distribution.R")
 \newpage
 # Chapter 02 Materials and methods
 
-Figure 3: Hazard curve for HMD UK data of the year 1841.
+Figure 3: Hazard curve (mx) for HMD UK data of the year 1841.
 
 ```{r Fig. 3: Hazard curve, echo=TRUE, warning=FALSE}
 source("./chapter_02_materials_and_methods/hazard_curve.R")
@@ -151,7 +163,7 @@ Preprocessing of data used in figure 6: Estimated modal ages.
 
 ### Written sources
 
-**Basic statistics**
+**Basic statistics and Bayes (extensive) calculations**
 
 The data is referenced and aggregated in "./chapter_04_results/historical_lifetables.R". In this file, all records from individual preprocessing files located in "./liftables_preprocessed/" are ```sourced```.  The corresponding data files are stored in "./data/".
 
@@ -287,7 +299,7 @@ Figure 7: St. Bride's Crypt. Density of actual ages and Bayesian model of Gomper
 
 The plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-```{r figure 7 St. Bride Crypt, fig.height=2, fig.width=4, warning=FALSE}
+```{r figure 7 St. Bride Crypt, fig.height=4, fig.width=8, warning=FALSE}
 plot(stbrides_crypt_plot)
 ```
 
@@ -375,8 +387,7 @@ Show that means are stable in Bayesian modelling, regardless of the number of MC
 
 ```{r Bayesian modeling stable means}
 source("./chapter_supplement/bayes_complete.R") # can take a few minutes
-kable (bayes_complete, caption = paste0("Bayesian model with simulated dataset and different number of steps. n = ", 
-                              n, ", Gompertz beta = ", round(beta, 4), ".", sep = "")) %>%
+kable (bayes_complete, caption = paste0("Bayesian model with simulated dataset and different number of steps. n = ", n, ", Gompertz beta = ", round(beta, 4), ".", sep = "")) %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
