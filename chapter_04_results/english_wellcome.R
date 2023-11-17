@@ -23,7 +23,7 @@ ggplot(english_wellcome, aes(x = year, y = M, colour = data, shape = source) ) +
   xlab("year (from - to)") + ylim(2, 75) +
   scale_color_manual(values=unname(plotcolors)) +
   scale_shape_manual(values=plotsymbols) +
-  geom_smooth(color = "dark grey") +
+  geom_smooth(color = "dark grey", method = 'loess', formula = 'y ~ x') +
   geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
   geom_point(size= 2 ) + 
@@ -52,7 +52,7 @@ ggplot(english_wellcome_r, aes(x = year, y = M, colour = data, shape = source) )
   xlab("year (from - to)") + ylim(2, 75) +
   scale_color_manual(values=unname(plotcolors)) +
   scale_shape_manual(values=plotsymbols) +
-  geom_smooth(color = "dark grey") +
+  geom_smooth(color = "dark grey", method = 'loess', formula = 'y ~ x') +
   geom_errorbar(aes(ymin = HDIlow, ymax=  HDIhigh), width=0, colour = "dark grey") +
   geom_errorbarh(aes(xmax = start, xmin = end, height = 1)) +
   geom_point(size= 2 )+ 

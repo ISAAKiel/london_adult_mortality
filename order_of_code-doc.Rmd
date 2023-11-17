@@ -1,35 +1,27 @@
 ---
 title: "Adult Mortality in the Metropolis of London 1100–1850"
-subtitle: "Supplement: Code structure, data source and processing"
-author: 
- - Nils Müller-Scheeßel^[Institute for Pre- and Proto History - Kiel University nils.mueller-scheessel@ufg.uni-kiel.de]
- - Katharina Fuchs^[Institute of Clinical Molecular Biology - Kiel University, k.fuchs@ikmb.uni-kiel.de]
- - Christoph Rinne^[Institute for Pre- and Proto History - Kiel University, crinne@ufg.uni-kiel.de]
+author:
+- "Nils Müller-Scheeßel^[Institute for Pre- and Proto History - Kiel University nils.mueller-scheessel@ufg.uni-kiel.de]"
+- "Katharina Fuchs^[Institute of Clinical Molecular Biology - Kiel University, k.fuchs@ikmb.uni-kiel.de]"
+- "Christoph Rinne^[Institute for Pre- and Proto History - Kiel University, crinne@ufg.uni-kiel.de]"
 date: "`r format(Sys.time(), '%d. %B %Y')`"
-license: "CC-BY 4.0"
-header-includes:
-  #\renewcommand{\contentsname}{Inhalt}
-  #\renewcommand{\figurename}{Abb.}
-  #\renewcommand{\tablename}{Tab.}
-papersize: a4
 output:
   html_document:
-    code_folding: Show
-    toc: true
+    code_folding: hide
+    toc: yes
     toc_depth: 2
-    toc_float: true
-    number_sections: true
-#  pdf_document:
-#    number_sections: true
-#    toc: true
-#    toc_depth: 2
-#    df_print: kable
-#    extra_dependencies: ["flafter"]
-#  html_notebook:
-#        code_folding: hide
-knit rmdfig_caption: true
+    toc_float: yes
+    number_sections: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+license: "CC-BY 4.0"
+header-includes: null
+papersize: a4
+subtitle: 'Supplement: Code structure, data source and processing'
+knit rmdfig_caption: yes
 urlcolor: blue
-link-citations: true # make citations hyperlinks
+link-citations: yes
 linkcolor: blue
 bibliography: References.bib
 csl: offa.csl
@@ -48,7 +40,7 @@ Note: The base path for rmd files is the folder in which they are located, not t
 
 > Depending on the hardware, the subsequent code can run for several hours or even a few days.
 
-> Install "Just Another Gibbs Sampler" (JAGS) if you want to run the Bayesian analyses anew.
+> Install "Just Another Gibbs Sampler" (JAGS) [@ref_103719] if you want to run the Bayesian analyses anew.
 > Version 4.3 - as used here - can be downloaded in pre-compiled form for a number of OS here: https://sourceforge.net/projects/mcmc-jags/ . 
 > The manual can be found here: https://people.stat.sc.edu/hansont/stat740/jags_user_manual.pdf
 
@@ -82,7 +74,7 @@ RNGkind("L'Ecuyer-CMRG") # conservative random number generator to avoid periodi
 ```
 Important for saving time:  Decide to run extensive code anew (app. 6 h +). In addition, you can set the folder for preprocessed files.
 
-```{r rund code anew, echo=TRUE}
+```{r run code anew, echo=TRUE}
 runCodeNew <- FALSE
 #runCodeNew <- TRUE
 
@@ -273,7 +265,8 @@ source("./chapter_04_results/english_wellcome.R")
 plot(modal_ages_plot)
 ```
 
-Table 2: Overview of modelled osteological data from London cemeteries
+Table 2: Overview of modelled osteological data from London cemeteries without and with
+compensation for population growth (marked by "r_")
 
 The data overview is build during pre-processing in ./chapter_04_results/Wellcome_DB.R and saved to a textfile (sep = \\t).
 

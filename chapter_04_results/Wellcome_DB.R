@@ -213,12 +213,12 @@ for (k in well_cemetery) {
 }
 
 wellcome_overview_r <- data.frame(cemetery = well_cemetery,
-                                  beta = well_beta_mode_r,
-                                  beta_range = paste0(well_beta_HDIlow_r, "-", well_beta_HDIhigh_r), 
-                                  M = well_M_mode_r,
-                                  M_range = paste0(well_M_HDIlow_r, "-", well_M_HDIhigh_r), 
-                                  ex20 = round(wellcome_20ex_r, 1), 
-                                  ex25 = round(wellcome_25ex_r, 1))
+                                  r_beta = well_beta_mode_r,
+                                  r_beta_range = paste0(well_beta_HDIlow_r, "-", well_beta_HDIhigh_r), 
+                                  r_M = well_M_mode_r,
+                                  r_M_range = paste0(well_M_HDIlow_r, "-", well_M_HDIhigh_r), 
+                                  r_ex20 = round(wellcome_20ex_r, 1), 
+                                  r_ex25 = round(wellcome_25ex_r, 1))
 
 wellcome_prep_r <- data.frame(source = "osteological",
                               data = well_cemetery,
