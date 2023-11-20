@@ -129,7 +129,6 @@ wellcome_result_r
 # figure 6: Modal ages from historical and osteological data
 source("./chapter_04_results/english_wellcome.R", echo=TRUE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-plot(modal_ages_plot)
 
 # table 2: Overview of modelled osteological data from London cemeteries
 wellcome_overview_all

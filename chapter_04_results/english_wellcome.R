@@ -67,7 +67,6 @@ english_wellcome_plot_r <- english_wellcome_plot_r + theme(legend.position="none
 grid::grid.newpage()
 ewp<-plot_grid(english_wellcome_plot, english_wellcome_plot_r, ncol=1)
 modal_ages_plot <- plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25))
-#plot(modal_ages_plot)
 
 # Save the finished map object
 ggsave(
@@ -77,3 +76,5 @@ ggsave(
   device = "pdf",
   path = "documented"
 )
+
+plot(modal_ages_plot)
