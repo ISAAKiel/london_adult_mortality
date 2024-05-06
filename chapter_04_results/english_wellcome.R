@@ -20,7 +20,7 @@ english_wellcome <- english_wellcome %>%
 
 ggplot(english_wellcome, aes(x = year, y = M, colour = data, shape = source) ) + 
   ylab("modal age & HDI low - HDI high")  + 
-  xlab("year (from - to)") + ylim(2, 75) +
+  xlab("year (from - to)") + ylim(2, 75) + theme_light() +
   scale_color_manual(values=unname(plotcolors)) +
   scale_shape_manual(values=plotsymbols) +
   geom_smooth(color = "dark grey", method = 'loess', formula = 'y ~ x') +
@@ -49,7 +49,7 @@ english_wellcome_r <- english_wellcome_r %>%
 
 ggplot(english_wellcome_r, aes(x = year, y = M, colour = data, shape = source) ) + 
   ylab("modal age (corrected for population growth)")  + 
-  xlab("year (from - to)") + ylim(2, 75) +
+  xlab("year (from - to)") + ylim(2, 75) + theme_light() +
   scale_color_manual(values=unname(plotcolors)) +
   scale_shape_manual(values=plotsymbols) +
   geom_smooth(color = "dark grey", method = 'loess', formula = 'y ~ x') +

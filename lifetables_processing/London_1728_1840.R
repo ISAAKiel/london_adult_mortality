@@ -20,15 +20,6 @@ if (runCodeNew){
     }
     london_sub <- subset(london_df, year >= cem_dates[1] & year < cem_dates[2])
     pop_rate <- psych::geometric.mean(london_sub$rate)
-    
-    # including population growth
-    gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
-                     thinSteps = 1,
-                     numSavedSteps = 200000, 
-                     minimum_age = 20, 
-                     maximum_age = 120,
-                     r = pop_rate) %>%
-      diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
 
     # without population growth
       gomp.anthr_age(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
@@ -38,6 +29,15 @@ if (runCodeNew){
                      numSavedSteps = 200000,
                      minimum_age = 20) %>%
         diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
+      
+      # including population growth
+      gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
+                       thinSteps = 1,
+                       numSavedSteps = 200000, 
+                       minimum_age = 20, 
+                       maximum_age = 100,
+                       r = pop_rate) %>%
+        diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
     
     ind_result <- cbind(year = i, parameter = c("alpha", "beta", "M"), gomp_anthr_MCMC_diag[1:3,])
     rownames(ind_result) <- NULL

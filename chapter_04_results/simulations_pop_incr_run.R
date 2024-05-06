@@ -26,7 +26,7 @@ lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], aes(y = surv_Gompertz_shape, x
   theme(plot.margin = unit(c(0,0.5,0.5,0), "cm"),
         plot.title = element_text(size = 12),
         axis.title = element_text(size = 10),
-        axis.text = element_text(size = 8))
+        axis.text = element_text(size = 8)) + theme_light()
 lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x = as.factor(pop_inc)) ) + 
   geom_boxplot()  + 
   ggtitle(paste0("\u03B2: ", (i + 2)/100) ) +
@@ -34,19 +34,17 @@ lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x 
   theme(plot.margin = unit(c(0,0.5,0.5,0), "cm"),
               plot.title = element_text(size = 12),
               axis.title = element_text(size = 10),
-              axis.text = element_text(size = 8))
+              axis.text = element_text(size = 8)) + theme_light()
 }
 
-#lt_sim_plots <- do.call(gridExtra::grid.arrange,c(lt_sim_plot_list, ncol = 4))
-
 lt_sim_plots <- gridExtra::grid.arrange (grobs = lt_sim_plot_list, ncol = 4,
-                                         top = textGrob("Original Gompertz", 
+                                         top = textGrob("Original Gompertz\n", 
                                                         gp=gpar(fonsize = 14)))
 # Save the finished map object
 ggsave(
   filename = "fig08_lt_sim_plots.pdf",
   width = 11.5, height = 8,
   plot = lt_sim_plots, 
-  device = "pdf",
+  device = cairo_pdf,
   path = "documented"
 )

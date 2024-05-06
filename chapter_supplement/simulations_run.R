@@ -17,17 +17,14 @@ load(file.path(".", saveFileDir, "lt_sim.Rda") )
 lt_sim_shapes <- c("OLS_Gompertz_shape", "WOLS_Gompertz_shape", "NLS_Gompertz_shape",
                    "surv_Gompertz_shape", "surv_lt_Gompertz_shape", "surv_lt10_Gompertz_shape",
                    "MLE_adapted_Gompertz_shape", "MLE_lt_Gompertz_shape", "MLE_lt10_Gompertz_shape",
-                   "bayes_gomp_b", "bayes_anthr_gomp_5y_b", "bayes_anthr_gomp_10y_b",
-                   "bayes_poisson_b")
+                   "bayes_gomp_b", "bayes_anthr_gomp_5y_b", "bayes_anthr_gomp_10y_b")
 lt_sim_shapes_names <- c("OLS", "WOLS", "WNLS",  
                          "survival", "survival (5y-cat)", "survival (10y-cat)",
                          "MLE", "MLE (5y-cat)", "MLE (10y-cat)",
-                         "Bayes", "Bayes (5y-cat)", "Bayes (10y-cat)", "Bayes poisson")
+                         "Bayes", "Bayes (5y-cat)", "Bayes (10y-cat)")
 lt_sim_estim_shapes <- c("OLS_estim_Gompertz_shape", "WOLS_estim_Gompertz_shape","NLS_estim_Gompertz_shape",  
-                         "surv_estim_lt_Gompertz_shape", "MLE_estim_lt_Gompertz_shape", "bayes_anthr_gomp_b",
-                         "bayes_estim_poisson_b")
-lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (cat)", "Bayes (cat)",
-                               "Bayes poisson")
+                         "surv_estim_lt_Gompertz_shape", "MLE_estim_lt_Gompertz_shape", "bayes_anthr_gomp_b")
+lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (cat)", "Bayes (cat)")
 
 plot_list_shapes <- list()
 for (i in 1:length(lt_sim_shapes)) {
@@ -63,7 +60,7 @@ for (i in 1:length(lt_sim_estim_shapes)) {
   plot_df <- data.frame(beta_original = lt_sim$beta, beta = lt_sim[,lt_sim_estim_shapes[i]])
   plot_list_estim_shapes[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta)) + 
     geom_point(shape = 21) + xlab("original \u03B2") + ylab("estimated \u03B2") + 
-    ggtitle(lt_sim_estim_shapes_names[i]) + xlim(0.01, 0.105) + ylim(0.01, 0.105)
+    ggtitle(lt_sim_estim_shapes_names[i]) + xlim(0.01, 0.105) + ylim(0.01, 0.105) + theme_light()
 }
 
 rmse_estim_result <- NULL
@@ -91,8 +88,8 @@ rmse_estim_result <- rbind(rmse_estim_result,MLE_wo_OL_df)
 plot_list_bayes_diff <- list(
   ggplot(lt_sim, aes(x = beta, y = beta - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("original \u03B2") + ylab("original \u03B2 - estimated \u03B2") + 
-    geom_smooth(method = "loess", formula = y ~ x),
+    geom_smooth(method = "loess", formula = y ~ x)  + theme_light(),
   ggplot(lt_sim, aes(x = y, y = beta - bayes_anthr_gomp_b )) + geom_point(shape = 21) +
     xlab("sample size") + ylab("original \u03B2 - estimated \u03B2") + 
-    geom_smooth(method = "loess", formula = y ~ x)
+    geom_smooth(method = "loess", formula = y ~ x) + theme_light()
 )

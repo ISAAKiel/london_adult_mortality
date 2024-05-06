@@ -2,7 +2,7 @@ gomp.anthr_age.r <- function(x, # data.frame with needed columns
                            age_beg, 
                            age_end,
                            minimum_age = 15,
-                           maximum_age = 120,
+                           maximum_age = 100,
                            numSavedSteps = numSavedSteps,
                            thinSteps = thinSteps,
                            runjagsMethod="rjags",

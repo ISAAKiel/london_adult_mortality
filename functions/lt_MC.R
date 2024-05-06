@@ -22,16 +22,7 @@ lt.MC <- function(sampling,
     ind_dfGomp <- flexsurv::flexsurvreg(formula = survival::Surv(age - 15, death) ~ 1, data = ind_df, dist="gompertz")
     surv_Gompertz_shape <- ind_dfGomp$coefficients[1]
     surv_Gompertz_rate <- exp(ind_dfGomp$coefficients[2])
-    
-    # # fit home-made MLE to individual age, original Konigsberg formula
-    MLE_Gompertz_shape <- NA
-    MLE_Gompertz_rate <- NA
-    tryCatch({
-      MLE_Gomp <- Gomp.MLE(ind_df, age = "age")
-      MLE_Gompertz_shape <- MLE_Gomp[2]
-      MLE_Gompertz_rate <- MLE_Gomp[1]
-    }, error=function(e){})
-    
+ 
     # # fit home-made MLE to individual age, adapted and simplified Konigsberg formula
     MLE_adapted_Gompertz_shape <- NA
     MLE_adapted_Gompertz_rate <- NA
@@ -112,20 +103,6 @@ lt.MC <- function(sampling,
       surv_lt_Gompertz_shape <- surv_lt$coefficients[1]
       surv_lt_Gompertz_rate <- exp(surv_lt$coefficients[2])
     }, error=function(e){})
-    
-    # fit bayesian poisson model to lifetable data
-    # we have to add 15, otherwise the minimum age setting will not work properly
-    mort_df_x$x_vec_15 <- mort_df_x$x_vec + 15
-    mort_df_x$x_vec2_15 <- mort_df_x$x_vec2 + 15
-    poisson.interval(mort_df_x, age_beg = "x_vec_15", age_end = "x_vec2_15", Dx = "Dx_vec",
-                       silent.jags = TRUE,
-                       silent.runjags = TRUE,
-                       thinSteps = 1,
-                       numSavedSteps = 10000,
-                       minimum_age = 15) %>%
-      diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
-    bayes_poisson_b <- gomp_anthr_MCMC_diag[2,5]
-    bayes_poisson_a <- gomp_anthr_MCMC_diag[1,5]
     
     #Bayes model from life table data, 5-year-interval
     mort_df_x_uncount <- mort_df_x %>% uncount(as.integer(Dx_vec))
@@ -263,17 +240,6 @@ lt.MC <- function(sampling,
       MLE_estim_lt_Gompertz_rate <- MLE_estim_lt[1]
     }, error=function(e){})
     
-    # fit bayesian poisson model to estimated data
-    poisson.interval(mort_df_estim, age_beg = "x_vec", age_end = "x_vec2", Dx = "Dx_vec",
-                       silent.jags = TRUE,
-                       silent.runjags = TRUE,
-                       thinSteps = 1,
-                       numSavedSteps = 10000,
-                       minimum_age = 0) %>%
-      diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
-    bayes_estim_poisson_b <- gomp_anthr_MCMC_diag[2,5]
-    bayes_estim_poisson_a <- gomp_anthr_MCMC_diag[1,5]
-    
     #Bayesian model with anthropological age estimate
     bayes_anthr_gomp_b <- NA
     bayes_anthr_gomp_a <- NA
@@ -307,9 +273,7 @@ lt.MC <- function(sampling,
                         surv_estim_lt_Gompertz_shape, surv_estim_lt_Gompertz_rate,
                         NLS_estim_Gompertz_shape, NLS_estim_Gompertz_rate,
                         MLE_estim_lt_Gompertz_shape, MLE_estim_lt_Gompertz_rate,
-                        bayes_anthr_gomp_b, bayes_anthr_gomp_a,
-                        bayes_poisson_b, bayes_poisson_a,
-                        bayes_estim_poisson_b, bayes_estim_poisson_a)
+                        bayes_anthr_gomp_b, bayes_anthr_gomp_a)
     lt_result <- rbind(lt_result, ind_result)
     
     svMisc::progress(g/sampling * 100, (sampling-1)/sampling * 100, progress.bar = TRUE)

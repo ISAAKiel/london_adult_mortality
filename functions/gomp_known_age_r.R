@@ -1,24 +1,25 @@
 gomp.known_age.r <- function(x, # data.frame with needed columns
-                           known_age, # column name: documented age of the individual,
-                           minimum_age = 15,
-                           numSavedSteps = 10000,
-                           thinSteps=1,
-                           runjagsMethod="rjags",
-                           nChains=3,
-                           adaptSteps = 1000,
-                           burnInSteps = 2000,
-                           silent.jags = FALSE,
-                           silent.runjags = FALSE,
-                           r = 0) {
+                             known_age, # column name: documented age of the individual,
+                             minimum_age = 15,
+                             numSavedSteps = 10000,
+                             thinSteps=1,
+                             runjagsMethod="rjags",
+                             nChains=3,
+                             adaptSteps = 1000,
+                             burnInSteps = 2000,
+                             silent.jags = FALSE,
+                             silent.runjags = FALSE,
+                             r = 0) {
   
   require(coda)
   require(runjags)
   
   y <- x[,known_age]
+  maximum_age <- max(y)
   Ntotal <- length(y) # number of individuals
   ones <- rep(1,Ntotal)
   C <- 100000
-  age_abs <- seq(0, (120 - minimum_age), 1) # for integral calculation in 1-year-intervals
+  age_abs <- seq(0, (maximum_age - minimum_age), 1) # for integral calculation in 1-year-intervals from 0-1 to max_age - min_age
   
   # Generate values for Gompertz alpha if minimum age is not 15
   gomp_a0 <- gomp.a0(minimum_age = minimum_age)
@@ -44,6 +45,7 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
     Ntotal = Ntotal,
     ones = ones,
     minimum_age = minimum_age,
+    maximum_age = maximum_age,
     gomp_a0_m = gomp_a0[1],
     gomp_a0_ic = gomp_a0[2],
     gomp_a0_var = gomp_a0[3],
@@ -60,8 +62,8 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
       rate_exp[i] <- exp(-rate * y[i] )
       ones[i] ~ dbern( spy[i]  )
     }
-  unity <- sum(gomp_sum[1:(121 - minimum_age)])
-  for (j in 1:(121 - minimum_age)) {
+  unity <- sum(gomp_sum[1:(1 + maximum_age - minimum_age)])
+  for (j in 1:(1 + maximum_age - minimum_age)) {
       gomp_sum[j] <- exp(-rate * age_abs[j] ) * a * exp(b * age_abs[j]) * exp(-a/b * (exp(b * age_abs[j]) - 1))
   }
   rate  ~ dnorm(r, 1/0.0001^2)
@@ -94,4 +96,3 @@ gomp.known_age.r <- function(x, # data.frame with needed columns
   codaSamples = as.mcmc.list( runJagsOut )
   return(codaSamples)
 }
-  

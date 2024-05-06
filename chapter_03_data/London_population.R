@@ -15,17 +15,19 @@ london_pop <- data.frame(date, pop, rate_p_a = c(NA, rate_p_a))
 london_pop1 <- ggplotGrob(ggplot(london_pop, aes(x = date, y =pop/1000)) + 
                             geom_line() + geom_point(colour = "dark grey") +
                             scale_y_continuous(trans='log10') + 
-                            ylab("population in thousand\n(log scale)") + 
-                            xlim(1100, 1850) +
+                            ylab("population in thousands\n(log scale)") + 
+                            xlim(1100, 1850)  +
+                            theme_light() +
                             theme(axis.text = element_text(size = 8), 
                                   axis.title = element_text(size = 8),
                                   axis.title.x = element_blank(), 
                                   axis.text.x = element_blank(), 
-                                  axis.ticks.x = element_blank())) 
+                                  axis.ticks.x = element_blank()))
 london_pop2 <- ggplotGrob(ggplot(london_pop, aes(x = date, y = 100 * rate_p_a )) + 
                             geom_bar(stat='identity') +
-                            ylab("population increase (% p.a.) \n since last zensus") + 
-                            xlab("\nyear AD") + xlim(1100, 1850) +
+                            ylab("population increase (% p.a.) \n since last census") + 
+                            xlab("\nyear AD") + xlim(1100, 1850)  +
+                            theme_light() +
                             theme(axis.text = element_text(size = 8), 
                                   axis.title = element_text(size = 8)))
 # write graph into a pdf

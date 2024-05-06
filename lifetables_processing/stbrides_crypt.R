@@ -38,10 +38,10 @@ if (runCodeNew){
       stbrides$age_end[i] <-  46
     } else if(stbrides$age[i] == 10) {
       stbrides$age_beg[i] <-  46
-      stbrides$age_end[i] <-  120
+      stbrides$age_end[i] <-  100
     } else if(stbrides$age[i] == 11) {
       stbrides$age_beg[i] <-  18
-      stbrides$age_end[i] <-  120
+      stbrides$age_end[i] <-  100
     } 
   }
   
@@ -75,7 +75,7 @@ if (runCodeNew){
   
   #Bayesian model with anthropological age estimate and compensation for population growth
   gomp.anthr_age.r(stbrides, age_beg = "age_beg", age_end = "age_end",
-                   thinSteps = 1, minimum_age = 12,
+                   thinSteps = 1, minimum_age = 12, maximum_age = 100,
                    numSavedSteps = 300000, r = pop_rate) %>%
     diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag_r
   
@@ -122,3 +122,12 @@ if (runCodeNew){
 load(file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
 load(file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
 load(file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
+
+# Save the finished map object
+ggsave(
+  filename = "fig07_st_brides_crypt.pdf",
+  width = 8, height = 6,
+  plot = stbrides_crypt_plot, 
+  device = cairo_pdf,
+  path = "documented"
+)

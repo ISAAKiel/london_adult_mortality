@@ -21,19 +21,20 @@ if (runCodeNew){
 gridExtra::grid.arrange(
   ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),]) + 
     geom_line(aes(x = Age, y = mx)) +
-    scale_y_continuous(trans='log10') + ylab("mx (log scale)") +
+    scale_y_continuous(trans='log10') + labs(y = expression(m[x] * " (log scale)")) +
     annotate("rect", xmin = 7, xmax = 17, ymin = 0.004, ymax = 0.01, 
              alpha = .1,fill = "blue") +
-    annotate (geom = "text", x = 12, y = 0.012, label = "zoom")+
-    annotate (geom = "text", x = 10, y = 0.3, label = "year: 1841"),
+    annotate (geom = "text", x = 12, y = 0.012, label = "zoom") +
+    theme_light(),
   ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),], 
-         aes(x = Age, y = mx)) + 
+         aes(x = Age, y = mx)) + scale_x_continuous(breaks=seq(8,16,2), limits=c(7, 17))  + 
     geom_line() + geom_point() +
-    xlim(7,17) + ylim(0.004, 0.01) +
-    ylab("mx") +
+    ylim(0.004, 0.01) +
+    labs(y = expression(m[x]))+
     annotate (geom = "text", x = 10, y = 0.009, label = "zoomed in") +
     geom_segment(aes(x = 12, y = 0.007, xend = 12, yend = 0.0055),
-                 arrow = arrow(length = unit(0.25, "cm")), colour = "red"),
+                 arrow = arrow(length = unit(0.25, "cm")), colour = "red") +
+    theme_light(),
   ncol = 1
 ) -> HMD_UK_hazard_plot
 

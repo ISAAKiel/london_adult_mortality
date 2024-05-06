@@ -89,13 +89,13 @@ razz_df
 # Subsequent Bayes calculations can take a while
 warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
 source("./chapter_04_results/historical_lifetables.R")
-peers_ranges
-monks_ranges
 london_1728_1840_ranges
 london_1728_1840_ranges_r
 London_1841_ranges
 eng_mort_ranges
 HMD_UK_ranges
+peers_ranges
+monks_ranges
 
 # Ranges for St. Marylebone with correction for population increase
 source("./lifetables_processing/Marylebone.R")
@@ -132,7 +132,7 @@ source("./chapter_04_results/english_wellcome.R", echo=TRUE,
 
 # table 2: Overview of modelled osteological data from London cemeteries
 wellcome_overview_all
-write.table(wellcome_overview_all, file = "./documented/table_wellcome.txt", sep="\t", quote = FALSE)
+write.table(wellcome_overview_all, file = "./documented/table02_osteological_estimates.txt", sep="\t", quote = FALSE)
 
 # figure 7: St. Bride's Crypt
 # The following calculations have already been sourced before.
@@ -184,18 +184,3 @@ do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 source("./chapter_supplement/bayes_complete.R",
        max.deparse.length=10000, continue.echo = getOption("continue"))
 bayes_complete_table
-
-##### out-dated code
-
-# share of decrease in mortality for population growth
-#source("./chap_discussion/ex15_increase.R")
-#explain_sum
-
-# # computing the inaccuracy of resampled "age estimations"
-# if (runCodeNew) {
-#   lt_bias <- lt.sampling(1000, n_min = 50, n_max = 500, b_min = 0.02, b_max = 0.1, error_range = 15)
-#   save(lt_bias, file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
-# } else {
-#   load(file = file.path(".", saveFileDir, "lt_bias.Rdata"))  
-# }
-# mean(lt_bias$lt_inaccuracy)

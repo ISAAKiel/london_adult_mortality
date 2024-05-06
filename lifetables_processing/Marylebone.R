@@ -1,5 +1,5 @@
 age_beg <- c(12, 18, 26, 36, 46, 18)
-age_end <- c(18, 26, 36, 46, 120, 120)
+age_end <- c(18, 26, 36, 46, 100, 100)
 st_marylebone <- c(3, 20, 42, 69, 52, 40)
 st_marylebone_north <-  c(2, 9, 33, 86, 50, 52)
 marylebone_data <- data.frame(age_beg, age_end,  st_marylebone, st_marylebone_north)
@@ -12,7 +12,7 @@ if (runCodeNew){
     year_data_uncount <- molas_ind %>% uncount(as.numeric(dx))
     
     gomp.anthr_age.r(year_data_uncount, age_beg = "age_beg", age_end = "age_end",
-                     thinSteps = 1, minimum_age = 12, maximum_age = 120,
+                     thinSteps = 1, minimum_age = 12, maximum_age = 100,
                      numSavedSteps = 200000, r = 0.0275) %>%
       diagnostic.summary(., HDImass = 0.95) -> gomp_anthr_MCMC_diag
     
