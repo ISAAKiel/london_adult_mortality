@@ -2,7 +2,7 @@
 title: "Adult Mortality in the Metropolis of London 1100–1850: a Bayesian View Based on Osteological Data"
 author:
 - "Nils Müller-Scheeßel^[Institute for Prehistoric and Protohistoric Archaeology - Kiel University nils.mueller-scheessel@ufg.uni-kiel.de]"
-- "Katharina Fuchs^[Institute of Clinical Molecular Biology - Kiel University, k.fuchs@ikmb.uni-kiel.de]"
+- "Katharina Fuchs^[Institute for Prehistoric and Protohistoric Archaeology - Kiel University, k.fuchs@ufg.uni-kiel.de]"
 - "Christoph Rinne^[Institute for Prehistoric and Protohistoric Archaeology - Kiel University, crinne@ufg.uni-kiel.de]"
 date: "`r format(Sys.time(), '%d. %B %Y')`"
 output:
