@@ -164,7 +164,7 @@ max.deparse.length=10000, continue.echo = getOption("continue"))
 # plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
 
-# plot of difference between expected and observed value
+# plot of difference between observed and estimated value
 do.call(gridExtra::grid.arrange, c(plot_list_diff, ncol = 3))
 
 # table of RMSEs

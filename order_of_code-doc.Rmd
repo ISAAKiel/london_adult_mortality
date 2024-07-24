@@ -210,7 +210,7 @@ kable(monks_ranges, caption = "Christ Church monks") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
-### Extented statistics
+### Extended statistics
 
 ```{r Extended statistics written sources, warning=FALSE}
 kable(london_1728_1840_result, 
@@ -306,7 +306,7 @@ min(gompertz_df$Gompertz_shape)
 
 ## Simulations
 
-### Figure S1: Comparing expected and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
+### Figure S1: Comparing observed and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
 
 ```{r Simulations retrieving Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
@@ -315,9 +315,9 @@ gridExtra::grid.arrange(grobs = plot_list_shapes, ncol = 3)
 
 \newpage
 
-### Figure S2: Difference between expected and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
+### Figure S2: Difference between observed and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
 
-```{r Simulations with difference between expected and estimated Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
+```{r Simulations with difference between observed and estimated Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
 gridExtra::grid.arrange(grobs = plot_list_diff, ncol = 3)
 ```
