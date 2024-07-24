@@ -96,11 +96,13 @@ if (runCodeNew){
   # saves results in Rda-object
   save(stbrides_crypt_full, file = file.path(".", saveFileDir, "stbrides_crypt_full.Rda") )
   save(stbrides_crypt_full_r, file = file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
+  load(stbrides_crypt_full, file = file.path(".", saveFileDir, "stbrides_crypt_full_r.Rda") )
   
-  stbrides_crypt_plot <- ggplot() + 
-    #geom_density(data = stbrides, aes(x=known_age, col = "density of actual ages\n(bw = 5)\n"), bw=5) + 
-    stat_density(data = stbrides, aes(x=known_age, col = "density of actual ages\n(bw = 5)\n"), 
-                 geom="line",position="identity") +
+  stbrides_density <- density(stbrides$known_age, bw = 5) # there is currently a problem with the stat_density-function
+  stbrides_density_df <- data.frame(x = stbrides_density$x, y = stbrides_density$y)
+  stbrides_crypt_plot <- 
+    ggplot() + 
+    geom_line(data = stbrides_density_df, aes(x = x, y = y, col = "density of actual ages\n(bw = 5)\n")) +
     geom_function(fun = function(x) flexsurv::dgompertz(x - 12, stbrides_crypt_full[5,9], 
                                                         stbrides_crypt_full[4,9]), 
                   aes(col = "Gompertz parameters\nfrom osteological estimates\n")) +
