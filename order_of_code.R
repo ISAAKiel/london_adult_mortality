@@ -19,7 +19,6 @@ pacman::p_load(coda, cowplot, demogR, dplyr, flexsurv, ggplot2, ggrepel, grid,
 options(scipen = 999)
 options(dplyr.summarise.inform = FALSE)
 
-source("./functions/bayes_cat_poisson.R")
 source("./functions/gomp_MLE.R")
 source("./functions/gomp_MLE_adapted.R")
 source("./functions/gomp_MLE_interval.R")
