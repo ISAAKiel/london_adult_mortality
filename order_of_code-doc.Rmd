@@ -7,15 +7,15 @@ author:
 - "Christoph Rinne^[Institute for Prehistoric and Protohistoric Archaeology - Kiel University, crinne@ufg.uni-kiel.de]"
 date: "`r format(Sys.time(), '%d. %B %Y')`"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
   html_document:
     code_folding: hide
     toc: yes
     toc_depth: 3
     toc_float: yes
     number_sections: no
-  pdf_document:
-    toc: yes
-    toc_depth: 3
 license: "CC-BY 4.0"
 header-includes: null
 papersize: a4
@@ -355,18 +355,18 @@ min(gompertz_df$Gompertz_shape)
 
 ## Simulations
 
-### Figure 11: Bayesian model of simulated data with anthropological age categories and random error in "age estimation.” Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
+### S.Fig 1: Bayesian model of simulated data with anthropological age categories and random error in "age estimation.” Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
 
-```{r Fig. 11. plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
+```{r S.Fig. 1. plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
 #source("./chapter_supplement/simulations_run.R")
 gridExtra::grid.arrange(grobs = plot_list_bayes_diff, ncol = 2)
 ```
 
 \newpage
 
-### Table 4. Bayesian model with simulated data-set to compare the impact of thinning and additional steps. n = 500, Gompertz $\beta$ = 0.05.
+### S.T.1. Bayesian model with simulated data-set to compare the impact of thinning and additional steps. n = 500, Gompertz $\beta$ = 0.05.
 
-```{r Bayesian modeling stable means}
+```{r S.T.1. Bayesian modeling stable means}
 source("./chapter_supplement/bayes_complete.R") # can take a few minutes
 kable (bayes_complete) %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
