@@ -10,7 +10,8 @@ sites_data <- rbind.data.frame(
     c("8", "St Bride's lower churchyard", 51.515253, -0.104973),
     c("9", "Sheen's burial ground", 51.51480, -0.06760),
     c("10","St Marylebone", 51.5225,-0.152222),
-    c("11",paste("St Marylebone's Paddington", "Street north", sep="\n"), 51.520869, -0.154515),
+    c("11",paste("St Marylebone's Paddington", "Street north", sep="\n"), 
+      51.520869, -0.154515),
     c("12", "Bow Baptist church", 51.529540, -0.01580),
     c("13", "St Mary and St Michael", 51.51330, -0.05190)
   ) 
@@ -47,7 +48,8 @@ if (!exists ("q_admin8") | (runCodeNew == TRUE)) {
 # Build the map
 London_map <- ggplot() +
   geom_sf(data = q_admin8$osm_multipolygons, fill=rgb(0.9,0.9,0.9)) +
-  geom_sf_text(data = q_admin8$osm_multipolygons, aes(label=sub('.*of ','',name)), size=3) +
+  geom_sf_text(data = q_admin8$osm_multipolygons, aes(label=sub('.*of ','',name)), 
+               size=3) +
   geom_sf(data = dat_sites,aes(), shape = 16, colour = "black", size = 2) +
   ggrepel::geom_label_repel(data = dat_sites, aes(label = nr, geometry = geometry),
   stat = "sf_coordinates", min.segment.length = 0, size=4) +

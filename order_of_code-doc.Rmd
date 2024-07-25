@@ -124,7 +124,9 @@ if (saveFileDir %in% list.files(getwd())) {
 
 ```{r Table 1: Overview of included cemeteries, echo=TRUE, warning=FALSE, results="asis"}
 read.table("chapter_03_data/london_cemeteries.txt", header = T, sep = "\t") %>%
-  knitr::kable(., col.names = c("Map no.",	"Name",	"Period",	"Excavation year",	"Social character",	"Absolute n",	"n analysed",	"n >= 12 years",	"References")) %>%
+  knitr::kable(., col.names = c("Map no.",	"Name",	"Period",	"Excavation year",	
+                                "Social character",	"Absolute n",	"n analysed",	
+                                "n >= 12 years",	"References")) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position") %>% unclass() %>% cat()
 ```
 
@@ -309,7 +311,8 @@ The following data overview is build during pre-processing in ./chapter_04_resul
 ```{r wellcome_overview_all, warning=FALSE}
 kable(wellcome_overview_all) %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
-write.table(wellcome_overview_all, file = "./documented/table02_osteological_estimates.txt", sep="\t", quote = FALSE)
+write.table(wellcome_overview_all, file = "./documented/table02_osteological_estimates.txt", 
+            sep="\t", quote = FALSE)
 ```
 
 
@@ -317,7 +320,8 @@ Data are hard coded in the code. Sources: @ref_221997, 97--103 table 32 (St Mary
 
 ```{r Basic statistics Marylebone, warning=FALSE}
 source("./lifetables_processing/Marylebone.R")
-kable(Marylebone_ranges, caption = "St Marylebone, corrected with population growth rate of 2.75 per-cent.") %>%
+kable(Marylebone_ranges, 
+      caption = "St Marylebone, corrected with population growth rate of 2.75 per-cent.") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 

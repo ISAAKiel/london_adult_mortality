@@ -19,7 +19,9 @@ load(file.path(".", saveFileDir, "lt_sim_list.Rda") )
 
 lt_sim_plot_list <- list()
 for (i in 1:4) {
-lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], aes(y = surv_Gompertz_shape, x = as.factor(pop_inc))) + 
+lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], 
+                                aes(y = surv_Gompertz_shape, 
+                                    x = as.factor(pop_inc))) + 
   geom_boxplot()  + 
   ggtitle(paste0("\u03B2: ", (i + 2)/100) ) +
   ylab("Gompertz \u03B2 (MLE)") + xlab("population increase") + 
@@ -27,7 +29,9 @@ lt_sim_plot_list[[i]] <- ggplot(lt_sim_list[[i]], aes(y = surv_Gompertz_shape, x
         plot.title = element_text(size = 12),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8)) + theme_light()
-lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], aes(y = bayes_gomp_b, x = as.factor(pop_inc)) ) + 
+lt_sim_plot_list[[i + 4]] <-   ggplot(lt_sim_list[[i]], 
+                                      aes(y = bayes_gomp_b, 
+                                          x = as.factor(pop_inc)) ) + 
   geom_boxplot()  + 
   ggtitle(paste0("\u03B2: ", (i + 2)/100) ) +
   ylab("Gompertz \u03B2 (Bayes)") + xlab("population increase") + 

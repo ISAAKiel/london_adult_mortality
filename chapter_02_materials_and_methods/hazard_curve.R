@@ -12,7 +12,8 @@ if (runCodeNew){
                                                    credentials[2])
     
     # saves results in Rda-object
-    save(HMD_UK_result_1_year, file = file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
+    save(HMD_UK_result_1_year, file = file.path(".", saveFileDir, 
+                                                "HMD_UK_result_1_year.Rda") )
   }
 } else {load(file.path(".", saveFileDir, "HMD_UK_result_1_year.Rda") )
   }
@@ -27,7 +28,8 @@ gridExtra::grid.arrange(
     annotate (geom = "text", x = 12, y = 0.012, label = "zoom") +
     theme_light(),
   ggplot(HMD_UK_result_1_year[which(HMD_UK_result_1_year$Year == 1841),], 
-         aes(x = Age, y = mx)) + scale_x_continuous(breaks=seq(8,16,2), limits=c(7, 17))  + 
+         aes(x = Age, y = mx)) + scale_x_continuous(breaks=seq(8,16,2), 
+                                                    limits=c(7, 17))  + 
     geom_line() + geom_point() +
     ylim(0.004, 0.01) +
     labs(y = expression(m[x]))+
