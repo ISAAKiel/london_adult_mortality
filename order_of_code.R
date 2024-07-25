@@ -84,6 +84,25 @@ razz_df
 ############
 # Results
 
+# Simulations for evaluation of algorithms for retrieving Gompertz parameters
+# Subsequent Bayes calculations can take a while
+source("./chapter_supplement/simulations_run.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+# plot of results of methods with known age-at-death
+do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
+
+# plot of difference between observed and estimated value
+do.call(gridExtra::grid.arrange, c(plot_list_diff, ncol = 3))
+
+# table of RMSEs
+rmse_result[order(rmse_result$RMSE) ,]
+
+# plot of results of methods with estimated age-at-death
+do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
+
+# table of RMSEs
+rmse_estim_result[order(rmse_estim_result$RMSE) ,]
+
 # Written sources, pre-processed
 # Subsequent Bayes calculations can take a while
 warning("Subsequent sourcing of Bayes calculations. Progressbars will show up.")
@@ -155,25 +174,6 @@ do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 # Minimum Gompertz beta in Coale/Demeny-Tables
 source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
-
-# Simulations for evaluation of algorithms for retrieving Gompertz parameters
-# Subsequent Bayes calculations can take a while
-source("./chapter_supplement/simulations_run.R", echo=TRUE,
-max.deparse.length=10000, continue.echo = getOption("continue"))
-# plot of results of methods with known age-at-death
-do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
-
-# plot of difference between observed and estimated value
-do.call(gridExtra::grid.arrange, c(plot_list_diff, ncol = 3))
-
-# table of RMSEs
-rmse_result[order(rmse_result$RMSE) ,]
-
-# plot of results of methods with estimated age-at-death
-do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
-
-# table of RMSEs
-rmse_estim_result[order(rmse_estim_result$RMSE) ,]
 
 # plot for Bayesian model of difference
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
