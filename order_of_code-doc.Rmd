@@ -7,15 +7,15 @@ author:
 - "Christoph Rinne^[Institute for Prehistoric and Protohistoric Archaeology - Kiel University, crinne@ufg.uni-kiel.de]"
 date: "`r format(Sys.time(), '%d. %B %Y')`"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: 3
   html_document:
     code_folding: hide
     toc: yes
     toc_depth: 3
     toc_float: yes
-    number_sections: yes
+    number_sections: no
+  pdf_document:
+    toc: yes
+    toc_depth: 3
 license: "CC-BY 4.0"
 header-includes: null
 papersize: a4
