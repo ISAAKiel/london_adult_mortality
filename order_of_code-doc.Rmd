@@ -298,9 +298,9 @@ kable(wellcome_result_r, caption = "London cemeteries data, corrected for popula
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
-### Figure 6: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
+### Figure 8: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
 
-```{r figure 6 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE, , include = TRUE, code = readLines("./chapter_04_results/english_wellcome.R")}
+```{r figure 8 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE, , include = TRUE, code = readLines("./chapter_04_results/english_wellcome.R")}
 #source("./chapter_04_results/english_wellcome.R")
 ```
 
@@ -327,15 +327,15 @@ kable(Marylebone_ranges,
 
 The following plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-### Figure 8: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
+### Figure 9: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
 
-```{r Fig. 8. St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
+```{r Fig. 9. St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
 plot(stbrides_crypt_plot)
 ```
 
-### Figure 9: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
+### Figure 10: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
 
-```{r Fig. 9. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
+```{r Fig. 10. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
 #source("./chapter_04_results/simulations_pop_incr_run.R")
 ```
 
@@ -355,9 +355,9 @@ min(gompertz_df$Gompertz_shape)
 
 ## Simulations
 
-### Figure 10: Bayesian model of simulated data with anthropological age categories and random error in "age estimation.” Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
+### Figure 11: Bayesian model of simulated data with anthropological age categories and random error in "age estimation.” Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
 
-```{r Fig. 10. plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
+```{r Fig. 11. plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
 #source("./chapter_supplement/simulations_run.R")
 gridExtra::grid.arrange(grobs = plot_list_bayes_diff, ncol = 2)
 ```
