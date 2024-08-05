@@ -46,7 +46,7 @@ lt_sim_plots <- gridExtra::grid.arrange (grobs = lt_sim_plot_list, ncol = 4,
                                                         gp=gpar(fonsize = 14)))
 # Save the finished map object
 ggsave(
-  filename = "fig08_lt_sim_plots.pdf",
+  filename = "fig09_lt_sim_plots.pdf",
   width = 11.5, height = 8,
   plot = lt_sim_plots, 
   device = cairo_pdf,

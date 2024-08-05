@@ -127,7 +127,7 @@ load(file.path(".", saveFileDir, "stbrides_crypt_plot.Rda") )
 
 # Save the finished map object
 ggsave(
-  filename = "fig07_st_brides_crypt.pdf",
+  filename = "fig11_st_brides_crypt.pdf",
   width = 8, height = 6,
   plot = stbrides_crypt_plot, 
   device = cairo_pdf,

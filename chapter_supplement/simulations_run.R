@@ -29,9 +29,9 @@ lt_sim_estim_shapes_names <- c("OLS", "WOLS", "WNLS", "survival (cat)", "MLE (ca
 plot_list_shapes <- list()
 for (i in 1:length(lt_sim_shapes)) {
   plot_df <- data.frame(beta_original = lt_sim$beta, beta = lt_sim[,lt_sim_shapes[i]])
-  plot_list_shapes[[i]] <- ggplot(plot_df, aes(x = beta_original, y = beta)) + geom_point(shape = 21) + 
+  plot_list_shapes[[i]] <- ggplotGrob(ggplot(plot_df, aes(x = beta_original, y = beta)) + geom_point(shape = 21) + 
     xlab("original \u03B2") + ylab("estimated \u03B2") + ggtitle(lt_sim_shapes_names[i]) + 
-    xlim(0.01, 0.105) + ylim(0.01, 0.105) + theme_light()
+    xlim(0.01, 0.105) + ylim(0.01, 0.105) + theme_light() )
 }
 
 plot_list_diff <- list()

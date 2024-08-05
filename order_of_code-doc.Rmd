@@ -105,24 +105,24 @@ if (saveFileDir %in% list.files(getwd())) {
 \newpage
 # Chapter 02 Materials and methods
 
-### Figure 2: Hazard curve (mx) for HMD UK data of the year 1841.
+### Figure 3: Hazard (m) of the population of England and Wales, 1841. The blue rectangle in the upper panel corresponds to the extent of the lower panel. The turning point of 12 years is marked (from Human Mortality Database).
 
-```{r Fig. 2: Hazard curve, echo=TRUE, warning=FALSE, include = TRUE, code = readLines("./chapter_02_materials_and_methods/hazard_curve.R")}
+```{r Fig. 3: Hazard curve, echo=TRUE, warning=FALSE, include = TRUE, code = readLines("./chapter_02_materials_and_methods/hazard_curve.R")}
 #source("./chapter_02_materials_and_methods/hazard_curve.R")
 ```
 
 \newpage
 # Chapter 03 Data
 
-### Figure 3: Major cemeteries in Greater London 1100–1850 used in the present study. 
+### Figure 4: Major cemeteries in Greater London 1100–1850 used in the present study. 
 
 ```{r Fig. 3: Map of London, echo=TRUE, warning=FALSE, include = TRUE, code = readLines("./chapter_03_data/London_places.R")}
 #source("./chapter_03_data/London_places.R") 
 ```
 
-### Table 1: Major cemeteries of London, without and with (r) compensation of population growth. beta – Gompertz beta parameter; M – modal age; ex20 – life expectancy at age 20; ex25 – life expectancy at age 25. Ranges computed with credible HDIs of 95%.
+### Table 2: Overview of major cemeteries in Greater London 1100–1850 used in the present study.
 
-```{r Table 1: Overview of included cemeteries, echo=TRUE, warning=FALSE, results="asis"}
+```{r Table 2: Overview of included cemeteries, echo=TRUE, warning=FALSE, results="asis"}
 read.table("chapter_03_data/london_cemeteries.txt", header = T, sep = "\t") %>%
   knitr::kable(., col.names = c("Map no.",	"Name",	"Period",	"Excavation year",	
                                 "Social character",	"Absolute n",	"n analysed",	
@@ -131,9 +131,9 @@ read.table("chapter_03_data/london_cemeteries.txt", header = T, sep = "\t") %>%
 ```
 
 \newpage
-### Figure 4: Population development of London, compiled from @ref_268519, 39 table 1; @ref_90775, 41; 179 table 5.7; @ref_115940, 655--657.
+### Figure 5: Population development of London, compiled from @ref_268519, 39 table 1; @ref_90775, 41; 179 table 5.7; @ref_115940, 655--657.
 
-```{r Fig. 4: Population development, echo=TRUE, warning=FALSE}
+```{r Fig. 5: Population development, echo=TRUE, warning=FALSE}
 source("./chapter_03_data/London_population.R")
 grid::grid.newpage()
 grid::grid.draw(rbind(london_pop1, london_pop2))
@@ -152,55 +152,58 @@ knitr::kable(razz_df)%>%
 
 ## Simulations
 
-### Figure 5: Comparing observed and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
+### Figure 6: Comparison of algorithms to estimate the original Gompertz $\beta$ from simulated data with known age-at-death (n = 1,000).
 
-```{r Fig. 5. Simulations retrieving Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
+```{r Fig. 6. Simulations retrieving Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
-gridExtra::grid.arrange(grobs = plot_list_shapes, ncol = 3)
+ggsave(filename = "fig06_lt_sim_plots.pdf",width = 8, height = 11.5,plot = gridExtra::grid.arrange (grobs = plot_list_shapes, ncol = 2), device = cairo_pdf,path = "documented"
+)
 ```
 
 \newpage
 
-### Figure 6: Difference between observed and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
+### Figure 7: Difference between observed and estimated Gompertz $\beta$-values by different algorithms with known age-at-death (n = 1,000).
 
-```{r Fig 6. Simulations with difference between observed and estimated Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
+```{r Fig 7. Simulations with difference between observed and estimated Gompertz parameters, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
-gridExtra::grid.arrange(grobs = plot_list_diff, ncol = 3)
+ggsave(filename = "fig07_lt_sim_plots.pdf", width = 8, height = 11.5, plot = gridExtra::grid.arrange (grobs = plot_list_diff, ncol = 2), device = cairo_pdf, path = "documented"
+)
 ```
 
 \newpage
-### Table 2: Root mean square errors (RMSE) for different algorithms for fitting known age-at-death, in ascending order.
+### Table 3: Root mean square errors (RMSE) for different algorithms for fitting known age-at-death, in ascending order.
 
-```{r T2 Simulation evaluation via RMSE}
+```{r T3 Simulation evaluation via RMSE}
 # table of RMSEs
 kable(rmse_result[order(rmse_result$RMSE) ,]) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position") 
-write.table(rmse_result[order(rmse_result$RMSE) ,], file = "./documented/table02_rmse_known_age.txt", 
+write.table(rmse_result[order(rmse_result$RMSE) ,], file = "./documented/table03_rmse_known_age.txt", 
             sep="\t", quote = FALSE)
 ```
 
 \newpage
-### Figure 7: Comparison of algorithms to estimate the original Gompertz $\beta$ from simulated data with osteological age categories (n = 1,000).
+### Figure 8: Comparison of algorithms to estimate the original Gompertz $\beta$ from simulated data with osteological age categories (n = 1,000).
 
-```{r Fig. 7. Simulations retrieving Gompertz parameters with age estimations, fig.height=8.5, fig.width=6, warning=FALSE}
+```{r Fig. 8. Simulations retrieving Gompertz parameters with age estimations, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
-gridExtra::grid.arrange(grobs = plot_list_estim_shapes, ncol = 2)
+ggsave(filename = "fig08_lt_sim_plots.pdf", width = 8, height = 8, plot = gridExtra::grid.arrange (grobs = plot_list_estim_shapes, ncol = 2), device = cairo_pdf,path = "documented"
+)
 ```
 
 \newpage
-### Table 3: Root mean square errors in different algorithms to estimate the original Gompertz  $\beta$ from simulated data with osteological age categories, in ascending order.
+### Table 4: Root mean square errors in different algorithms to estimate the original Gompertz  $\beta$ from simulated data with osteological age categories, in ascending order.
 
-```{r T3 Simulation evaluation via RMSE: anthropological categories}
+```{r T4 Simulation evaluation via RMSE: anthropological categories}
 # table of RMSEs
 kable(rmse_estim_result[order(rmse_estim_result$RMSE) ,]) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position") 
-write.table(rmse_estim_result[order(rmse_estim_result$RMSE) ,], file = "./documented/table03_rmse_osteo_age.txt", 
+write.table(rmse_estim_result[order(rmse_estim_result$RMSE) ,], file = "./documented/table04_rmse_osteo_age.txt", 
             sep="\t", quote = FALSE)
 ```
 
-### Figure 8: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
+### Figure 9: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
 
-```{r Fig. 10. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
+```{r Fig. 9. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
 #source("./chapter_04_results/simulations_pop_incr_run.R")
 ```
 
@@ -308,20 +311,20 @@ kable(wellcome_result_r, caption = "London cemeteries data, corrected for popula
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
-### Figure 9: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
+### Figure 10: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
 
-```{r figure 8 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE, , include = TRUE, code = readLines("./chapter_04_results/english_wellcome.R")}
+```{r figure 10 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE, , include = TRUE, code = readLines("./chapter_04_results/english_wellcome.R")}
 #source("./chapter_04_results/english_wellcome.R")
 ```
 
 The following data overview is build during pre-processing in ./chapter_04_results/Wellcome_DB.R and saved to a textfile (sep = \\t).
 
-### Table 4: Major cemeteries of London, without and with (r) compensation of population growth. beta – Gompertz beta parameter; M – modal age; ex20 – life expectancy at age 20; ex25 – life expectancy at age 25. Ranges computed with credible HDIs of 95%.
+### Table 5: Major cemeteries of London, without and with (r) compensation of population growth. beta – Gompertz beta parameter; M – modal age; ex20 – life expectancy at age 20; ex25 – life expectancy at age 25. Ranges computed with credible HDIs of 95%.
 
 ```{r wellcome_overview_all, warning=FALSE}
 kable(wellcome_overview_all) %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
-write.table(wellcome_overview_all, file = "./documented/table04_osteological_estimates.txt", 
+write.table(wellcome_overview_all, file = "./documented/table05_osteological_estimates.txt", 
             sep="\t", quote = FALSE)
 ```
 
@@ -337,9 +340,9 @@ kable(Marylebone_ranges,
 
 The following plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-### Figure 10: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
+### Figure 11: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
 
-```{r Fig. 9. St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
+```{r Fig. 11. St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
 plot(stbrides_crypt_plot)
 ```
 

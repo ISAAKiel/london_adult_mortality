@@ -70,7 +70,7 @@ modal_ages_plot <- plot_grid(ewp, ewp_legend, ncol = 2, rel_widths = c(.75, .25)
 
 # Save the finished map object
 ggsave(
-  filename = "fig06_modal_ages_plot.pdf",
+  filename = "fig10_modal_ages_plot.pdf",
   width = 11, height = 8.5,
   plot = modal_ages_plot, 
   device = "pdf",

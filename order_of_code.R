@@ -88,20 +88,25 @@ razz_df
 # Subsequent Bayes calculations can take a while
 source("./chapter_supplement/simulations_run.R", echo=TRUE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
-# plot of results of methods with known age-at-death
+# figure 6: Plot of results of methods with known age-at-death
 do.call(gridExtra::grid.arrange, c(plot_list_shapes, ncol = 3))
 
-# plot of difference between observed and estimated value
+# figure 7: Plot of difference between observed and estimated value
 do.call(gridExtra::grid.arrange, c(plot_list_diff, ncol = 3))
 
-# table of RMSEs
+# table 3: RMSEs for known ages
 rmse_result[order(rmse_result$RMSE) ,]
 
-# plot of results of methods with estimated age-at-death
+# figure 8: Plot of results of algorithms with estimated age-at-death
 do.call(gridExtra::grid.arrange, plot_list_estim_shapes)
 
-# table of RMSEs
+# table 4: RMSEs for estimated ages
 rmse_estim_result[order(rmse_estim_result$RMSE) ,]
+
+# figure 9: Simulation of population increase
+source("./chapter_04_results/simulations_pop_incr_run.R", echo=TRUE,
+       max.deparse.length=10000, continue.echo = getOption("continue"))
+do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 
 # Written sources, pre-processed
 # Subsequent Bayes calculations can take a while
@@ -144,15 +149,15 @@ source("./chapter_04_results/Wellcome_DB.R", echo=TRUE,
 wellcome_result
 wellcome_result_r
 
-# figure 6: Modal ages from historical and osteological data
+# figure 10: Modal ages from historical and osteological data
 source("./chapter_04_results/english_wellcome.R", echo=TRUE,
        max.deparse.length=10000, continue.echo = getOption("continue"))
 
-# table 2: Overview of modelled osteological data from London cemeteries
+# table 5: Overview of modelled osteological data from London cemeteries
 wellcome_overview_all
 write.table(wellcome_overview_all, file = "./documented/table02_osteological_estimates.txt", sep="\t", quote = FALSE)
 
-# figure 7: St. Bride's Crypt
+# figure 11: St. Bride's Crypt
 # The following calculations have already been sourced before.
 # Only run again if necessary or continue with 'stbrides_crypt_plot'.
 source("./lifetables_processing/stbrides_crypt.R", echo=TRUE,
@@ -162,11 +167,6 @@ source("./chapter_04_results/Wellcome_DB.R", echo=TRUE,
 # St. Bride's crypt data, comparison of known age and osteological estimates
 stbrides_crypt_plot
 
-# figure 8: Simulation of population increase
-source("./chapter_04_results/simulations_pop_incr_run.R", echo=TRUE,
-       max.deparse.length=10000, continue.echo = getOption("continue"))
-do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
-
 
 ############
 # Supplements
@@ -175,10 +175,10 @@ do.call(gridExtra::grid.arrange, c(lt_sim_plot_list, ncol = 4) )
 source("./chapter_supplement/coale_demeny_life_tables_gompertz.R")
 min(gompertz_df$Gompertz_shape)
 
-# plot for Bayesian model of difference
+# Figure S.F1.: Plot for Bayesian model of difference
 do.call(gridExtra::grid.arrange, c(plot_list_bayes_diff, ncol = 2) )
 
-# Show that means are stable in Bayesian modelling
+# Table S.T1: Show that means are stable in Bayesian modelling
 # can take a few minutes
 source("./chapter_supplement/bayes_complete.R",
        max.deparse.length=10000, continue.echo = getOption("continue"))
