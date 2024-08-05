@@ -169,16 +169,18 @@ gridExtra::grid.arrange(grobs = plot_list_diff, ncol = 3)
 ```
 
 \newpage
-### Table 2: Root mean square errors (RMSE) for different formulas for fitting known age-at-death, in ascending order.
+### Table 2: Root mean square errors (RMSE) for different algorithms for fitting known age-at-death, in ascending order.
 
 ```{r T2 Simulation evaluation via RMSE}
 # table of RMSEs
 kable(rmse_result[order(rmse_result$RMSE) ,]) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position") 
+write.table(rmse_result[order(rmse_result$RMSE) ,], file = "./documented/table02_rmse_known_age.txt", 
+            sep="\t", quote = FALSE)
 ```
 
 \newpage
-### Figure 7: Comparison of methods to estimate the original Gompertz $\beta$ from simulated data with anthropological age categories (n = 1,000).
+### Figure 7: Comparison of algorithms to estimate the original Gompertz $\beta$ from simulated data with osteological age categories (n = 1,000).
 
 ```{r Fig. 7. Simulations retrieving Gompertz parameters with age estimations, fig.height=8.5, fig.width=6, warning=FALSE}
 source("./chapter_supplement/simulations_run.R")
@@ -186,12 +188,20 @@ gridExtra::grid.arrange(grobs = plot_list_estim_shapes, ncol = 2)
 ```
 
 \newpage
-### Table 3: Root mean square errors in different methods to estimate the original Gompertz  $\beta$ from simulated data with anthropological age categories, in ascending order.
+### Table 3: Root mean square errors in different algorithms to estimate the original Gompertz  $\beta$ from simulated data with osteological age categories, in ascending order.
 
 ```{r T3 Simulation evaluation via RMSE: anthropological categories}
 # table of RMSEs
 kable(rmse_estim_result[order(rmse_estim_result$RMSE) ,]) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position") 
+write.table(rmse_estim_result[order(rmse_estim_result$RMSE) ,], file = "./documented/table03_rmse_osteo_age.txt", 
+            sep="\t", quote = FALSE)
+```
+
+### Figure 8: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
+
+```{r Fig. 10. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
+#source("./chapter_04_results/simulations_pop_incr_run.R")
 ```
 
 
@@ -298,7 +308,7 @@ kable(wellcome_result_r, caption = "London cemeteries data, corrected for popula
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
 ```
 
-### Figure 8: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
+### Figure 9: Estimated modal ages from written sources and osteological data compared, upper panel: without population growth correction, lower panel: with population growth correction. Horizontal bars indicate the time span the data point covers. Vertical bars indicate 95% HDI for credible ranges and are only displayed for small n, i.e. English Peers, Christ Church monks and osteological data.
 
 ```{r figure 8 modal ages plot, fig.height=8.5, fig.width=11, echo=TRUE, warning=FALSE, , include = TRUE, code = readLines("./chapter_04_results/english_wellcome.R")}
 #source("./chapter_04_results/english_wellcome.R")
@@ -306,12 +316,12 @@ kable(wellcome_result_r, caption = "London cemeteries data, corrected for popula
 
 The following data overview is build during pre-processing in ./chapter_04_results/Wellcome_DB.R and saved to a textfile (sep = \\t).
 
-### Table 3: Major cemeteries of London, without and with (r) compensation of population growth. beta – Gompertz beta parameter; M – modal age; ex20 – life expectancy at age 20; ex25 – life expectancy at age 25. Ranges computed with credible HDIs of 95%.
+### Table 4: Major cemeteries of London, without and with (r) compensation of population growth. beta – Gompertz beta parameter; M – modal age; ex20 – life expectancy at age 20; ex25 – life expectancy at age 25. Ranges computed with credible HDIs of 95%.
 
 ```{r wellcome_overview_all, warning=FALSE}
 kable(wellcome_overview_all) %>%
   kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
-write.table(wellcome_overview_all, file = "./documented/table02_osteological_estimates.txt", 
+write.table(wellcome_overview_all, file = "./documented/table04_osteological_estimates.txt", 
             sep="\t", quote = FALSE)
 ```
 
@@ -327,16 +337,10 @@ kable(Marylebone_ranges,
 
 The following plot is build in ./lifetables_processing/stbrides_crypt.R within the if-statement on ```runCodeNew``` (s. data limitations above).
 
-### Figure 9: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
+### Figure 10: St. Bride's Crypt. Density of actual ages and Bayesian model of Gompertz distribution of actual ages and osteological estimates (without correction for population growth).
 
 ```{r Fig. 9. St. Bride Crypt, fig.height=3, fig.width=6, warning=FALSE}
 plot(stbrides_crypt_plot)
-```
-
-### Figure 10: Simulation of population increase with known age-at-death and Maximum Likelihood Estimation (MLE) (top four) and osteological estimates, Bayesian model and including rate of increase (bottom four).
-
-```{r Fig. 10. Simulation of population increase, fig.height=6, fig.width=8, warning=FALSE, include = TRUE, code = readLines("./chapter_04_results/simulations_pop_incr_run.R")}
-#source("./chapter_04_results/simulations_pop_incr_run.R")
 ```
 
 \newpage
@@ -355,7 +359,7 @@ min(gompertz_df$Gompertz_shape)
 
 ## Simulations
 
-### S.Fig 1: Bayesian model of simulated data with anthropological age categories and random error in "age estimation.” Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
+### S.Fig 1: Bayesian model of simulated data with osteological age categories. Difference of estimated to original Gompertz $\beta$ in relation to original $\beta$ (left) and sample size (right).
 
 ```{r S.Fig. 1. plot Bayesian model, fig.height=2.5, fig.width=5,warning=FALSE}
 #source("./chapter_supplement/simulations_run.R")
